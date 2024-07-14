@@ -9,12 +9,12 @@ import android.os.Bundle;
 
 import com.rarestardev.morimint.Adapters.MoriNewsAdapter;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.ViewModel.MoriNewsViewModel;
+import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 
 public class NewsActivity extends AppCompatActivity {
     private RecyclerView recyclerViewMoriNews;
     private MoriNewsAdapter adapter;
-    MoriNewsViewModel moriNewsViewModel;
+    ApplicationDataViewModel applicationDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,8 @@ public class NewsActivity extends AppCompatActivity {
         recyclerViewMoriNews = findViewById(R.id.recyclerViewMoriNews);
 
         // View Model
-        moriNewsViewModel = new ViewModelProvider(this).get(MoriNewsViewModel.class);
-        moriNewsViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
+        applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+        applicationDataViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
             adapter = new MoriNewsAdapter(moriNewsModels, NewsActivity.this);
             recyclerViewMoriNews.setLayoutManager(new LinearLayoutManager(NewsActivity.this));
             recyclerViewMoriNews.refreshDrawableState();

@@ -7,11 +7,26 @@ public class Users {
     @SerializedName("id")
     private int id;
 
+    @SerializedName("total_invites")
+    private int total_invites;
+
+    @SerializedName("is_superuser")
+    private boolean is_superuser;
+
     @SerializedName("username")
     private String username;
 
+    @SerializedName("is_staff")
+    private boolean is_staff;
+
+    @SerializedName("is_active")
+    private boolean is_active;
+
     @SerializedName("email")
     private String email;
+
+    @SerializedName("referral_code")
+    private long referral_code;
 
     @SerializedName("level")
     private int level;
@@ -25,31 +40,32 @@ public class Users {
     @SerializedName("coin")
     private int coin;
 
-    @SerializedName("ads")
-    private int ads;
-
-    @SerializedName("total_invites")
-    private int total_invites;
-
-    @SerializedName("is_superuser")
-    private boolean is_superuser;
-
-    @SerializedName("is_staff")
-    private boolean is_staff;
-
-    @SerializedName("is_active")
-    private boolean is_active;
-
-    @SerializedName("referral_code")
-    private int referral_code;
-
     @SerializedName("wallet")
     private String wallet;
+
+    @SerializedName("ads")
+    private int ads;
 
     @SerializedName("referred_by")
     private int referred_by;
 
-    public Users() {
+
+    public Users(int id, int total_invites, boolean is_superuser, String username, boolean is_staff, boolean is_active, String email, int referral_code, int level, int level_xp, boolean blue_tick, int coin, String wallet, int ads, int referred_by) {
+        this.id = id;
+        this.total_invites = total_invites;
+        this.is_superuser = is_superuser;
+        this.username = username;
+        this.is_staff = is_staff;
+        this.is_active = is_active;
+        this.email = email;
+        this.referral_code = referral_code;
+        this.level = level;
+        this.level_xp = level_xp;
+        this.blue_tick = blue_tick;
+        this.coin = coin;
+        this.wallet = wallet;
+        this.ads = ads;
+        this.referred_by = referred_by;
     }
 
     public int getId() {
@@ -148,11 +164,11 @@ public class Users {
         this.is_active = is_active;
     }
 
-    public int getReferral_code() {
+    public long getReferral_code() {
         return referral_code;
     }
 
-    public void setReferral_code(int referral_code) {
+    public void setReferral_code(long referral_code) {
         this.referral_code = referral_code;
     }
 

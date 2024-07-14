@@ -14,7 +14,15 @@ public class UserDataViewModel extends ViewModel {
         userDataRepository = new UserDataRepository();
     }
 
-    public void GetDataSignUpUsers(Context context,String username, String email, String password){
+
+    public void getUserData(Context context){
+        userDataRepository.UserData(context);
+    }
+
+
+
+
+    public void SignUp(Context context, String username, String email, String password){
         userDataRepository.SendUserDataSignUp(context,username, email, password);
     }
 

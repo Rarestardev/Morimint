@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.ViewModel.DailyRewardViewModel;
+import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 
 public class DailyRewardActivity extends AppCompatActivity {
     RecyclerView dailyRewardRecyclerView;
     RelativeLayout dailyBonus;
-    DailyRewardViewModel dailyRewardViewModel;
+    ApplicationDataViewModel applicationDataViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,9 +24,9 @@ public class DailyRewardActivity extends AppCompatActivity {
         dailyRewardRecyclerView = findViewById(R.id.dailyRewardRecyclerView);
         dailyBonus = findViewById(R.id.dailyBonus);
 
-        dailyRewardViewModel = new ViewModelProvider(this).get(DailyRewardViewModel.class);
-        dailyRewardViewModel.GetDataDailyReward(dailyRewardRecyclerView,this);
+        applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+        applicationDataViewModel.GetDataDailyReward(dailyRewardRecyclerView, this);
 
-        dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this,DailyBonusActivity.class)));
+        dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this, DailyBonusActivity.class)));
     }
 }

@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -25,21 +25,21 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.rarestardev.morimint.Constants.ApiToken;
 import com.rarestardev.morimint.Constants.MintValues;
-import com.rarestardev.morimint.Constants.UserConstants;
+import com.rarestardev.morimint.Model.Users;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.Repository.UserDataRepository;
 import com.rarestardev.morimint.UsersManagement.CheckActiveUser;
 import com.rarestardev.morimint.UsersManagement.Counter;
 import com.rarestardev.morimint.UsersManagement.MintCounter;
 import com.rarestardev.morimint.UsersManagement.UserProgress;
 import com.rarestardev.morimint.Utilities.InternetConnection;
-import com.rarestardev.morimint.ViewModel.MoriNewsViewModel;
+import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
+import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private Counter counter; // Counter Charge Energy   // true = clicked    // false = not clicked recharged energy
     private MintCounter mintCounter; // balance coin manager
     private CountDownTimer turboDownTimer; // Turbo timer Counter 12 second
-    MoriNewsViewModel moriNewsViewModel; // Mori News Data
+    ApplicationDataViewModel applicationDataViewModel;
+    UserDataViewModel userDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,31 +415,29 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "onResume");
 
-
-        UserDataRepository userDataRepository = new UserDataRepository();
-        userDataRepository.UserData(this,binding.tvUsername);
-
+        userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        userDataViewModel.getUserData(MainActivity.this);
 
         InternetConnection connection = new InternetConnection();
         if (!connection.isConnectedNetwork(this)) {
             Toast.makeText(this, "No Internet !", Toast.LENGTH_SHORT).show();
         } else {
             RechargedEnergy();
-            moriNewsViewModel = new ViewModelProvider(this).get(MoriNewsViewModel.class);
-            moriNewsViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
+            applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+            applicationDataViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
                 boolean is_pinned_news = moriNewsModels.get(0).isIs_published();
 
                 if (is_pinned_news) {
                     binding.tvNewsMessage.setText(moriNewsModels.get(0).getContent());
-                } else{
+                } else {
                     binding.tvNewsMessage.setText("");
                 }
 
-                String isNews  = moriNewsModels.get(0).getTitle();
+                String isNews = moriNewsModels.get(0).getTitle();
 
-                if (isNews.isEmpty()){
+                if (isNews.isEmpty()) {
                     binding.moriNewsDot.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.moriNewsDot.setVisibility(View.VISIBLE);
                 }
 

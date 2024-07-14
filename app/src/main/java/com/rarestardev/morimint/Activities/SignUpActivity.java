@@ -134,6 +134,6 @@ public class SignUpActivity extends AppCompatActivity {
     private void SignUpAccount(String username, String email, String password) {
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        userDataViewModel.GetDataSignUpUsers(SignUpActivity.this,username,email,password);
+        userDataViewModel.SignUp(SignUpActivity.this,username,email,password);
     }
 }

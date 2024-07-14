@@ -1,6 +1,5 @@
 package com.rarestardev.morimint.Api;
 
-import com.rarestardev.morimint.Constants.ApiToken;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.Users;
@@ -18,11 +17,11 @@ import retrofit2.http.Part;
 
 public interface ApiService {
 
-    @Headers("Authorization: " + ApiToken.SERVER_TOKEN)
+    @Headers("Authorization: " + ApiClient.SERVER_TOKEN)
     @GET("controls/news")
     Call<List<MoriNewsModel>> GetMoriNews();
 
-    @Headers("Authorization: " + ApiToken.SERVER_TOKEN)
+    @Headers("Authorization: " + ApiClient.SERVER_TOKEN)
     @GET("controls/Dailybonus")
     Call<List<DailyRewardModel>> GetDailyReward();
 
@@ -38,5 +37,5 @@ public interface ApiService {
 
 
     @GET("user/userdata")
-    Call<List<Users>>UserData(@Header("Authorization: ") String token);
+    Call<Users> UserData(@Header("Authorization") String token);
 }
