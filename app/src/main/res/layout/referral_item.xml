@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginBottom="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/card_layout_bg">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/drawer_profile_ic"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRefUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Soheyl Darzi"
+        android:layout_toEndOf="@id/imageViewProfile"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ 50.000"
+        android:layout_toEndOf="@id/imageViewProfile"
+        android:layout_below="@id/tvRefUsername"
+        android:layout_marginStart="25dp"
+        android:maxLines="1"
+        android:textColor="#00C853"
+        android:textSize="15sp"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/coin_mint"
+        android:layout_toStartOf="@id/tvRefNumber"
+        android:layout_marginEnd="10dp"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRefNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50.000"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="15dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

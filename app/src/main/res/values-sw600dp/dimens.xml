@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activities -->
+    <dimen name="MintLogoBrain">80dp</dimen>
+    <dimen name="DrawerWidth">350dp</dimen>
+    <dimen name="bottomNavigationBarWidth">500dp</dimen>
+    <dimen name="PriceLayoutWidth">150dp</dimen>
+    <dimen name="PriceLayoutHeight">40dp</dimen>
+    <dimen name="MintLogoMarginTop">35dp</dimen>
+    <dimen name="MintBalanceMarginTop">50dp</dimen>
+    <dimen name="MintBalanceTextSize">35sp</dimen>
+    <dimen name="BaseCoinLayoutWidth">550dp</dimen>
+    <dimen name="BaseCoinLayoutHeight">570dp</dimen>
+    <dimen name="CoinMintImage">470dp</dimen>
+    <dimen name="CoinMintImageMarginTop">150dp</dimen>
+    <dimen name="MintFrameHeight">350dp</dimen>
+    <dimen name="MintFrameWidth">365dp</dimen>
+    <dimen name="MintFrameMarginTop">180dp</dimen>
+    <dimen name="IconEnergySize">35dp</dimen>
+    <dimen name="tvEnergyTextSize">20sp</dimen>
+    <dimen name="LevelProgressBarHeight">30dp</dimen>
+    <dimen name="LevelProgressBarMarginTop">15dp</dimen>
+    <dimen name="LevelProgressBarWidth">400dp</dimen>
+    <dimen name="levelShow">90dp</dimen>
+    <dimen name="levelShowMarginTop">15dp</dimen>
+    <dimen name="levelShowStroke">85dp</dimen>
+    <dimen name="levelShowSecond">78dp</dimen>
+    <dimen name="levelShowTextSize">20sp</dimen>
+    <dimen name="levelShowTextMarginTop">20dp</dimen>
+    <dimen name="MainCardWidth">400dp</dimen>
+    <dimen name="MainCardHeight">80dp</dimen>
+    <dimen name="MainCardMarginTop">60dp</dimen>
+    <dimen name="JackpotItemHeight">80dp</dimen>
+
+
+    <dimen name="jackpotSizeWidth">420dp</dimen>
+    <dimen name="jackpotSizeHeight">320dp</dimen>
+    <dimen name="jackpotColSizeWidth">80dp</dimen>
+    <dimen name="jackpotColSizeHeight">200dp</dimen>
+    <dimen name="jackpotIconSize">45dp</dimen>
+    <dimen name="jackpotColOneMarginStart">55dp</dimen>
+    <dimen name="jackpotHandleWidth">70dp</dimen>
+    <dimen name="jackpotHandleHeight">200dp</dimen>
+    <dimen name="jackpotHandleMarginEnd">155dp</dimen>
+    <dimen name="jackpotHandleMarginBottom">28dp</dimen>
+    <dimen name="referral_layout_size">450dp</dimen>
+    <dimen name="NavigationTextSize">12sp</dimen>
+    <dimen name="NavigationIconMarginTop">5dp</dimen>
+    <dimen name="priceTextSize">14sp</dimen>
+    <dimen name="priceMarginTop">3dp</dimen>
+    <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
+    <dimen name="dailyRewardRecyclerViewWidth">420dp</dimen>
+
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="NavigationTextSize">10sp</dimen>
+    <dimen name="NavigationLayoutSize">60dp</dimen>
+    <dimen name="NavigationIconSize">28dp</dimen>
+    <dimen name="NavigationIconMarginTop">10dp</dimen>
+    <dimen name="PriceLayoutWidth">120dp</dimen>
+    <dimen name="priceTextSize">10sp</dimen>
+    <dimen name="priceMarginTop">3dp</dimen>
+    <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
+    <dimen name="dailyRewardRecyclerViewWidth">360dp</dimen>
+</resources>

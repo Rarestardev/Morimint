@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/base_app_bg"
+        android:scrollbars="none"
+        tools:context=".Activities.JackpotActivity">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/jackpotInfo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/help_ic"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/jackpotDesc"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:paddingStart="15dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/jackpot_ic"
+                android:layout_marginTop="30dp"
+                 />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/jackpotTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jackpot"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_below="@id/jackpotDesc"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/score_detail_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/jackpotTitle"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/score_layout"
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/jackpot_score_banner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scoreTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="38dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="@string/score"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/scoreIcon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/coin_mint"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvBonusJackpot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:maxLines="1"
+                        android:textSize="22sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/scoreTitle"
+                        tools:text="157400064233651" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="300dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/jackpot_chance_banner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/score_layout">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/chanceTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="40dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="@string/chance"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvChanceJackpot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        tools:text="20"
+                        android:textSize="28sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/chanceTitle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="400dp"
+                android:layout_height="300dp"
+                android:layout_below="@id/score_detail_layout"
+                android:layout_centerHorizontal="true">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/jackpotSizeWidth"
+                    android:layout_height="302dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <View
+                        android:id="@+id/play_jackpot"
+                        android:layout_width="@dimen/jackpotHandleWidth"
+                        android:layout_height="@dimen/jackpotHandleHeight"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/jackpot_controller"
+                        android:visibility="visible" />
+
+                    <View
+                        android:id="@+id/stop_jackpot"
+                        android:layout_width="@dimen/jackpotHandleWidth"
+                        android:layout_height="@dimen/jackpotHandleHeight"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/jackpot_handle_down"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="@dimen/jackpotSizeWidth"
+                    android:layout_height="@dimen/jackpotSizeHeight"
+                    android:background="@drawable/jackpot_styles"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <FrameLayout
+                        android:id="@+id/c3"
+                        android:layout_width="@dimen/jackpotColSizeWidth"
+                        android:layout_height="@dimen/jackpotColSizeHeight"
+                        android:layout_marginStart="@dimen/jackpotColOneMarginStart"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UselessParent">
+
+                        <FrameLayout
+                            android:id="@+id/Column3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView7"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|top"
+                                android:layout_marginTop="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView9"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:layout_marginBottom="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                        </FrameLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/c2"
+                        android:layout_width="@dimen/jackpotColSizeWidth"
+                        android:layout_height="@dimen/jackpotColSizeHeight"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/c3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UselessParent">
+
+                        <FrameLayout
+                            android:id="@+id/Column2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView4"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|top"
+                                android:layout_marginTop="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_crown_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:layout_marginBottom="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+                        </FrameLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/c1"
+                        android:layout_width="@dimen/jackpotColSizeWidth"
+                        android:layout_height="@dimen/jackpotColSizeHeight"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/c2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UselessParent">
+
+                        <FrameLayout
+                            android:id="@+id/Column1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView1"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|top"
+                                android:layout_marginTop="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_brain_off_ic" />
+
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="@dimen/jackpotIconSize"
+                                android:layout_height="@dimen/jackpotIconSize"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:layout_marginBottom="5dp"
+                                android:contentDescription="@string/app_name"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jackpot_bullion_off_ic" />
+
+                        </FrameLayout>
+
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</layout>

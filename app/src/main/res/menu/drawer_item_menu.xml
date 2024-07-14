@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/wallet_menu"
+        android:title="@string/wallet"
+        android:icon="@drawable/wallet_down_ic"/>
+
+    <item android:id="@+id/booster_menu"
+        android:title="@string/booster"
+        android:icon="@drawable/booster_ic"/>
+
+    <item android:id="@+id/jackpot_menu"
+        android:title="@string/jackpot"
+        android:icon="@drawable/jackpot_ic"/>
+
+    <item android:id="@+id/task_menu"
+        android:title="@string/task"
+        android:icon="@drawable/task_ic"/>
+
+    <item android:id="@+id/ads_menu"
+        android:title="@string/ads"
+        android:icon="@drawable/advert_ic"/>
+
+    <item android:id="@+id/exitApp"
+        android:title="@string/exit"
+        android:icon="@drawable/exit_ic"/>
+
+
+
+
+</menu>
