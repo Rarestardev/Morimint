@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.UsersManagement;
+package com.rarestardev.morimint.ApplicationSetup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -58,6 +58,10 @@ public class CoinMintManager {
             balance += mintValue;
             mintValue = 0;
         }
+    }
+
+    public void getReward(int reward){
+        balance += reward;
     }
 
     public long SendNewValue(){

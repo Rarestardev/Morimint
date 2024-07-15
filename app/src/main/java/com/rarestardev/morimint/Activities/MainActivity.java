@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -25,50 +24,57 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.rarestardev.morimint.ApplicationSetup.UserProgress;
 import com.rarestardev.morimint.Constants.MintValues;
-import com.rarestardev.morimint.Model.Users;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.UsersManagement.CheckActiveUser;
-import com.rarestardev.morimint.UsersManagement.Counter;
-import com.rarestardev.morimint.UsersManagement.MintCounter;
-import com.rarestardev.morimint.UsersManagement.UserProgress;
+import com.rarestardev.morimint.ApplicationSetup.ChargeEnergyCounter;
+import com.rarestardev.morimint.ApplicationSetup.CheckActiveUser;
+import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.InternetConnection;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
+import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private int clickerCounter; // number of clicked for mint counter
-    private int clickerCounterTurbo; // number of clicked for mint counter
-    private int TurboCount = 0; // Turbo Counter
-    private static final String TAG = "Main Activity"; // Log tag
-    private boolean isClicked = false; // Clicked Coin for Mint = true or false
+    private static final String TAG = "HomeLog"; // Log tag
     private final Handler handler = new Handler(); // energy timer
     private Runnable runnable; // energy charger
     int energy; // energy
-    private SharedPreferences.Editor editor; // current energy counter
-    private Counter counter; // Counter Charge Energy   // true = clicked    // false = not clicked recharged energy
-    private MintCounter mintCounter; // balance coin manager
-    private CountDownTimer turboDownTimer; // Turbo timer Counter 12 second
+    private SharedPreferences.Editor editor; // current energy chargeEnergyCounter
+    private ChargeEnergyCounter chargeEnergyCounter; // ChargeEnergyCounter Charge Energy   // true = clicked    // false = not clicked recharged energy
+
+    private int clickerCounter;
+    private int clickerCounterTurbo; // number of clicked for mint chargeEnergyCounter
+    private boolean isClicked = false;
+    private int TurboCount = 0; // Turbo ChargeEnergyCounter
+
+    CoinMintManager coinMintManager;
+    CountDownTimer turboDownTimer; // Turbo timer ChargeEnergyCounter 12 second
+
     ApplicationDataViewModel applicationDataViewModel;
     UserDataViewModel userDataViewModel;
+    CoinManagerViewModel coinManagerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        coinMintManager = new CoinMintManager(MainActivity.this,MintValues.mint);
+        chargeEnergyCounter = new ChargeEnergyCounter(MintValues.MaxEnergy, MintValues.MaxEnergy, 0, MintValues.STEP_ENERGY);
+
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentTime", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         StartActivities();
         NavigationDrawerHandle();
+        RechargedEnergy();
         MintHandler();
     }
 
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.turboMint.setVisibility(View.GONE);
                 binding.coin.setVisibility(View.GONE);
                 binding.turbo.setVisibility(View.VISIBLE);
-                mintCounter = new MintCounter(MintValues.mint);
+                coinMintManager = new CoinMintManager(MainActivity.this, MintValues.mint);
                 binding.CoinLayout.setOnTouchListener((v, event) -> {
                     float x = event.getX();
                     float y = event.getY();
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                             case 4:
                             case 5:
                                 clickerCounterTurbo++;
-                                mintCounter.IncreaseBalance(clickerCounterTurbo, true);
+                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true);
                                 CreateAnimation(x, y);
                                 break;
                         }
@@ -136,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     public void MintCoinAnimation() {
-        mintCounter = new MintCounter(MintValues.mint);
         binding.CoinLayout.setOnTouchListener((v, event) -> {
             float x = event.getX();
             float y = event.getY();
@@ -150,11 +155,11 @@ public class MainActivity extends AppCompatActivity {
                     case 3:
                     case 4:
                     case 5:
-                        if (!counter.mintStop()) {
+                        if (!chargeEnergyCounter.mintStop()) {
                             clickerCounter++;
-                            mintCounter.IncreaseBalance(clickerCounter, false);
-                            counter.decrement();
-                            binding.tvEnergy.setText(counter.getValue() + " / " + MintValues.MaxEnergy);
+                            coinMintManager.IncreaseBalance(clickerCounter, false);
+                            chargeEnergyCounter.decrement();
+                            binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + MintValues.MaxEnergy);
                             isClicked = true;
 
                             CreateAnimation(x, y);
@@ -170,17 +175,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void CreateAnimation(float x, float y) {
+    private void CreateAnimation(float x, float y) {
         YoYo.with(Techniques.Shake).duration(MintValues.COIN_SHAKE_ANIMATION_TIMER).playOn(binding.coin);
         YoYo.with(Techniques.Shake).duration(MintValues.COIN_SHAKE_ANIMATION_TIMER).playOn(binding.turbo);
 
-        NumberFormat(mintCounter.getTotalBalance(), binding.tvBalanceCoin);
+        NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
-        UserProgress userProgress = new UserProgress(mintCounter.getTotalBalance(), binding.tvLevelShow, binding.levelXpProgressBar);
-        userProgress.levelUserManagement();
-
-        TextView animationTextView = new TextView(this);
-
+        TextView animationTextView = new TextView(MainActivity.this);
         animationTextView.setText("+" + MintValues.mint);
         animationTextView.setTextSize(30);
         animationTextView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -241,12 +242,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void NumberFormat(long balance, @NonNull TextView tvBalance) {
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setGroupingSeparator(',');
+        DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
+        numberFormat.setGroupingSize(3);
+        numberFormat.setMaximumFractionDigits(2);
+        tvBalance.setText(numberFormat.format(balance));
+    }
+
     @SuppressLint("SetTextI18n")
     private void RechargedEnergy() {
-        counter = new Counter(MintValues.MaxEnergy, MintValues.MaxEnergy, 1, MintValues.STEP_ENERGY);
-        binding.tvEnergy.setText(counter.getValue() + " / " + MintValues.MaxEnergy);
-
-        if (counter.getValue() >= MintValues.MaxEnergy) {
+        if (chargeEnergyCounter.getValue() >= MintValues.MaxEnergy) {
             editor.clear();
         }
 
@@ -254,14 +261,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!isClicked) {
-                    if (counter.getValue() < MintValues.MaxEnergy) {
-                        counter.increment();
-                    } else if (counter.getValue() >= MintValues.MaxEnergy) {
-                        binding.tvEnergy.setText(MintValues.MaxEnergy + " / " + MintValues.MaxEnergy);
+                    if (chargeEnergyCounter.getValue() < MintValues.MaxEnergy) {
+                        chargeEnergyCounter.increment();
                     }
                 }
-
-                binding.tvEnergy.setText(counter.getValue() + " / " + MintValues.MaxEnergy);
+                binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + MintValues.MaxEnergy);
                 handler.postDelayed(this, MintValues.IncreaseEnergyTime);
             }
         };
@@ -277,24 +281,15 @@ public class MainActivity extends AppCompatActivity {
             long timeDifInSecond = (lastTime - currentTime) / 1000;
 
             if (energy < MintValues.MaxEnergy) {
-                counter.increase((int) timeDifInSecond, energy);
+                chargeEnergyCounter.increase((int) timeDifInSecond, energy);
             }
             if (energy > MintValues.MaxEnergy) {
                 energy = MintValues.MaxEnergy;
                 editor.clear();
             }
 
-            binding.tvEnergy.setText(counter.getValue() + " / " + MintValues.MaxEnergy);
+            binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + MintValues.MaxEnergy);
         }
-    }
-
-    private void NumberFormat(int balance, @NonNull TextView tvBalance) {
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
-        decimalFormatSymbols.setGroupingSeparator(',');
-        DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
-        numberFormat.setGroupingSize(3);
-        numberFormat.setMaximumFractionDigits(2);
-        tvBalance.setText(numberFormat.format(balance));
     }
 
     private void NavigationDrawerHandle() {
@@ -337,9 +332,6 @@ public class MainActivity extends AppCompatActivity {
         binding.profileLayout.setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 
-        binding.referral.setOnClickListener(v ->
-                startActivity(new Intent(this, ReferralActivity.class)));
-
         binding.moriNews.setOnClickListener(v ->
                 startActivity(new Intent(this, NewsActivity.class)));
 
@@ -361,9 +353,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
+        coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         super.onStop();
         Log.d(TAG, "onStop");
         getCurrentTimeUserActiveToOfflineMode();
+
     }
 
     private void getCurrentTimeUserActiveToOfflineMode() {
@@ -371,12 +366,14 @@ public class MainActivity extends AppCompatActivity {
         activeUser.isActiveUserInApp(false);
 
         editor.putLong("Time", System.currentTimeMillis());
-        editor.putInt("Energy", counter.getValue());
+        editor.putInt("Energy", chargeEnergyCounter.getValue());
         editor.apply();
     }
 
     @Override
     protected void onDestroy() {
+        coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
+        coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         Log.d(TAG, "onDestroy");
 
         handler.removeCallbacks(runnable);
@@ -389,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "onRestart");
+        coinMintManager.OnStartClearData();
     }
 
     @Override
@@ -406,6 +404,7 @@ public class MainActivity extends AppCompatActivity {
         if (binding.tvBalanceCoin.getText().toString().isEmpty()) {
             binding.tvBalanceCoin.setText("0");
         }
+
         CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
         activeUser.isActiveUserInApp(true);
     }
@@ -414,15 +413,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        userDataViewModel.getUserData(MainActivity.this);
+        userDataViewModel.getUserData(MainActivity.this).observe(this, users -> {
+            if (users != null) {
+                binding.referral.setOnClickListener(v -> {
+                    Intent intent = new Intent(MainActivity.this, ReferralActivity.class);
+                    intent.putExtra("Referral", users.getReferral_code());
+                    startActivity(intent);
+                });
+
+                binding.tvUsername.setText(users.getUsername());
+                binding.drawerTvUsername.setText(users.getUsername());
+                binding.tvLevelShow.setText(String.valueOf(users.getLevel()));
+                coinMintManager.setBalance(users.getCoin());
+                binding.tvBalanceCoin.setText(String.valueOf(coinMintManager.getBalance()));
+            }
+        });
 
         InternetConnection connection = new InternetConnection();
         if (!connection.isConnectedNetwork(this)) {
             Toast.makeText(this, "No Internet !", Toast.LENGTH_SHORT).show();
         } else {
-            RechargedEnergy();
             applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
             applicationDataViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
                 boolean is_pinned_news = moriNewsModels.get(0).isIs_published();
@@ -443,11 +454,5 @@ public class MainActivity extends AppCompatActivity {
 
             });
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
     }
 }

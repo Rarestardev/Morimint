@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Activities.SignInActivity;
@@ -15,6 +18,8 @@ import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Api.ApiResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
+
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -31,16 +36,18 @@ public class UserDataRepository {
     }
 
 
-    public void UserData(Context context) {
+    public LiveData<Users> UserData(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
         Log.d("UserData", token);
+        MutableLiveData<Users> data = new MutableLiveData<>();
         Call<Users> call = apiService.UserData(token);
         call.enqueue(new Callback<Users>() {
             @Override
             public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("UserData", "Success");
+                    data.setValue(response.body());
                 }
             }
 
@@ -49,6 +56,7 @@ public class UserDataRepository {
                 Log.e("UserData", "Error", t);
             }
         });
+        return data;
     }
 
 

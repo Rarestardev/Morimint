@@ -3,6 +3,7 @@ package com.rarestardev.morimint.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
 import android.content.Intent;
@@ -16,11 +17,14 @@ import android.widget.TextView;
 import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.databinding.ActivityJackpotBinding;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Random;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class JackpotActivity extends AppCompatActivity {
     private ActivityJackpotBinding binding;
@@ -31,13 +35,18 @@ public class JackpotActivity extends AppCompatActivity {
     private int value_two;
     private int value_three;
     private int Play_chance = 20;
-    private int Score = 0;
+    private long Score = 0;
     double[] probabilities = {0.04, 0.06, 0.10, 0.15, 0.25, 0.40};
+
+    CoinManagerViewModel coinManagerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_jackpot);
+
+        coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
+
 
         if (Play_chance == 0) {
             binding.playJackpot.setVisibility(View.GONE);
@@ -203,22 +212,27 @@ public class JackpotActivity extends AppCompatActivity {
         if (value_one == value_two && value_two == value_three) {
             Score += calculateReward(value_one);
         }
-        updateScoreDisplay();
     }
 
     private int calculateReward(int value) {
         switch (value) {
             case 0:
+                ShowDialogClimbReward(5000000);
                 return 5000000;
             case 1:
+                ShowDialogClimbReward(1000000);
                 return 1000000;
             case 2:
+                ShowDialogClimbReward(500000);
                 return 500000;
             case 3:
+                ShowDialogClimbReward(100000);
                 return 100000;
             case 4:
+                ShowDialogClimbReward(50000);
                 return 50000;
             case 5:
+                ShowDialogClimbReward(10000);
                 return 10000;
 
             default:
@@ -226,12 +240,27 @@ public class JackpotActivity extends AppCompatActivity {
         }
     }
 
+    private void ShowDialogClimbReward(int reward){
+        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this,SweetAlertDialog.SUCCESS_TYPE);
+        dialog.setCancelable(false);
+        dialog.setTitle("Good Job!");
+        dialog.setContentText("Great , you won " + reward + " MoriBit Coin");
+        dialog.setConfirmButton("Climb", sweetAlertDialog -> {
+            if (reward != 0){
+                coinManagerViewModel.UpdateCoin(reward, JackpotActivity.this);
+                updateScoreDisplay();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     private void updateScoreDisplay() {
         binding.tvBonusJackpot.setText(String.valueOf(Score));
         NumberFormat(Score, binding.tvBonusJackpot);
     }
 
-    private void NumberFormat(int balance, @NonNull TextView tvBalance) {
+    private void NumberFormat(long balance, @NonNull TextView tvBalance) {
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setGroupingSeparator(',');
         DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
@@ -316,6 +345,27 @@ public class JackpotActivity extends AppCompatActivity {
             binding.tvChanceJackpot.setText(String.valueOf(0));
         } else {
             binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //SendRewardValueToBalanceCoin();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //SendRewardValueToBalanceCoin();
+    }
+
+
+    private void SendRewardValueToBalanceCoin(){
+        if (Score != 0){
+            coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
+            coinManagerViewModel.UpdateCoin(Score, JackpotActivity.this);
+            System.out.println(Score);
         }
     }
 }

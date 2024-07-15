@@ -2,8 +2,10 @@ package com.rarestardev.morimint.ViewModel;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rarestardev.morimint.Model.Users;
 import com.rarestardev.morimint.Repository.UserDataRepository;
 
 public class UserDataViewModel extends ViewModel {
@@ -15,8 +17,8 @@ public class UserDataViewModel extends ViewModel {
     }
 
 
-    public void getUserData(Context context){
-        userDataRepository.UserData(context);
+    public LiveData<Users> getUserData(Context context){
+        return userDataRepository.UserData(context);
     }
 
 

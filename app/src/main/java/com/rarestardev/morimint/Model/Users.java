@@ -38,7 +38,7 @@ public class Users {
     private boolean blue_tick;
 
     @SerializedName("coin")
-    private int coin;
+    private long coin;
 
     @SerializedName("wallet")
     private String wallet;
@@ -116,11 +116,11 @@ public class Users {
         this.blue_tick = blue_tick;
     }
 
-    public int getCoin() {
+    public long getCoin() {
         return coin;
     }
 
-    public void setCoin(int coin) {
+    public void setCoin(long coin) {
         this.coin = coin;
     }
 

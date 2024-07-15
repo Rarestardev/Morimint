@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.UsersManagement;
+package com.rarestardev.morimint.ApplicationSetup;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;

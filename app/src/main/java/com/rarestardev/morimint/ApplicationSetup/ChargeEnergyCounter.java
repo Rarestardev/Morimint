@@ -1,12 +1,12 @@
-package com.rarestardev.morimint.UsersManagement;
+package com.rarestardev.morimint.ApplicationSetup;
 
 import com.rarestardev.morimint.Constants.MintValues;
 
 public class ChargeEnergyCounter {
-    private int value;
-    private int maxValue;
-    private int minValue;
-    private int step;
+    int value;
+    int maxValue;
+    int minValue;
+    int step;
 
     public ChargeEnergyCounter(int value, int maxValue, int minValue, int step) {
         this.value = value;
@@ -48,9 +48,5 @@ public class ChargeEnergyCounter {
 
     public int getValue() {
         return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 }
