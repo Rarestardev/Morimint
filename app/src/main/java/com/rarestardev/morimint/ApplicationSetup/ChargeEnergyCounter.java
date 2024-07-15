@@ -2,13 +2,13 @@ package com.rarestardev.morimint.UsersManagement;
 
 import com.rarestardev.morimint.Constants.MintValues;
 
-public class Counter {
+public class ChargeEnergyCounter {
     private int value;
     private int maxValue;
     private int minValue;
     private int step;
 
-    public Counter(int value, int maxValue, int minValue, int step) {
+    public ChargeEnergyCounter(int value, int maxValue, int minValue, int step) {
         this.value = value;
         this.maxValue = maxValue;
         this.minValue = minValue;
@@ -27,8 +27,8 @@ public class Counter {
     public void decrement() {
         if (value >= 1) {
             value -= MintValues.mint;
-            if (value < 0) {
-                value = 1;
+            if (value < minValue) {
+                value = minValue;
             }
         }
     }

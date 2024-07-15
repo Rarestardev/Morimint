@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.rarestardev.morimint.Constants.MintValues;
 
 public class UserProgress {
-    private int coin;
+    private long coin;
     private TextView textView;
     private ProgressBar progressBar;
     private int adsCount = 0;
@@ -24,7 +24,7 @@ public class UserProgress {
     private static final int[] LEVEL_REFERRAL = {2, 3, 4, 5, 7, 10};
     private static final int[] LEVEL_XP = {30, 50, 70, 85, 100};
 
-    public UserProgress(int coin, TextView textView, ProgressBar progressBar) {
+    public UserProgress(long coin, TextView textView, ProgressBar progressBar) {
         this.coin = coin;
         this.textView = textView;
         this.progressBar = progressBar;
