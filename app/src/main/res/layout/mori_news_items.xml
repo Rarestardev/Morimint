@@ -60,20 +60,12 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="15dp"
             >
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/socialImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/insta_ic"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/socialImage"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:maxLines="1"
                 android:ellipsize="end"

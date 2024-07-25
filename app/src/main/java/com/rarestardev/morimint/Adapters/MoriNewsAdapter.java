@@ -9,17 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.R;
 
 import java.util.List;
 
-public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHolder>{
+public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHolder> {
 
     List<MoriNewsModel> moriNewsModels;
     Context context;
@@ -32,7 +30,7 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
     @NonNull
     @Override
     public NewsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mori_news_items,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mori_news_items, parent, false);
         return new NewsHolder(view);
     }
 
@@ -42,7 +40,6 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
         holder.title.setText(moriNewsModels.get(position).getTitle() + ":");
         holder.tvNews.setText(moriNewsModels.get(position).getContent());
         holder.tvLink.setText(moriNewsModels.get(position).getLink());
-        //Glide.with(context).load(Uri.parse(moriNewsModels.get(position).getImage())).into(holder.socialImage);
 
         holder.tvLink.setOnClickListener(v -> {
             String link = moriNewsModels.get(position).getLink();
@@ -57,10 +54,9 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
         return moriNewsModels.size();
     }
 
-    class NewsHolder extends RecyclerView.ViewHolder{
+    static class NewsHolder extends RecyclerView.ViewHolder {
 
-        AppCompatTextView title,tvNews,tvLink;
-        AppCompatImageView socialImage;
+        AppCompatTextView title, tvNews, tvLink;
 
         public NewsHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,7 +64,6 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
             title = itemView.findViewById(R.id.title);
             tvNews = itemView.findViewById(R.id.tvNews);
             tvLink = itemView.findViewById(R.id.tvLink);
-            socialImage = itemView.findViewById(R.id.socialImage);
 
         }
     }

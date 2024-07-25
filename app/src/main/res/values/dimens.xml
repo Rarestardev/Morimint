@@ -41,10 +41,10 @@
     <dimen name="MintBalanceTextSize">28sp</dimen>
     <dimen name="BaseCoinLayoutWidth">410dp</dimen>
     <dimen name="BaseCoinLayoutHeight">400dp</dimen>
-    <dimen name="CoinMintImage">310dp</dimen>
-    <dimen name="CoinMintImageMarginTop">90dp</dimen>
-    <dimen name="MintFrameHeight">250dp</dimen>
-    <dimen name="MintFrameWidth">240dp</dimen>
+    <dimen name="CoinMintImage">350dp</dimen>
+    <dimen name="CoinMintImageMarginTop">95dp</dimen>
+    <dimen name="MintFrameHeight">290dp</dimen>
+    <dimen name="MintFrameWidth">320dp</dimen>
     <dimen name="MintFrameMarginTop">120dp</dimen>
     <dimen name="IconEnergySize">25dp</dimen>
     <dimen name="tvEnergyTextSize">14sp</dimen>

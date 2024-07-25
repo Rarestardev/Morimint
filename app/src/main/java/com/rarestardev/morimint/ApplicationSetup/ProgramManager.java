@@ -1,9 +1,10 @@
 package com.rarestardev.morimint.ApplicationSetup;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,27 +14,27 @@ import androidx.core.content.ContextCompat;
 
 import com.rarestardev.morimint.R;
 
-public class ProgressBarManager {
+public class ProgramManager {
 
     ProgressBar progressBar;
     Context context;
     TextView tvLevel;
     AppCompatImageView Coin,Turbo;
+
+
     int energy;
-    int mint;
+    int mint = 1;
     int minEnergy;
     int progressStatus;
     long totalBalance;
     private static final String LOG_TAG = "ProgressManager";
-    public static int EnergyCount = 1000;
-    public static int MintCount = 1;
 
-    /*private static final long[] LEVEL_COIN = {200000,700000,1500000,5000000,8000000,15000000,25000000,35000000,50000000,70000000,90000000,
+    /* private static final long[] LEVEL_COIN = {200000,700000,1500000,5000000,8000000,15000000,25000000,35000000,50000000,70000000,90000000,
     120000000,150000000,200000000,300000000};*/
 
     private static final long[] LEVEL_COIN = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500};
 
-    public ProgressBarManager(ProgressBar progressBar, Context context, TextView tvLevel,AppCompatImageView Coin,AppCompatImageView Turbo) {
+    public ProgramManager(ProgressBar progressBar, Context context, TextView tvLevel, AppCompatImageView Coin, AppCompatImageView Turbo) {
         this.progressBar = progressBar;
         this.context = context;
         this.tvLevel = tvLevel;
@@ -60,8 +61,7 @@ public class ProgressBarManager {
 
         }else if (totalBalance > LEVEL_COIN[0] && totalBalance <= LEVEL_COIN[1]){
             tvLevel.setText(String.valueOf(2));
-            EnergyCount = 2000;
-            MintCount = 2;
+            energy = 2000;
             progressBar.setMax((int) LEVEL_COIN[1]);
             initProgressBarValues(LEVEL_COIN[1]);
             Coin.setImageDrawable(context.getDrawable(R.drawable.level_two));
@@ -182,6 +182,11 @@ public class ProgressBarManager {
         }
     }
 
+
+
+
+
+
     public void initProgressBarValues(long currentCoin){
         if (totalBalance < currentCoin){
             progressStatus = (int) totalBalance;
@@ -201,6 +206,8 @@ public class ProgressBarManager {
             }
         }).start();
     }
+
+
 
     public int getEnergy() {
         return energy;
@@ -226,9 +233,13 @@ public class ProgressBarManager {
         this.minEnergy = minEnergy;
     }
 
+
+
+
+
+
     private void changeProgressBarColor() {
         int progress = progressBar.getProgress();
-
         int colorId;
         if (progress < 10) {
             colorId = R.color.white;

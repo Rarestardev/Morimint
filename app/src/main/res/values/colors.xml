@@ -13,4 +13,9 @@
     <color name="DarkGray">#4E4E4E</color>
     <color name="Gray">#232323</color>
     <color name="DarkGradientLockedView">#B3232323</color>
+
+
+    <color name="JackpotBonusAnim1">#ffc000</color>
+    <color name="JackpotBonusAnim2">#F3DA03</color>
+    <color name="JackpotBonusAnim3">#ECCD6F</color>
 </resources>

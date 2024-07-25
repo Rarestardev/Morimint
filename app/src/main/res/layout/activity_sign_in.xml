@@ -29,51 +29,6 @@
                 android:textStyle="bold" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/signInWithGoogle"
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
-                android:layout_height="@dimen/SigningBackgroundFieldsHeight"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="50dp"
-                android:background="@color/Fields">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/SigningBackgroundFieldsHeight"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/signing_icon_bg"
-                    android:padding="@dimen/SigningIconPadding"
-                    android:src="@drawable/icon_google"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="75dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/signInWithGoogle"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/TextColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:text="@string/or"
-                android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="@dimen/SigningBackgroundFieldsWidth"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"

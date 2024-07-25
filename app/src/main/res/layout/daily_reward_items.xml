@@ -15,16 +15,6 @@
         android:layout_toStartOf="@id/dailyCheck"
         android:background="@drawable/card_layout_bg">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/dailyIcon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/youtube_ic" />
-
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             android:layout_width="0dp"
@@ -36,7 +26,7 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/reward"
-            app:layout_constraintStart_toEndOf="@id/dailyIcon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="www.google.com" />
 
@@ -45,7 +35,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginEnd="10dp"
-            android:padding="2dp"
+            android:padding="3dp"
             android:src="@drawable/icon_forward"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -85,6 +75,7 @@
         android:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rewardCheck"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/card_layout_bg"
@@ -96,6 +87,7 @@
             android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rewardTimer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/daily_reward_check_bg"
@@ -106,12 +98,17 @@
             android:visibility="gone"
             tools:text="29 S" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rewardSuccess"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/daily_check_complete_bg"
-            android:padding="8dp"
-            android:src="@drawable/task_tick_ic"
+            android:padding="4dp"
+            android:textSize="15sp"
+            android:fontFamily="@font/opensans_bold"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:text="@string/Climb"
             android:visibility="gone" />
 
 

@@ -7,73 +7,185 @@
 
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:scrollbars="none"
         android:background="@drawable/base_app_bg"
         tools:context=".Activities.EarnActivity">
 
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/earn_ic"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/earn"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:textSize="25sp"
-            android:fontFamily="@font/opensans_bold"
-            android:textColor="@color/white" />
-
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/rewardLayout"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/card_layout_bg"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/earn_ic"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp" />
 
-            <RelativeLayout
-                android:id="@+id/dailyReward"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/card_layout_bg">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/earn"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/white" />
 
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="0.5dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/view"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/rewardLayout"
+                android:layout_width="330dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/card_layout_bg"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/dailyReward"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    app:dividerColor="@color/white" />
+                    android:background="@drawable/card_layout_bg">
 
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="0.5dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/view"
+                        android:layout_marginEnd="15dp"
+                        app:dividerColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/dailyReward"
+                        android:textSize="13sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_layout_bg"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                >
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/bonusCode"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"/>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTextCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/card_layout_bg"
+                    android:hint="@string/yourCode"
+                    android:textColorHint="@color/white"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCheckCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="15dp"
-                    android:text="@string/dailyReward"
-                    android:textSize="13sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/signing_button"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
-                    tools:ignore="RelativeOverlap" />
+                    android:text="@string/check"
+                    android:fontFamily="@font/opensans_bold"
+                    android:visibility="gone"
+                    />
 
-            </RelativeLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_layout_bg"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                >
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/bonusCodeApp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"/>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTextCodeApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/card_layout_bg"
+                    android:hint="@string/yourCode"
+                    android:textColorHint="@color/white"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCheckCodeApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/signing_button"
+                    android:textColor="@color/white"
+                    android:text="@string/check"
+                    android:fontFamily="@font/opensans_bold"
+                    android:visibility="gone"
+                    />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+
+    </ScrollView>
 </layout>

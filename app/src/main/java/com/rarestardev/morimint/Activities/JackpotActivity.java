@@ -6,14 +6,20 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.jinatonic.confetti.CommonConfetti;
+import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
@@ -36,7 +42,8 @@ public class JackpotActivity extends AppCompatActivity {
     private int value_three;
     private int Play_chance = 20;
     private long Score = 0;
-    double[] probabilities = {0.04, 0.06, 0.10, 0.15, 0.25, 0.40};
+    double[] probabilities = {0.05, 0.10, 0.15, 0.15, 0.20, 0.35};
+    private int playJackpot_ad = 3;
 
     CoinManagerViewModel coinManagerViewModel;
 
@@ -70,6 +77,16 @@ public class JackpotActivity extends AppCompatActivity {
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
                 Play_chance--;
+
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    // newest device
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        vibrator.vibrate(50); // oldest device
+                    }
+                }
 
                 binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
 
@@ -196,16 +213,44 @@ public class JackpotActivity extends AppCompatActivity {
                 break;
             case 3:
                 ROTATE_COUNT_THREE = 0;
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    // newest device
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(70, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        vibrator.vibrate(70); // oldest device
+                    }
+                }
                 checkAndAwardPoints();
                 if (Play_chance == 0) {
                     binding.playJackpot.setVisibility(View.GONE);
                     binding.stopJackpot.setVisibility(View.VISIBLE);
+                    playJackpot_ad--;
+                    if (playJackpot_ad != 0) {
+                        MoreChanceJackpotPlay();
+                    }
                 } else {
                     binding.playJackpot.setVisibility(View.VISIBLE);
                     binding.stopJackpot.setVisibility(View.GONE);
                 }
                 break;
         }
+    }
+
+    private void MoreChanceJackpotPlay() {
+        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
+        dialog.setCancelable(false);
+        dialog.setTitle("Try again");
+        dialog.setContentText("More chance by seeing the ad");
+        dialog.setConfirmButton("Show Ad", sweetAlertDialog -> {
+            Play_chance += 5;
+            binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
+            binding.playJackpot.setVisibility(View.VISIBLE);
+            binding.stopJackpot.setVisibility(View.GONE);
+            dialog.dismiss();
+        });
+        dialog.show();
     }
 
     private void checkAndAwardPoints() {
@@ -240,13 +285,39 @@ public class JackpotActivity extends AppCompatActivity {
         }
     }
 
-    private void ShowDialogClimbReward(int reward){
-        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this,SweetAlertDialog.SUCCESS_TYPE);
+    private void ShowDialogClimbReward(int reward) {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (reward == 5000000){
+            if (vibrator != null) {
+                // newest device
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(600, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    vibrator.vibrate(600); // oldest device
+                }
+            }
+        }else {
+            if (vibrator != null) {
+                // newest device
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    vibrator.vibrate(300); // oldest device
+                }
+            }
+        }
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setGroupingSeparator(',');
+        DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
+        numberFormat.setGroupingSize(3);
+        numberFormat.setMaximumFractionDigits(2);
+        showConfetti();
+        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.SUCCESS_TYPE);
         dialog.setCancelable(false);
         dialog.setTitle("Good Job!");
-        dialog.setContentText("Great , you won " + reward + " MoriBit Coin");
-        dialog.setConfirmButton("Climb", sweetAlertDialog -> {
-            if (reward != 0){
+        dialog.setContentText("Great , you won " + numberFormat.format(reward) + " MoriBit Coin");
+        dialog.setConfirmButton("Claim", sweetAlertDialog -> {
+            if (reward != 0) {
                 coinManagerViewModel.UpdateCoin(reward, JackpotActivity.this);
                 updateScoreDisplay();
                 dialog.dismiss();
@@ -254,6 +325,22 @@ public class JackpotActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
+    private void showConfetti() {
+        final int containerMiddleX = binding.parentRelative.getWidth() / 2;
+        final int containerMiddleY = 0;
+        final ConfettiSource confettiSource = new ConfettiSource(containerMiddleX, containerMiddleY);
+
+        CommonConfetti.rainingConfetti(binding.parentRelative,confettiSource,
+                        new int[] { getColor(R.color.JackpotBonusAnim1),getColor(R.color.JackpotBonusAnim2) ,
+                        getColor(R.color.JackpotBonusAnim3)})
+
+                .infinite()
+                .setEmissionRate(150)
+                .setEmissionDuration(4000);
+
+    }
+
 
     private void updateScoreDisplay() {
         binding.tvBonusJackpot.setText(String.valueOf(Score));
@@ -341,31 +428,6 @@ public class JackpotActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Play_chance == 0) {
-            binding.tvChanceJackpot.setText(String.valueOf(0));
-        } else {
-            binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        //SendRewardValueToBalanceCoin();
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //SendRewardValueToBalanceCoin();
-    }
-
-
-    private void SendRewardValueToBalanceCoin(){
-        if (Score != 0){
-            coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
-            coinManagerViewModel.UpdateCoin(Score, JackpotActivity.this);
-            System.out.println(Score);
-        }
+        binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
     }
 }

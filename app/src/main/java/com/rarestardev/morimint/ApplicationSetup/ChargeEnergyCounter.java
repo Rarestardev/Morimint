@@ -1,7 +1,5 @@
 package com.rarestardev.morimint.ApplicationSetup;
 
-import com.rarestardev.morimint.Constants.MintValues;
-
 public class ChargeEnergyCounter {
     int value;
     int maxValue;
@@ -15,34 +13,34 @@ public class ChargeEnergyCounter {
         this.step = step;
     }
 
-    public void increment() {
+    public void increment(int maxEnergy) {
         if (value < maxValue) {
             value += step;
         }
         if (value > maxValue) {
-            value = MintValues.MaxEnergy;
+            value = maxEnergy;
         }
     }
 
-    public void decrement() {
+    public void decrement(int mint) {
         if (value >= 1) {
-            value -= MintValues.mint;
+            value -= mint;
             if (value < minValue) {
                 value = minValue;
             }
         }
     }
 
-    public boolean mintStop() {
-        return value < MintValues.mint;
+    public boolean mintStop(int mint) {
+        return value < mint;
     }
 
-    public void increase(int currentTime, int last_energy) {
+    public void increase(int currentTime, int last_energy,int maxEnergy) {
         int added_energy = currentTime * step;
 
-        value = Math.min(last_energy + added_energy, MintValues.MaxEnergy);
+        value = Math.min(last_energy + added_energy, maxEnergy);
         if (value > maxValue){
-            value = MintValues.MaxEnergy;
+            value = maxEnergy;
         }
     }
 

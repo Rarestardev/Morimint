@@ -7,7 +7,6 @@
     <string name="emailHint">Email</string>
     <string name="passwordHint">Password</string>
     <string name="rePasswordHint">Repeat</string>
-    <string name="refHint">Referral</string>
     <string name="SignUp">Sign up</string>
     <string name="register">Register</string>
     <string name="SignUpToSignIn">Already an user? SIGN IN</string>
@@ -18,7 +17,6 @@
     <string name="emailTitle">EMAIL :</string>
     <string name="Next">Next</string>
     <string name="SampleEmail">Moriaiteam@gmail.com</string>
-    <string name="signInWithGoogle">Continue With Google</string>
     <string name="or">OR</string>
     <string name="Click">Click</string>
 
@@ -78,5 +76,10 @@
 
     <string name="dailyRewardDesc">Login every day to claim your rewards!</string>
     <string name="gotIt">Got It</string>
+    <string name="Climb">Climb</string>
+    <string name="refHint">Invitation Code (Optional)</string>
+    <string name="bonusCode">Enter the code you already received in site</string>
+    <string name="bonusCodeApp">Enter the code you already received</string>
+    <string name="yourCode">Your Code</string>
 
 </resources>

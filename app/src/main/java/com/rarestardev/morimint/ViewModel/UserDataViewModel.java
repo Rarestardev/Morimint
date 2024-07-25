@@ -24,8 +24,8 @@ public class UserDataViewModel extends ViewModel {
 
 
 
-    public void SignUp(Context context, String username, String email, String password){
-        userDataRepository.SendUserDataSignUp(context,username, email, password);
+    public void SignUp(Context context, String username, String email, String password,long referral){
+        userDataRepository.SendUserDataSignUp(context,username, email, password,referral);
     }
 
     public void LoginUserAccount(Context context , String username,String password){

@@ -38,15 +38,15 @@ public class CoinManagerRepository {
             @Override
             public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {
                 if (response.isSuccessful()) {
-                    Log.d("API", "Success");
+                    Log.d("UpdateCoin", "Success");
                 } else {
                     try {
                         assert response.errorBody() != null;
                         String errorBodyString = response.errorBody().string();
-                        Log.e("API", "Error: " + errorBodyString);
+                        Log.e("UpdateCoin", "Error: " + errorBodyString);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("API", "Error parsing error body");
+                        Log.e("UpdateCoin", "Error parsing error body");
                     }
                 }
             }

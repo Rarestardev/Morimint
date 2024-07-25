@@ -18,6 +18,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private boolean showing_password = false;
     private boolean showing_rePassword = false;
+    long referral;
 
     UserDataViewModel userDataViewModel;
 
@@ -78,14 +79,26 @@ public class SignUpActivity extends AppCompatActivity {
             String email = String.valueOf(binding.editTextEmail.getText());
             String password = String.valueOf(binding.editTextPassword.getText());
             String repeat = String.valueOf(binding.editTextRePass.getText());
-            int referral = Integer.parseInt(String.valueOf(binding.editTextReferral.getText()));
+
+            String inputRef = String.valueOf(binding.editTextReferral.getText());
+
+            try {
+                if (!inputRef.isEmpty()){
+                    referral = Long.parseLong(inputRef);
+                }else
+                    referral = 0;
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+            }
+
+
 
 
             CheckInputFieldsValue(username, email, password, repeat, referral);
         });
     }
 
-    private void CheckInputFieldsValue(String username, String email, String password, String repeat, int referral) {
+    private void CheckInputFieldsValue(String username, String email, String password, String repeat, long referral) {
         // check input fields
         if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeat.isEmpty()) {
 
@@ -118,7 +131,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                 // all fields not error and complete register user account
 
-                SignUpAccount(username, email, password);
+
+
+                SignUpAccount(username, email, password,referral);
 
             }
 
@@ -131,9 +146,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void SignUpAccount(String username, String email, String password) {
+    private void SignUpAccount(String username, String email, String password,long referral) {
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        userDataViewModel.SignUp(SignUpActivity.this,username,email,password);
+        userDataViewModel.SignUp(SignUpActivity.this,username,email,password,referral);
     }
 }

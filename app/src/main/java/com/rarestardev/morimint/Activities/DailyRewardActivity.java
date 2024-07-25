@@ -27,6 +27,7 @@ public class DailyRewardActivity extends AppCompatActivity {
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
         applicationDataViewModel.GetDataDailyReward(dailyRewardRecyclerView, this);
 
+
         dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this, DailyBonusActivity.class)));
     }
 }

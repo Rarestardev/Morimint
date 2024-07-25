@@ -14,6 +14,8 @@ import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.InternetConnection;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LogoActivity extends AppCompatActivity {
     private static final int SPLASH_DURATION = 2500;
     @SuppressLint("SetTextI18n")
@@ -41,15 +43,15 @@ public class LogoActivity extends AppCompatActivity {
 
             }, SPLASH_DURATION);
         }else {
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.alert_dialog_no_internet);
-            dialog.show();
-
-            AppCompatButton close_dialog = dialog.findViewById(R.id.close_dialog);
-            close_dialog.setOnClickListener(v -> {
-                dialog.dismiss();
+            SweetAlertDialog dialog = new SweetAlertDialog(LogoActivity.this,SweetAlertDialog.ERROR_TYPE);
+            dialog.setCancelable(false);
+            dialog.setTitle("No Internet!");
+            dialog.setContentText("Please check the internet connection");
+            dialog.setConfirmButton("Exit", sweetAlertDialog -> {
                 finish();
+                dialog.dismiss();
             });
+            dialog.show();
         }
 
     }

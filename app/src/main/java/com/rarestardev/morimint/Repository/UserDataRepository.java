@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +17,6 @@ import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Api.ApiResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
-
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -48,6 +45,8 @@ public class UserDataRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("UserData", "Success");
                     data.setValue(response.body());
+                } else {
+                    Log.e("UserData", "Failed :" + response.errorBody());
                 }
             }
 
@@ -60,7 +59,7 @@ public class UserDataRepository {
     }
 
 
-    public void SendUserDataSignUp(Context context, String username, String email, String password) {
+    public void SendUserDataSignUp(Context context, String username, String email, String password, long referral) {
         RequestBody Username = RequestBody.create(MediaType.parse("text/plain"), username);
         RequestBody Email = RequestBody.create(MediaType.parse("text/plain"), email);
         RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), password);
@@ -80,6 +79,8 @@ public class UserDataRepository {
                         Intent intent = new Intent(context, SignInActivity.class);
                         context.startActivity(intent);
                     }
+                }else {
+                    Log.e("Signup", "Failed :" + response.errorBody());
                 }
             }
 

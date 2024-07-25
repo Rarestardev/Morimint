@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/base_app_bg"
-        android:scrollbars="none"
+        android:id="@+id/parentRelative"
         tools:context=".Activities.JackpotActivity">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            >
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/jackpotInfo"
                 android:layout_width="30dp"
@@ -31,7 +32,7 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/jackpot_ic"
                 android:layout_marginTop="30dp"
-                 />
+                />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/jackpotTitle"
@@ -80,7 +81,8 @@
                         android:layout_height="35dp"
                         android:layout_marginStart="50dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/coin_mint"
+                        android:padding="2dp"
+                        android:src="@drawable/brain_mint_ic"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
 
@@ -88,14 +90,14 @@
                         android:id="@+id/tvBonusJackpot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
+                        android:layout_marginTop="15dp"
                         android:fontFamily="@font/opensans_bold"
                         android:maxLines="1"
                         android:textSize="22sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/scoreTitle"
-                        tools:text="157400064233651" />
+                        tools:text="5000000" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -125,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="13dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="13dp"
                         android:fontFamily="@font/opensans_bold"
                         android:maxLength="3"
                         android:maxLines="1"
@@ -329,9 +331,20 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </RelativeLayout>
 
-    </ScrollView>
+
+
+        <com.github.jinatonic.confetti.ConfettiView
+            android:id="@+id/ConfettiView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            />
+
+
+
+    </RelativeLayout>
 
 </layout>

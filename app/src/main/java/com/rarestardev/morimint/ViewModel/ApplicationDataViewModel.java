@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Repository.ApplicationDataRepository;
 
@@ -27,6 +28,18 @@ public class ApplicationDataViewModel extends ViewModel {
 
     public LiveData<List<MoriNewsModel>> SetDataMoriNews(){
         return applicationDataRepository.GetDataMoriNews();
+    }
+
+    public LiveData<ApplicationSetupModel> SetApplicationSetup(){
+        return applicationDataRepository.ApplicationConfig();
+    }
+
+    public void SiteGiftCode(Context context,String code){
+        applicationDataRepository.SiteGiftCode(context, code);
+    }
+
+    public void GiftCode(Context context,String code){
+        applicationDataRepository.SiteGiftCode(context, code);
     }
 
 }

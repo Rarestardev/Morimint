@@ -1,6 +1,7 @@
 package com.rarestardev.morimint.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,11 +13,16 @@ import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.OfflineModel.InformationJackpotModel;
 import com.rarestardev.morimint.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JackpotInformationActivity extends AppCompatActivity {
     RecyclerView recyclerView;
+    AppCompatTextView tvDescJackpot;
     List<InformationJackpotModel> jackpotModels = new ArrayList<>();
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -25,14 +31,16 @@ public class JackpotInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jackpot_information);
         recyclerView = findViewById(R.id.recyclerView);
+        tvDescJackpot = findViewById(R.id.tvDescJackpot);
 
+        tvDescJackpot.setText(readFromAssets());
 
         String jackpot_icon_desc1 = "The prize received for this icon is equal to : 5M MoriBit";
         String jackpot_icon_desc2 = "The prize received for this icon is equal to : 1M MoriBit";
         String jackpot_icon_desc3 = "The prize received for this icon is equal to : 500K MoriBit";
         String jackpot_icon_desc4 = "The prize received for this icon is equal to : 100K MoriBit";
-        String jackpot_icon_desc5 = "The prize received for this icon is equal to : 5K MoriBit";
-        String jackpot_icon_desc6 = "The prize received for this icon is equal to : 1K MoriBit";
+        String jackpot_icon_desc5 = "The prize received for this icon is equal to : 50K MoriBit";
+        String jackpot_icon_desc6 = "The prize received for this icon is equal to : 10K MoriBit";
 
 
         jackpotModels.add(new InformationJackpotModel(jackpot_icon_desc1,JackpotValues.JACKPOT_ICON_ON[0]));
@@ -53,6 +61,23 @@ public class JackpotInformationActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    private String readFromAssets() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            InputStream is = getAssets().open("jackpot_desc.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append('\n');
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 
 }

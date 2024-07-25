@@ -49,7 +49,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/opensans_bold"
                         android:maxLines="1"
-                        android:text="hi.masoud"
+                        tools:text="hi.masoud"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -127,14 +127,12 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="27dp"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginEnd="5dp"
                             android:layout_toStartOf="@id/blue_tick_icon"
                             android:ellipsize="end"
                             android:maxWidth="80dp"
-                            android:maxHeight="20dp"
                             android:maxLines="1"
-                            android:text="hi . masoud"
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -144,12 +142,12 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tvUsername"
                             android:layout_marginStart="27dp"
-                            android:layout_marginTop="2dp"
                             android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="1dp"
                             android:maxLines="1"
                             android:text="@string/welcomeApp"
                             android:textColor="@color/white"
-                            android:textSize="8sp"
+                            android:textSize="9sp"
                             android:textStyle="normal"
                             tools:ignore="SmallSp" />
 
@@ -204,13 +202,13 @@
                         android:layout_marginEnd="15dp"
                         android:background="@drawable/days_bg"
                         android:gravity="center"
-                        android:text="9 0"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="25sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="9 0" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -256,7 +254,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/mintLayout"
                         android:layout_width="@dimen/BaseCoinLayoutWidth"
-                        android:layout_height="@dimen/BaseCoinLayoutHeight"
+                        android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/profileLayout">
@@ -269,25 +267,43 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:id="@+id/coin"
                                 android:layout_width="@dimen/CoinMintImage"
                                 android:layout_height="@dimen/CoinMintImage"
+                                android:background="@drawable/mint_background"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="@dimen/CoinMintImageMarginTop"
-                                android:background="@drawable/coin_mint"
-                                android:scaleType="fitXY"
-                                android:visibility="visible" />
+                                android:visibility="visible"
+                                >
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/coin_image"
+                                    android:layout_width="235dp"
+                                    android:layout_height="235dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="35dp"
+                                    android:scaleType="fitXY"
+                                    />
+                            </FrameLayout>
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:id="@+id/turbo"
                                 android:layout_width="@dimen/CoinMintImage"
                                 android:layout_height="@dimen/CoinMintImage"
+                                android:background="@drawable/mint_turbo_background"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="@dimen/CoinMintImageMarginTop"
-                                android:background="@drawable/coin_energy"
-                                android:scaleType="fitXY"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                >
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/turbo_image"
+                                    android:layout_width="235dp"
+                                    android:layout_height="235dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="35dp"
+                                    android:scaleType="fitXY"
+                                    />
+                            </FrameLayout>
 
                             <FrameLayout
                                 android:id="@+id/CoinLayout"
@@ -295,7 +311,7 @@
                                 android:layout_height="@dimen/MintFrameHeight"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="@dimen/MintFrameMarginTop"
-                                android:background="@drawable/coin_frame_circle" />
+                                />
 
                         </RelativeLayout>
 
@@ -344,6 +360,7 @@
                         android:layout_width="@dimen/LevelProgressBarWidth"
                         android:layout_height="@dimen/LevelProgressBarHeight"
                         android:layout_marginTop="@dimen/LevelProgressBarMarginTop"
+                        android:progress="0"
                         android:progressDrawable="@drawable/custom_progress_level_bg"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -376,7 +393,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:maxLines="1"
-                            android:text="1"
+                            tools:text="1"
                             android:textColor="@color/white"
                             android:textSize="@dimen/levelShowTextSize"
                             android:textStyle="bold" />
