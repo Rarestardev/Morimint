@@ -7,19 +7,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +25,9 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.rarestardev.morimint.ApplicationSetup.ProgramManager;
-import com.rarestardev.morimint.Constants.EnergyValue;
+import com.rarestardev.morimint.ApplicationSetup.ApplicationManager;
+import com.rarestardev.morimint.ApplicationSetup.CustomLevelDialog;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.ApplicationSetup.ChargeEnergyCounter;
 import com.rarestardev.morimint.ApplicationSetup.CheckActiveUser;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
@@ -43,7 +38,6 @@ import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Objects;
 import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -62,45 +56,36 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private final Handler handler = new Handler(); // energy timer
     private Runnable runnable; // energy charger
     int energy; // energy
-    private SharedPreferences.Editor editor; // current energy chargeEnergyCounter
-    private ChargeEnergyCounter chargeEnergyCounter; // ChargeEnergyCounter Charge Energy   // true = clicked    // false = not clicked recharged energy
+    private SharedPreferences.Editor editor; // current energy applicationManager
+    private ApplicationManager applicationManager; // ApplicationManager Charge Energy   // true = clicked    // false = not clicked recharged energy
 
     // value
     private int clickerCounter;
-    private int clickerCounterTurbo; // number of clicked for mint chargeEnergyCounter
+    private int clickerCounterTurbo; // number of clicked for mint applicationManager
     private boolean isClicked = false;
     boolean isUserData;
-    private int TurboCount = 0; // Turbo ChargeEnergyCounter
+    private int TurboCount = 0; // Turbo ApplicationManager
     private boolean is_active;
     private boolean is_mint_on;
     private long DayValue;
 
     // Class
     private CoinMintManager coinMintManager;
-    private CountDownTimer turboDownTimer; // Turbo timer ChargeEnergyCounter 12 second
+    private CountDownTimer turboDownTimer; // Turbo timer ApplicationManager 12 second
     private NetworkChangeReceiver networkChangeReceiver;
-    ProgramManager programManager;
 
     // ViewModels
     private ApplicationDataViewModel applicationDataViewModel;
     UserDataViewModel userDataViewModel;
     private CoinManagerViewModel coinManagerViewModel;
 
-    private Dialog levelProgressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        programManager = new ProgramManager(binding.levelXpProgressBar,MainActivity.this,
-                binding.tvLevelShow,binding.coinImage,binding.turboImage);
-
-        levelProgressDialog = new Dialog(MainActivity.this);
         networkChangeReceiver = new NetworkChangeReceiver(this);
         coinMintManager = new CoinMintManager(MainActivity.this);
-        chargeEnergyCounter = new ChargeEnergyCounter(EnergyValue.Energy,EnergyValue.Energy,0,3);
-
+        applicationManager = new ApplicationManager();
 
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentTime", MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -109,11 +94,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         NavigationDrawerHandle();
         RechargedEnergy();
 
-        binding.levelLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowDialogUserTask();
-            }
+        binding.applicationManagerLayout.setOnClickListener(v -> {
+            CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this,coinMintManager.getBalance());
+            customLevelDialog.show();
         });
     }
 
@@ -155,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             case 4:
                             case 5:
                                 clickerCounterTurbo++;
-                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true, programManager.getMint());
+                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true, applicationManager.getMinter());
                                 CreateAnimation(x, y);
                                 break;
                         }
@@ -194,13 +177,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     case 3:
                     case 4:
                     case 5:
-                        if (!chargeEnergyCounter.mintStop(programManager.getMint())) {
+                        if (!applicationManager.mintStop(applicationManager.getMinter())) {
                             clickerCounter++;
-                            coinMintManager.IncreaseBalance(clickerCounter, false, EnergyValue.Mint);
-                            chargeEnergyCounter.decrement(EnergyValue.Mint);
-                            binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + EnergyValue.Energy);
-                            programManager.initLevelValues();
-                            programManager.initTotalCoin(coinMintManager.getBalance());
+                            coinMintManager.IncreaseBalance(clickerCounter, false, applicationManager.getMinter());
+                            applicationManager.decrement(applicationManager.getMinter());
+                            binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
+                            applicationManager.initLevelValues(MainActivity.this, coinMintManager.getBalance(),
+                                    binding.levelXpProgressBar, binding.coinImage, binding.turboImage, binding.tvLevelShow,
+                                    binding.imageViewProfile, binding.drawerProfile);
                             isClicked = true;
 
                             CreateAnimation(x, y);
@@ -223,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
         TextView animationTextView = new TextView(MainActivity.this);
-        animationTextView.setText("+" + programManager.getMint());
+        animationTextView.setText("+" + applicationManager.getMinter());
         animationTextView.setTextSize(30);
         animationTextView.setTypeface(Typeface.DEFAULT_BOLD);
         animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[0]));
@@ -294,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @SuppressLint("SetTextI18n")
     private void RechargedEnergy() {
-        if (chargeEnergyCounter.getValue() >= programManager.getEnergy()) {
+        if (applicationManager.getValue() >= applicationManager.getMaxValue()) {
             editor.clear();
         }
 
@@ -302,11 +286,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             @Override
             public void run() {
                 if (!isClicked) {
-                    if (chargeEnergyCounter.getValue() < EnergyValue.Energy) {
-                        chargeEnergyCounter.increment(EnergyValue.Energy);
+                    if (applicationManager.getValue() < applicationManager.getMaxValue()) {
+                        applicationManager.increment();
+                        YoYo.with(Techniques.Flash).duration(1000).playOn(binding.tvEnergy);
                     }
                 }
-                binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + EnergyValue.Energy);
+                binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
                 handler.postDelayed(this, IncreaseEnergyTime);
             }
         };
@@ -315,21 +300,21 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentTime", MODE_PRIVATE);
         long currentTime = sharedPreferences.getLong("Time", -1);
-        energy = sharedPreferences.getInt("Energy", EnergyValue.Energy);
+        energy = sharedPreferences.getInt("Energy", applicationManager.getMaxValue());
 
         if (currentTime != -1) {
             long lastTime = System.currentTimeMillis();
             long timeDifInSecond = (lastTime - currentTime) / 1000;
 
-            if (energy < EnergyValue.Energy) {
-                chargeEnergyCounter.increase((int) timeDifInSecond, energy, EnergyValue.Energy);
+            if (energy < applicationManager.getMaxValue()) {
+                applicationManager.increase((int) timeDifInSecond, energy);
             }
-            if (energy > EnergyValue.Energy) {
-                energy = EnergyValue.Energy;
+            if (energy > applicationManager.getMaxValue()) {
+                energy = applicationManager.getMaxValue();
                 editor.clear();
             }
 
-            //binding.tvEnergy.setText(chargeEnergyCounter.getValue() + " / " + programManager.getEnergy());
+            binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
         }
     }
 
@@ -389,15 +374,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 startActivity(new Intent(this, WalletActivity.class)));
     }
 
-    private void ShowDialogUserTask() {
-        levelProgressDialog.setContentView(R.layout.custom_dialog_layout);
-        levelProgressDialog.show();
-        Objects.requireNonNull(levelProgressDialog.getWindow()).setLayout(1350, ViewGroup.LayoutParams.WRAP_CONTENT);
-        levelProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        levelProgressDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        levelProgressDialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
-
     @Override
     protected void onStop() {
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
@@ -412,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         activeUser.isActiveUserInApp(false);
 
         editor.putLong("Time", System.currentTimeMillis());
-        editor.putInt("Energy", chargeEnergyCounter.getValue());
+        editor.putInt("Energy", applicationManager.getValue());
         editor.apply();
     }
 
@@ -433,12 +409,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         super.onBackPressed();
         CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
         activeUser.isActiveUserInApp(false);
-        if (levelProgressDialog.isShowing()) {
-            levelProgressDialog.dismiss();
-        } else {
-            finish();
-        }
-
     }
 
     @Override
@@ -539,7 +509,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 coinMintManager.setBalance(users.getCoin());
                 binding.tvBalanceCoin.setText(numberFormat.format(coinMintManager.getBalance()));
 
-                programManager.initTotalCoin(coinMintManager.getBalance());
+                applicationManager.initLevelValues(MainActivity.this, coinMintManager.getBalance(),
+                        binding.levelXpProgressBar, binding.coinImage, binding.turboImage, binding.tvLevelShow,
+                        binding.imageViewProfile, binding.drawerProfile);
 
             } else {
                 isUserData = false;

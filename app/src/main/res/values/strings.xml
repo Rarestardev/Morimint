@@ -81,5 +81,6 @@
     <string name="bonusCode">Enter the code you already received in site</string>
     <string name="bonusCodeApp">Enter the code you already received</string>
     <string name="yourCode">Your Code</string>
+    <string name="yourLevel">Your Level</string>
 
 </resources>

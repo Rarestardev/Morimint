@@ -281,7 +281,9 @@
                                     android:layout_width="235dp"
                                     android:layout_height="235dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="35dp"
+                                    android:src="@drawable/level_one"
+                                    android:layout_marginTop="40dp"
+                                    android:padding="5dp"
                                     android:scaleType="fitXY"
                                     />
                             </FrameLayout>
@@ -328,77 +330,105 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icon_energy"
-                        android:layout_width="@dimen/IconEnergySize"
-                        android:layout_height="@dimen/IconEnergySize"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/energy_ic"
-                        app:layout_constraintEnd_toStartOf="@id/tvEnergy"
-                        app:layout_constraintTop_toBottomOf="@id/mintLayout" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvEnergy"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/applicationManagerLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_vertical"
-                        android:maxWidth="150dp"
-                        android:maxLines="1"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/tvEnergyTextSize"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/mintLayout"
-                        tools:text="1000 / 1000" />
-
-                    <ProgressBar
-                        android:id="@+id/level_xp_progressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="@dimen/LevelProgressBarWidth"
-                        android:layout_height="@dimen/LevelProgressBarHeight"
-                        android:layout_marginTop="@dimen/LevelProgressBarMarginTop"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/custom_progress_level_bg"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/icon_energy"
-                        tools:ignore="UnusedAttribute" />
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/level_layout"
-                        android:layout_width="@dimen/levelShow"
-                        android:layout_height="@dimen/levelShow"
-                        android:layout_marginTop="@dimen/levelShowMarginTop"
-                        android:background="@drawable/level_circle_layout"
-                        android:orientation="vertical"
-                        app:layout_constraintStart_toStartOf="@+id/level_xp_progressBar"
-                        app:layout_constraintTop_toBottomOf="@id/mintLayout">
+                        >
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/icon_energy"
+                            android:layout_width="@dimen/IconEnergySize"
+                            android:layout_height="@dimen/IconEnergySize"
+                            android:layout_marginEnd="5dp"
+                            android:src="@drawable/energy_ic"
+                            app:layout_constraintEnd_toStartOf="@id/tvEnergy"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvEnergy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/levelShowTextMarginTop"
-                            android:text="@string/levelText"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/levelShowTextSize"
-                            android:textStyle="bold" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvLevelShow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center_vertical"
+                            android:maxWidth="150dp"
                             android:maxLines="1"
-                            tools:text="1"
+                            android:textAlignment="gravity"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/levelShowTextSize"
-                            android:textStyle="bold" />
+                            android:textSize="@dimen/tvEnergyTextSize"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="1000 / 1000" />
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                        <ProgressBar
+                            android:id="@+id/level_xp_progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="@dimen/LevelProgressBarWidth"
+                            android:layout_height="@dimen/LevelProgressBarHeight"
+                            android:layout_marginTop="@dimen/LevelProgressBarMarginTop"
+                            android:indeterminate="false"
+                            android:progressTintMode="src_in"
+                            android:progressDrawable="@drawable/custom_progress_level_bg"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/icon_energy"
+                            tools:ignore="UnusedAttribute" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvYourLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:text="@string/yourLevel"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="5dp"
+                            app:layout_constraintStart_toStartOf="@id/level_xp_progressBar"
+                            app:layout_constraintEnd_toEndOf="@id/level_xp_progressBar"
+                            app:layout_constraintTop_toTopOf="@id/level_xp_progressBar"
+                            app:layout_constraintBottom_toBottomOf="@id/level_xp_progressBar"
+                            />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/level_layout"
+                            android:layout_width="@dimen/levelShow"
+                            android:layout_height="@dimen/levelShow"
+                            android:layout_marginTop="@dimen/levelShowMarginTop"
+                            android:background="@drawable/level_circle_layout"
+                            android:orientation="vertical"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="35dp"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/levelShowTextMarginTop"
+                                android:text="@string/levelText"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/levelShowTextSize"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvLevelShow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:maxLines="1"
+                                tools:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/levelShowTextSize"
+                                android:textStyle="bold" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <RelativeLayout
                         android:id="@+id/newsLayout"
@@ -408,7 +438,7 @@
                         android:background="@drawable/card_layout_bg"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/level_xp_progressBar">
+                        app:layout_constraintTop_toBottomOf="@id/applicationManagerLayout">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvNewsTitle"

@@ -31,7 +31,7 @@
     <dimen name="TitleActivity">18sp</dimen>
     <dimen name="MaxWidthViews">350dp</dimen>
 
-    <dimen name="LevelProgressBarWidth">305dp</dimen>
+    <dimen name="LevelProgressBarWidth">310dp</dimen>
     <dimen name="MainCardWidth">300dp</dimen>
     <dimen name="MintLogoBrain">50dp</dimen>
     <dimen name="DrawerWidth">270dp</dimen>
@@ -48,10 +48,10 @@
     <dimen name="MintFrameMarginTop">120dp</dimen>
     <dimen name="IconEnergySize">25dp</dimen>
     <dimen name="tvEnergyTextSize">14sp</dimen>
-    <dimen name="LevelProgressBarHeight">20dp</dimen>
+    <dimen name="LevelProgressBarHeight">25dp</dimen>
     <dimen name="LevelProgressBarMarginTop">8dp</dimen>
     <dimen name="levelShow">60dp</dimen>
-    <dimen name="levelShowMarginTop">10dp</dimen>
+    <dimen name="levelShowMarginTop">13dp</dimen>
     <dimen name="levelShowStroke">55dp</dimen>
     <dimen name="levelShowSecond">48dp</dimen>
     <dimen name="levelShowTextSize">14sp</dimen>

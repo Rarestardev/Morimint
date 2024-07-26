@@ -18,4 +18,14 @@
     <color name="JackpotBonusAnim1">#ffc000</color>
     <color name="JackpotBonusAnim2">#F3DA03</color>
     <color name="JackpotBonusAnim3">#ECCD6F</color>
+
+
+    <color name="progressMinValue">#07AF0E</color>
+    <color name="progressOneValue">#CC9A07</color>
+    <color name="progressTwoValue">#DF4B1C</color>
+    <color name="progressThreeValue">#0C79CF</color>
+    <color name="progressMaxValue">#40228d</color>
+
+
+    <color name="levelImageGradientBg">#BC26014A</color>
 </resources>
