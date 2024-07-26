@@ -10,22 +10,38 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.rarestardev.morimint.Adapters.LevelManagerAdapter;
+import com.rarestardev.morimint.OfflineModel.LevelManagerModel;
 import com.rarestardev.morimint.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationManager {
     private int value;
     private int maxValue;
-    private int minValue;
-    private int step;
+    private final int minValue;
+    private final int step;
     private int minter;
     private long totalBalance;
     private int level;
-    private int maxProgress;
     private int progressStatus;
+    List<LevelManagerModel> managerModels;
 
     private static final long[] LEVEL_COIN = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+    private static final int[] LEVEL = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    private static final int[] LEVEL_ENERGY = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 14000, 16000, 18000};
+    private static final int[] LEVEL_TAP = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18};
+    private boolean[] LEVEL_PASSED = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+
+    private static final int[] LEVEL_ITEM = {R.drawable.level_one, R.drawable.level_two, R.drawable.level_three, R.drawable.level_four,
+            R.drawable.level_five, R.drawable.level_six, R.drawable.level_seven, R.drawable.level_eight,
+            R.drawable.level_nine, R.drawable.level_ten, R.drawable.level_eleven, R.drawable.level_twelve, R.drawable.level_thirteen,
+            R.drawable.level_fourteen, R.drawable.level_fifteen};
 
     public ApplicationManager() {
         this.value = 1000;
@@ -252,7 +268,8 @@ public class ApplicationManager {
     }
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
-    public void initLevelDialog(Context context, long coin, ProgressBar progressBar, AppCompatImageView Coin, AppCompatTextView textView) {
+    public void initLevelDialog(Context context, long coin, ProgressBar progressBar, AppCompatImageView Coin,
+                                AppCompatTextView textView,RecyclerView recyclerView,TextView tap) {
         totalBalance = coin;
         if (totalBalance < LEVEL_COIN[0]) {
             level = 1;
@@ -321,7 +338,26 @@ public class ApplicationManager {
 
         setLevelImagesDialog(level, Coin, context);
         textView.setText("Level : " + level);
+        tap.setText("Tap : +" + minter);
         ProgressBar(level, progressBar, coin);
+        setLevelListManager(recyclerView,context,level);
+    }
+
+    private void setLevelListManager(RecyclerView recyclerView,Context context,int level){
+        for (int i = 0; i < level; i++) {
+            LEVEL_PASSED[i] = true;
+        }
+
+        managerModels = new ArrayList<>();
+        for (int i = 0; i < LEVEL.length;i++){
+            managerModels.add(new LevelManagerModel(LEVEL[i] ,LEVEL_ITEM[i], LEVEL_PASSED[i], LEVEL_ENERGY[i], LEVEL_TAP[i], LEVEL_COIN[i]));
+        }
+
+        LevelManagerAdapter adapter = new LevelManagerAdapter(context,managerModels,level);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.refreshDrawableState();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -378,6 +414,7 @@ public class ApplicationManager {
     }
 
     private void ProgressBar(int level, ProgressBar progressBar, long coin) {
+        int maxProgress;
         switch (level) {
             case 2:
                 progressStatus = (int) (coin - LEVEL_COIN[0]);
