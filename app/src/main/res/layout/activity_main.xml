@@ -31,20 +31,27 @@
                     android:layout_height="180dp"
                     android:background="@drawable/navigation_header_layout_bg">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/drawer_profile"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerHorizontal="true"
+                    <FrameLayout
+                        android:id="@+id/drawer_profile_layout"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_marginTop="50dp"
+                        android:layout_centerHorizontal="true"
                         android:background="@drawable/drawer_profile_bg"
-                        android:src="@drawable/drawer_profile_ic" />
+                        >
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/drawer_profile"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            />
+                    </FrameLayout>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/drawerTvUsername"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/drawer_profile"
+                        android:layout_below="@id/drawer_profile_layout"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/opensans_bold"
@@ -126,25 +133,26 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
                             android:layout_marginStart="27dp"
-                            android:layout_marginTop="3dp"
                             android:layout_marginEnd="5dp"
+                            android:layout_marginTop="2dp"
                             android:layout_toStartOf="@id/blue_tick_icon"
                             android:ellipsize="end"
                             android:maxWidth="80dp"
                             android:maxLines="1"
+                            tools:text="soheyldarzi"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/tvUsername"
                             android:layout_marginStart="27dp"
                             android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="1dp"
-                            android:maxLines="1"
+                            android:layout_marginBottom="2dp"
+                            android:layout_alignParentBottom="true"
                             android:text="@string/welcomeApp"
                             android:textColor="@color/white"
                             android:textSize="9sp"

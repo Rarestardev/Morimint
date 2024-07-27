@@ -1,24 +1,29 @@
 package com.rarestardev.morimint.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TaskModel {
 
+    @SerializedName("id")
     private int id;
 
+    @SerializedName("title")
     private String title;
 
-    private int reward;
+    @SerializedName("gift_coin")
+    private long gift_coin;
 
-    private boolean isComplete;
+    @SerializedName("link")
+    private String link;
 
-    private String task_link;
 
-    public TaskModel(int id, String title, int reward, boolean isComplete, String task_link) {
+    public TaskModel(int id, String title, long gift_coin, String link) {
         this.id = id;
         this.title = title;
-        this.reward = reward;
-        this.isComplete = isComplete;
-        this.task_link = task_link;
+        this.gift_coin = gift_coin;
+        this.link = link;
     }
+
 
     public int getId() {
         return id;
@@ -36,27 +41,19 @@ public class TaskModel {
         this.title = title;
     }
 
-    public int getReward() {
-        return reward;
+    public long getGift_coin() {
+        return gift_coin;
     }
 
-    public void setReward(int reward) {
-        this.reward = reward;
+    public void setGift_coin(long gift_coin) {
+        this.gift_coin = gift_coin;
     }
 
-    public boolean isComplete() {
-        return isComplete;
+    public String getLink() {
+        return link;
     }
 
-    public void setComplete(boolean complete) {
-        isComplete = complete;
-    }
-
-    public String getTask_link() {
-        return task_link;
-    }
-
-    public void setTask_link(String task_link) {
-        this.task_link = task_link;
+    public void setLink(String link) {
+        this.link = link;
     }
 }

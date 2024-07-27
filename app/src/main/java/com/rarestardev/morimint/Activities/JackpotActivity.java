@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,10 +41,13 @@ public class JackpotActivity extends AppCompatActivity {
     private int value_one;
     private int value_two;
     private int value_three;
-    private int Play_chance = 20;
+    private int Play_chance = 2;
     private long Score = 0;
     double[] probabilities = {0.05, 0.10, 0.15, 0.15, 0.20, 0.35};
-    private int playJackpot_ad = 3;
+    private int playJackpot_ad = 1;
+    private boolean isGameFinished = false;
+    private static final String SHARED_JACKPOT = "Jackpot";
+    private static final String SHARED_JACKPOT_KEY = "ChanceActive";
 
     CoinManagerViewModel coinManagerViewModel;
 
@@ -54,14 +58,15 @@ public class JackpotActivity extends AppCompatActivity {
 
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
+        boolean isPlay = sharedPreferences.getBoolean(SHARED_JACKPOT_KEY,false);
 
-        if (Play_chance == 0) {
+        if (isPlay){
             binding.playJackpot.setVisibility(View.GONE);
             binding.stopJackpot.setVisibility(View.VISIBLE);
-        } else if (Play_chance <= 0) {
             Play_chance = 0;
             binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
-        } else {
+        }else {
             binding.playJackpot.setVisibility(View.VISIBLE);
             binding.stopJackpot.setVisibility(View.GONE);
             JackpotPlayHandle();
@@ -224,18 +229,28 @@ public class JackpotActivity extends AppCompatActivity {
                 }
                 checkAndAwardPoints();
                 if (Play_chance == 0) {
+                    isGameFinished = true;
                     binding.playJackpot.setVisibility(View.GONE);
                     binding.stopJackpot.setVisibility(View.VISIBLE);
                     playJackpot_ad--;
                     if (playJackpot_ad != 0) {
+                        isGameFinished = false;
                         MoreChanceJackpotPlay();
+                    }else {
+                        isGameFinished = true;
                     }
                 } else {
                     binding.playJackpot.setVisibility(View.VISIBLE);
                     binding.stopJackpot.setVisibility(View.GONE);
+                    isGameFinished = false;
                 }
                 break;
         }
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SHARED_JACKPOT_KEY,isGameFinished);
+        editor.apply();
     }
 
     private void MoreChanceJackpotPlay() {
@@ -244,7 +259,7 @@ public class JackpotActivity extends AppCompatActivity {
         dialog.setTitle("Try again");
         dialog.setContentText("More chance by seeing the ad");
         dialog.setConfirmButton("Show Ad", sweetAlertDialog -> {
-            Play_chance += 5;
+            Play_chance += 1;
             binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
             binding.playJackpot.setVisibility(View.VISIBLE);
             binding.stopJackpot.setVisibility(View.GONE);

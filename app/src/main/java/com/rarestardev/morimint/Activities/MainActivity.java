@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 if (!isClicked) {
                     if (applicationManager.getValue() < applicationManager.getMaxValue()) {
                         applicationManager.increment();
-                        YoYo.with(Techniques.Flash).duration(1000).playOn(binding.tvEnergy);
+                        YoYo.with(Techniques.Flash).duration(1000).playOn(binding.iconEnergy);
                     }
                 }
                 binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());

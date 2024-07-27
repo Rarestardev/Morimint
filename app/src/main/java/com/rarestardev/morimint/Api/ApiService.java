@@ -4,6 +4,7 @@ import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.GiftCodeModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
+import com.rarestardev.morimint.Model.TaskModel;
 import com.rarestardev.morimint.Model.Users;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public interface ApiService {
 
     @GET("/controls/Dailybonus")
     Call<List<DailyRewardModel>> GetDailyReward(@Header("Authorization") String token);
+
+    @GET("/controls/tasks")
+    Call<List<TaskModel>> GetTasks(@Header("Authorization") String token);
 
 
     @Headers("Content-Type: application/json")

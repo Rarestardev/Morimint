@@ -102,14 +102,30 @@
         android:layout_marginTop="30dp"
         >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="50"
-            tools:listitem="@layout/task_item"
-            />
+            android:layout_height="400dp"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNoData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:text="@string/noData"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="50"
+                tools:listitem="@layout/task_item"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
 
     </ScrollView>
 

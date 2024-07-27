@@ -57,7 +57,7 @@
     <dimen name="levelShowTextSize">14sp</dimen>
     <dimen name="levelShowTextMarginTop">15dp</dimen>
     <dimen name="MainCardHeight">75dp</dimen>
-    <dimen name="MainCardMarginTop">35dp</dimen>
+    <dimen name="MainCardMarginTop">20dp</dimen>
     <dimen name="jackpotSizeWidth">340dp</dimen>
     <dimen name="jackpotSizeHeight">240dp</dimen>
     <dimen name="jackpotColOneMarginStart">45dp</dimen>

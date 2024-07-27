@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rarestardev.morimint.Adapters.DailyRewardAdapter;
+import com.rarestardev.morimint.Adapters.TaskListAdapter;
 import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiResponse;
 import com.rarestardev.morimint.Api.ApiService;
@@ -21,6 +24,7 @@ import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.GiftCodeModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
+import com.rarestardev.morimint.Model.TaskModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -197,6 +201,40 @@ public class ApplicationDataRepository {
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 Log.e("GiftCoin", "Error", t);
+            }
+        });
+    }
+
+
+    public void GetTasks(Context context, RecyclerView recyclerView, TextView textView){
+        Call<List<TaskModel>> call = apiService.GetTasks(ApiClient.SERVER_TOKEN);
+        call.enqueue(new Callback<List<TaskModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<TaskModel>> call, @NonNull Response<List<TaskModel>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    textView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    List<TaskModel> tasks = response.body();
+                    TaskListAdapter adapter = new TaskListAdapter(context,tasks);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.refreshDrawableState();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView.setAdapter(adapter);
+                }else {
+                    textView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    try {
+                        assert response.errorBody() != null;
+                        Log.e("GetTask :" , response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<TaskModel>> call, @NonNull Throwable t) {
+                Log.e("GetTask :" , "OnFailure",t);
             }
         });
     }
