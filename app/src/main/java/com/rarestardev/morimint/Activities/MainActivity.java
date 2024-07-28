@@ -29,6 +29,7 @@ import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
+import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
@@ -78,16 +79,22 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         networkChangeReceiver = new NetworkChangeReceiver(this);
         coinMintManager = new CoinMintManager(MainActivity.this);
+
         applicationManager = new ApplicationManager(MainActivity.this);
+
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
 
         StartActivities();
         NavigationDrawerHandle();
 
-        binding.applicationManagerLayout.setOnClickListener(v -> {
-            CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this, coinMintManager.getBalance());
-            customLevelDialog.show();
+        binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener(){
+            @Override
+            public void onSingleClick(View v) {
+                super.onSingleClick(v);
+                CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this, coinMintManager.getBalance());
+                customLevelDialog.show();
+            }
         });
     }
 
@@ -171,12 +178,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                         if (!energyManager.mintStop(applicationManager.getMinter())) {
                             clickerCounter++;
                             coinMintManager.IncreaseBalance(clickerCounter, false, applicationManager.getMinter());
-                            applicationManager.initLevelValues(coinMintManager.getBalance(),
-                                    binding.levelXpProgressBar);
                             energyManager.clicked(true);
 
                             energyManager.ReduceEnergy(applicationManager.getMinter());
 
+                            applicationManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
                             CreateAnimation(x, y);
                         }
                         break;
@@ -433,9 +439,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.drawerTvUsername.setText(users.getUsername());
                 coinMintManager.setBalance(users.getCoin());
                 binding.tvBalanceCoin.setText(numberFormat.format(coinMintManager.getBalance()));
+
                 energyManager.getLevelFromServer(users.getLevel());
+
                 applicationManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
                 applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.drawerProfile);
+                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.coinImage);
+                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.turboImage);
+                applicationManager.ProgressBar(users.getLevel(),binding.levelXpProgressBar);
 
             } else {
                 isUserData = false;

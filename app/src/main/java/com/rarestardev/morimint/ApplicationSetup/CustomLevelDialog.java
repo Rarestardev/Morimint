@@ -22,6 +22,19 @@ import java.util.Objects;
 
 public class CustomLevelDialog extends Dialog {
 
+    boolean[] LEVEL_PASSED = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+    private static final int[] LEVEL = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    private static final int[] LEVEL_ENERGY = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 14000, 16000, 18000};
+
+    private static final int[] LEVEL_ITEM = {R.drawable.level_one, R.drawable.level_two,
+            R.drawable.level_three, R.drawable.level_four,
+            R.drawable.level_five, R.drawable.level_six,
+            R.drawable.level_seven, R.drawable.level_eight,
+            R.drawable.level_nine, R.drawable.level_ten,
+            R.drawable.level_eleven, R.drawable.level_twelve,
+            R.drawable.level_thirteen, R.drawable.level_fourteen,
+            R.drawable.level_fifteen};
+
     AppCompatImageView imageViewCharacter,iconCloseDialog;
     AppCompatTextView tvLevel,tvBalanceCoin,tvTap;
     ProgressBar level_progressBar;
@@ -29,7 +42,6 @@ public class CustomLevelDialog extends Dialog {
     Context context;
     long coin;
 
-    ApplicationManager applicationManager;
     CoinMintManager coinMintManager;
 
     public CustomLevelDialog(@NonNull Context context,long coin) {
@@ -47,7 +59,6 @@ public class CustomLevelDialog extends Dialog {
         getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         getWindow().setGravity(Gravity.BOTTOM);
 
-        applicationManager = new ApplicationManager(context);
         coinMintManager = new CoinMintManager(context);
 
         imageViewCharacter = findViewById(R.id.imageViewCharacter);
@@ -58,8 +69,6 @@ public class CustomLevelDialog extends Dialog {
         tvTap = findViewById(R.id.tvTap);
         levelsRecyclerView = findViewById(R.id.levelsRecyclerView);
 
-
-        applicationManager.initLevelDialog(context,coin,level_progressBar,imageViewCharacter,tvLevel,levelsRecyclerView,tvTap);
 
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setGroupingSeparator(',');
