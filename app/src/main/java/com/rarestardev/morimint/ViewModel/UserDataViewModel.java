@@ -12,24 +12,26 @@ public class UserDataViewModel extends ViewModel {
 
     UserDataRepository userDataRepository;
 
-    public UserDataViewModel(){
+    public UserDataViewModel() {
         userDataRepository = new UserDataRepository();
     }
 
 
-    public LiveData<Users> getUserData(Context context){
+    public LiveData<Users> getUserData(Context context) {
         return userDataRepository.UserData(context);
     }
 
 
-
-
-    public void SignUp(Context context, String username, String email, String password,long referral){
-        userDataRepository.SendUserDataSignUp(context,username, email, password,referral);
+    public void SignUp(Context context, String username, String email, String password, long referral) {
+        userDataRepository.SendUserDataSignUp(context, username, email, password, referral);
     }
 
-    public void LoginUserAccount(Context context , String username,String password){
+    public void LoginUserAccount(Context context, String username, String password) {
         userDataRepository.LoginData(context, username, password);
+    }
+
+    public void ChangeUserPassword(String email, String newPassword, Context context) {
+        userDataRepository.ChangePassword(email, newPassword, context);
     }
 
 }

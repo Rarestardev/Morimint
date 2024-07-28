@@ -2,6 +2,8 @@ package com.rarestardev.morimint.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Users {
 
     @SerializedName("id")
@@ -9,6 +11,9 @@ public class Users {
 
     @SerializedName("total_invites")
     private int total_invites;
+
+    @SerializedName("invited_users")
+    private List<ReferralTeamModel> invited_users;
 
     @SerializedName("is_superuser")
     private boolean is_superuser;
@@ -90,6 +95,14 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<ReferralTeamModel> getInvited_users() {
+        return invited_users;
+    }
+
+    public void setInvited_users(List<ReferralTeamModel> invited_users) {
+        this.invited_users = invited_users;
     }
 
     public int getLevel() {

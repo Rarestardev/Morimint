@@ -1,5 +1,6 @@
 package com.rarestardev.morimint.Repository;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,9 @@ import com.rarestardev.morimint.Api.ApiResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
 
+import java.io.IOException;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -64,7 +68,9 @@ public class UserDataRepository {
         RequestBody Email = RequestBody.create(MediaType.parse("text/plain"), email);
         RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), password);
 
-        Call<ApiResponse> call = apiService.Sign_up(Username, Email, Password);
+        RequestBody coinRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(referral));
+
+        Call<ApiResponse> call = apiService.Sign_up(Username, Email, Password, coinRequest);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
@@ -76,10 +82,12 @@ public class UserDataRepository {
 
                     if (status.equals("success")) {
                         Toast.makeText(context, "Registered account success.", Toast.LENGTH_SHORT).show();
+                        CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
+                        coinManagerRepository.UpdateCoin(100000,context);
                         Intent intent = new Intent(context, SignInActivity.class);
                         context.startActivity(intent);
                     }
-                }else {
+                } else {
                     Log.e("Signup", "Failed :" + response.errorBody());
                 }
             }
@@ -122,6 +130,48 @@ public class UserDataRepository {
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 Log.e("Login", "Failed" + t.getMessage());
+            }
+        });
+    }
+
+
+    public void ChangePassword(String email, String newPassword, Context context) {
+        RequestBody Email = RequestBody.create(MediaType.parse("text/plain"), email);
+        RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), newPassword);
+
+        Call<ApiResponse> call = apiService.ChangePassword(Email, Password);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                    dialog.setTitle(apiResponse.getStatus());
+                    dialog.setContentText(apiResponse.getMessage());
+                    dialog.setCancelable(false);
+                    dialog.setConfirmButton("Ok", Dialog::dismiss);
+                    dialog.show();
+                } else {
+                    try {
+                        assert response.errorBody() != null;
+                        Log.e("ChangePassword", response.errorBody().string());
+                        ApiResponse apiResponse = response.body();
+                        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                        assert apiResponse != null;
+                        dialog.setTitle(apiResponse.getStatus());
+                        dialog.setContentText(apiResponse.getMessage());
+                        dialog.setCancelable(false);
+                        dialog.setConfirmButton("Ok", Dialog::dismiss);
+                        dialog.show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
+                Log.e("ChangePassword", "Error", t);
             }
         });
     }

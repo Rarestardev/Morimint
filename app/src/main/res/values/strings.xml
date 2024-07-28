@@ -16,7 +16,6 @@
     <string name="ForgetPassHint">Please enter your email address, so we will send are set link.</string>
     <string name="emailTitle">EMAIL :</string>
     <string name="Next">Next</string>
-    <string name="SampleEmail">Moriaiteam@gmail.com</string>
     <string name="or">OR</string>
     <string name="Click">Click</string>
 
@@ -34,7 +33,7 @@
     <string name="referral">Referral</string>
     <string name="exit">Exit</string>
     <string name="ChangePassword">Change</string>
-    <string name="newPass">Create new password…</string>
+    <string name="newPass">Create new password</string>
     <string name="jackpot">Jackpot</string>
     <string name="importantNews">Important News :</string>
     <string name="comingSoon">Coming soon</string>
@@ -70,8 +69,6 @@
     <string name="descRequest">Description Of The Request:</string>
     <string name="sendRequest">Send Request</string>
     <string name="copy">Copy</string>
-    <string name="my_invite_link">My invite link :</string>
-    <string name="send_invite">Send invite</string>
 
 
     <string name="dailyRewardDesc">Login every day to claim your rewards!</string>

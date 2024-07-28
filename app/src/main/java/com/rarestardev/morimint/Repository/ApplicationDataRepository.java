@@ -8,19 +8,24 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Adapters.DailyCheckAdapter;
 import com.rarestardev.morimint.Adapters.DailyRewardAdapter;
+import com.rarestardev.morimint.Adapters.MoriNewsAdapter;
 import com.rarestardev.morimint.Adapters.TaskListAdapter;
 import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiResponse;
 import com.rarestardev.morimint.Api.ApiService;
-import com.rarestardev.morimint.Api.DailyRewardResponse;
+import com.rarestardev.morimint.Api.SingleResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
+import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.GiftCodeModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
@@ -42,14 +47,18 @@ public class ApplicationDataRepository {
         apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public LiveData<List<MoriNewsModel>> GetDataMoriNews() {
-        MutableLiveData<List<MoriNewsModel>> data = new MutableLiveData<>();
+    public void GetDataMoriNews(Context context,RecyclerView recyclerView) {
         Call<List<MoriNewsModel>> call = apiService.GetMoriNews(ApiClient.SERVER_TOKEN);
         call.enqueue(new Callback<List<MoriNewsModel>>() {
             @Override
             public void onResponse(@NonNull Call<List<MoriNewsModel>> call, @NonNull Response<List<MoriNewsModel>> response) {
                 if (response.body() != null) {
-                    data.setValue(response.body());
+                    List<MoriNewsModel> moriNewsModel = response.body();
+                    MoriNewsAdapter adapter = new MoriNewsAdapter(moriNewsModel,context);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView.refreshDrawableState();
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(adapter);
                 }
                 if (response.isSuccessful()) {
                     Log.d("MoriNews", "Success");
@@ -65,15 +74,57 @@ public class ApplicationDataRepository {
                 }
             }
         });
-        return data;
     }
 
-    public void DailyRewardData(RecyclerView recyclerView, Context context) {
+    public void GetPinnedNews(AppCompatImageView moriNews_dot,TextView textView){
+        Call<List<MoriNewsModel>> call = apiService.GetMoriNewsPinned(ApiClient.SERVER_TOKEN);
+        call.enqueue(new Callback<List<MoriNewsModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<MoriNewsModel>> call, @NonNull Response<List<MoriNewsModel>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    List<MoriNewsModel> moriNewsModel = response.body();
+                    MoriNewsModel latestItem = findLatestItem(moriNewsModel,moriNews_dot);
+                    moriNews_dot.setVisibility(View.VISIBLE);
+                    boolean isPinned = latestItem.isIs_published();
+                    if (isPinned){
+                        textView.setText(latestItem.getContent());
+                    }else {
+                        textView.setText("");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<MoriNewsModel>> call, @NonNull Throwable t) {
+                Log.e("PinnedNews","Error",t);
+            }
+        });
+    }
+
+    private MoriNewsModel findLatestItem(List<MoriNewsModel> items,AppCompatImageView imageView) {
+        if (items == null || items.isEmpty()) {
+            return null;
+        }
+
+        MoriNewsModel latestItem = items.get(0);
+        for (MoriNewsModel item : items) {
+            if (item.getDateTime().compareTo(latestItem.getDateTime()) > 0) {
+                latestItem = item;
+            }else {
+                imageView.setVisibility(View.GONE);
+            }
+        }
+        return latestItem;
+    }
+
+    public void DailyRewardData(RecyclerView recyclerView, Context context,TextView textView) {
         Call<List<DailyRewardModel>> call = apiService.GetDailyReward(ApiClient.SERVER_TOKEN);
         call.enqueue(new Callback<List<DailyRewardModel>>() {
             @Override
             public void onResponse(@NonNull Call<List<DailyRewardModel>> call, @NonNull Response<List<DailyRewardModel>> response) {
-                if (response.body() != null) {
+                if (response.isSuccessful() && response.body() != null) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.GONE);
                     List<DailyRewardModel> dailyRewardModels = response.body();
                     DailyRewardAdapter adapter = new DailyRewardAdapter(dailyRewardModels, context);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -81,6 +132,15 @@ public class ApplicationDataRepository {
                     recyclerView.refreshDrawableState();
                     recyclerView.setAdapter(adapter);
                     Log.d("DailyRewardRepo", "Success");
+                }else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.GONE);
+                    try {
+                        assert response.errorBody() != null;
+                        Log.e("DailyRewardRepo", response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
@@ -117,14 +177,14 @@ public class ApplicationDataRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
 
-        Call<DailyRewardResponse> call = apiService.SetDailyReward(token, dailyRewardModel);
-        call.enqueue(new Callback<DailyRewardResponse>() {
+        Call<SingleResponse> call = apiService.SetDailyReward(token, dailyRewardModel);
+        call.enqueue(new Callback<SingleResponse>() {
             @Override
-            public void onResponse(@NonNull Call<DailyRewardResponse> call, @NonNull Response<DailyRewardResponse> response) {
+            public void onResponse(@NonNull Call<SingleResponse> call, @NonNull Response<SingleResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("ClaimDailyReward", "Success");
-                    DailyRewardResponse dailyRewardResponse = response.body();
-                    String detail = dailyRewardResponse.getDetail();
+                    SingleResponse singleResponse = response.body();
+                    String detail = singleResponse.getDetail();
                     final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                     dialog.setTitle("Success");
                     dialog.setContentText(detail);
@@ -149,7 +209,7 @@ public class ApplicationDataRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<DailyRewardResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<SingleResponse> call, @NonNull Throwable t) {
                 Log.e("ClaimDailyReward", "ERROR", t);
             }
         });
@@ -235,6 +295,65 @@ public class ApplicationDataRepository {
             @Override
             public void onFailure(@NonNull Call<List<TaskModel>> call, @NonNull Throwable t) {
                 Log.e("GetTask :" , "OnFailure",t);
+            }
+        });
+    }
+
+    public void ClaimTask(Context context,TaskModel taskModel){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
+
+        Call<SingleResponse> call = apiService.ClaimTask(token,taskModel);
+        call.enqueue(new Callback<SingleResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SingleResponse> call, @NonNull Response<SingleResponse> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    SingleResponse task = response.body();
+                    final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.SUCCESS_TYPE);
+                    dialog.setTitle("Success");
+                    dialog.setContentText(task.getDetail());
+                    dialog.setCancelable(false);
+                    dialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                }else {
+                    SingleResponse task = response.body();
+                    assert task != null;
+                    final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
+                    dialog.setTitle("Success");
+                    dialog.setContentText(task.getDetail());
+                    dialog.setCancelable(false);
+                    dialog.setConfirmButton("Ok", Dialog::dismiss).show();
+
+                    try {
+                        assert response.errorBody() != null;
+                        Log.e("ClaimTask",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SingleResponse> call, @NonNull Throwable t) {
+                Log.e("ClaimTask","ERROR",t);
+            }
+        });
+    }
+
+
+    public void GetDailyCheck(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
+
+        Call<List<DailyCheckModel>> call = apiService.GetDailyCheckReward(token);
+        call.enqueue(new Callback<List<DailyCheckModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<DailyCheckModel>> call, @NonNull Response<List<DailyCheckModel>> response) {
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<DailyCheckModel>> call, @NonNull Throwable t) {
+                Log.e("DailyCheck","ERROR",t);
             }
         });
     }

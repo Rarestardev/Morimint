@@ -1,5 +1,6 @@
 package com.rarestardev.morimint.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +12,31 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.rarestardev.morimint.OfflineModel.DailyBonusModel;
+import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.R;
 
 import java.util.List;
 
-public class DailyBonusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DailyCheckAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LARGE = 0;
     private static final int VIEW_TYPE_SMALL = 1;
     Context context;
-    List<DailyBonusModel> dailyBonusModels;
+    List<DailyCheckModel> dailyCheckModels;
 
-    public DailyBonusAdapter(Context context, List<DailyBonusModel> dailyBonusModels) {
+    long days;
+
+    public DailyCheckAdapter(Context context, List<DailyCheckModel> dailyCheckModels) {
         this.context = context;
-        this.dailyBonusModels = dailyBonusModels;
+        this.dailyCheckModels = dailyCheckModels;
     }
 
     @Override
     public int getItemViewType(int position) {
-        DailyBonusModel bonusModel = dailyBonusModels.get(position);
-        return bonusModel.isLarge() ? VIEW_TYPE_LARGE : VIEW_TYPE_SMALL;
+        if (days == 10 || days == 20 || days == 30){
+            return VIEW_TYPE_LARGE;
+        }else {
+            return VIEW_TYPE_SMALL;
+        }
     }
 
     @NonNull
@@ -45,44 +51,28 @@ public class DailyBonusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        DailyBonusModel bonusModel = dailyBonusModels.get(position);
-        if (holder.getItemViewType() == VIEW_TYPE_LARGE) {
-            LargeViewHolder largeViewHolder = (LargeViewHolder) holder;
-            largeViewHolder.tvReward.setText(bonusModel.getBonus());
-            largeViewHolder.tvDay.setText(bonusModel.getDays());
-            if (bonusModel.isLocked()) {
-                largeViewHolder.bonusLocked.setVisibility(View.VISIBLE);
-            } else {
-                largeViewHolder.bonusLocked.setVisibility(View.GONE);
-                if (bonusModel.isComplete()) {
-                    largeViewHolder.isComplete.setVisibility(View.VISIBLE);
-                } else {
-                    largeViewHolder.isComplete.setVisibility(View.GONE);
-                }
-            }
+        days = dailyCheckModels.get(position).getDays();
+        DailyCheckModel dailyCheckModel = dailyCheckModels.get(position);
 
-        } else {
+        if (holder.getItemViewType() == VIEW_TYPE_SMALL){
             SmallViewHolder smallViewHolder = (SmallViewHolder) holder;
-            smallViewHolder.tvRewardSmall.setText(bonusModel.getBonus());
-            smallViewHolder.tvDaySmall.setText(bonusModel.getDays());
-            if (bonusModel.isLocked()) {
-                smallViewHolder.bonusLockedSmall.setVisibility(View.VISIBLE);
-            } else {
-                smallViewHolder.bonusLockedSmall.setVisibility(View.GONE);
-                if (bonusModel.isComplete()) {
-                    smallViewHolder.isCompleteSmall.setVisibility(View.VISIBLE);
-                } else {
-                    smallViewHolder.isCompleteSmall.setVisibility(View.GONE);
-                }
-            }
+            smallViewHolder.tvDaySmall.setText("Day " + days);
+            smallViewHolder.tvRewardSmall.setText(String.valueOf(dailyCheckModel.getGift()));
+        }else {
+            LargeViewHolder largeViewHolder = (LargeViewHolder) holder;
+            largeViewHolder.tvDay.setText("Day " + days);
+            largeViewHolder.tvReward.setText(String.valueOf(dailyCheckModel.getGift()));
         }
+
+
     }
 
     @Override
     public int getItemCount() {
-        return dailyBonusModels.size();
+        return dailyCheckModels.size();
     }
 
     private static class SmallViewHolder extends RecyclerView.ViewHolder {

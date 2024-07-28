@@ -47,7 +47,7 @@ public class CustomLevelDialog extends Dialog {
         getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         getWindow().setGravity(Gravity.BOTTOM);
 
-        applicationManager = new ApplicationManager();
+        applicationManager = new ApplicationManager(context);
         coinMintManager = new CoinMintManager(context);
 
         imageViewCharacter = findViewById(R.id.imageViewCharacter);

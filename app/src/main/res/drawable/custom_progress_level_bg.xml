@@ -13,6 +13,7 @@
 <item android:id="@android:id/progress">
     <clip>
         <shape>
+            <padding android:bottom="1dp" android:top="1dp"/>
             <corners android:radius="20dp"/>
             <stroke android:width="0.5dp" android:color="@color/white"/>
         </shape>

@@ -1,11 +1,11 @@
 package com.rarestardev.morimint.Api;
 
-public class DailyRewardResponse {
+public class SingleResponse {
 
     private String detail;
 
 
-    public DailyRewardResponse(String detail) {
+    public SingleResponse(String detail) {
         this.detail = detail;
     }
 

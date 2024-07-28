@@ -55,7 +55,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/opensans_bold"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -69,12 +70,34 @@
             android:layout_above="@id/invite_layout"
             android:layout_marginBottom="45dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/referral_item" />
+                >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNoData"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    tools:text="@string/noData"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/referral_item" />
+            </RelativeLayout>
+
+
         </ScrollView>
 
         <RelativeLayout
@@ -86,11 +109,12 @@
             android:layout_marginBottom="30dp">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/inviteCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/my_invite_link"
+                tools:text="Invite Code : 5161516516515615"
                 android:fontFamily="@font/opensans_bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_alignParentStart="true"
                 android:layout_alignBaseline="@id/btnCopyReferralCode" />
@@ -107,27 +131,6 @@
                 android:textAllCaps="false"
                 android:textSize="17sp"
                 tools:ignore="RelativeOverlap" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/ref_link"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnCopyReferralCode"
-                android:layout_marginTop="15dp"
-                android:text="https://t.me/moriaicompany_startbot=/98304033"
-                android:maxLines="1"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="350dp"
-                android:layout_height="70dp"
-                android:layout_below="@id/ref_link"
-                android:background="@drawable/card_layout_bg"
-                android:layout_marginTop="10dp"
-                android:text="@string/send_invite"
-                android:textSize="18sp"
-                android:fontFamily="@font/opensans_bold" />
         </RelativeLayout>
 
 

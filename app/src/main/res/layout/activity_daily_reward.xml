@@ -76,6 +76,19 @@
             android:textAllCaps="true"
             android:textColor="@color/white" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoData"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:text="@string/noData"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dailyRewardRecyclerView"
             android:layout_width="@dimen/MaxWidthViews"
@@ -83,6 +96,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:scrollbars="none"
+            android:visibility="gone"
             tools:listitem="@layout/daily_reward_items" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

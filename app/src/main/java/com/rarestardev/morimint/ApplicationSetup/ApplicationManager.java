@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,81 +23,91 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationManager {
-    private int value;
     private int maxValue;
-    private final int minValue;
-    private final int step;
     private int minter;
     private long totalBalance;
     private int level;
     private int progressStatus;
+    Context context;
     List<LevelManagerModel> managerModels;
 
     private static final long[] LEVEL_COIN = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
     private static final int[] LEVEL = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     private static final int[] LEVEL_ENERGY = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 14000, 16000, 18000};
     private static final int[] LEVEL_TAP = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18};
-    private boolean[] LEVEL_PASSED = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+    boolean[] LEVEL_PASSED = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
     private static final int[] LEVEL_ITEM = {R.drawable.level_one, R.drawable.level_two, R.drawable.level_three, R.drawable.level_four,
             R.drawable.level_five, R.drawable.level_six, R.drawable.level_seven, R.drawable.level_eight,
             R.drawable.level_nine, R.drawable.level_ten, R.drawable.level_eleven, R.drawable.level_twelve, R.drawable.level_thirteen,
             R.drawable.level_fourteen, R.drawable.level_fifteen};
 
-    public ApplicationManager() {
-        this.value = 1000;
+    public ApplicationManager(Context context) {
+        this.context = context;
         this.maxValue = 1000;
-        this.minValue = 0;
-        this.step = 3;
         this.minter = 1;
-    }
-
-    public void increment() {
-        if (value < maxValue) {
-            value += step;
-        }
-        if (value > maxValue) {
-            value = maxValue;
-        }
-    }
-
-    public void decrement(int mint) {
-        if (value >= 1) {
-            value -= mint;
-            if (value < minValue) {
-                value = minValue;
-            }
-        }
-    }
-
-    public boolean mintStop(int mint) {
-        return value < mint;
-    }
-
-    public void increase(int currentTime, int last_energy) {
-        int added_energy = currentTime * step;
-
-        value = Math.min(last_energy + added_energy, maxValue);
-        if (value > maxValue) {
-            value = maxValue;
-        }
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public int getMaxValue() {
-        return maxValue;
     }
 
     public int getMinter() {
         return minter;
     }
 
+
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void initLevelValues(Context context, long coin, ProgressBar progressBar, AppCompatImageView Coin, AppCompatImageView Turbo, TextView textView,
-                                RoundedImageView mainProfile, AppCompatImageView drawerProfile) {
+    public void setImageWithCurrentLevel(int level, ImageView imageView) {
+        switch (level) {
+            case 2:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_two));
+                break;
+            case 3:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_three));
+                break;
+            case 4:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_four));
+                break;
+            case 5:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_five));
+                break;
+            case 6:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_six));
+                break;
+            case 7:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_seven));
+                break;
+            case 8:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_eight));
+                break;
+            case 9:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_nine));
+                break;
+            case 10:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_ten));
+                break;
+            case 11:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_eleven));
+                break;
+            case 12:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_twelve));
+                break;
+            case 13:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_thirteen));
+                break;
+            case 14:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_fourteen));
+                break;
+            case 15:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_fifteen));
+                break;
+            default:
+                imageView.setImageDrawable(context.getDrawable(R.drawable.level_one));
+                break;
+
+        }
+    }
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void initLevelValues(long coin, ProgressBar progressBar) {
         totalBalance = coin;
         if (totalBalance < LEVEL_COIN[0]) {
             level = 1;
@@ -162,114 +173,12 @@ public class ApplicationManager {
             maxValue = 18000;
             minter = 18;
         }
-
-        setLevelImages(level, Coin, Turbo, context,mainProfile,drawerProfile);
-        textView.setText(String.valueOf(level));
         ProgressBar(level, progressBar, coin);
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private void setLevelImages(int levelValue, AppCompatImageView Coin, AppCompatImageView Turbo, Context context
-            ,RoundedImageView mainProfile,AppCompatImageView drawerProfile) {
-        switch (levelValue) {
-            case 2:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_two));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_two));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_two));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_two));
-                break;
-            case 3:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_three));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_three));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_three));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_three));
-                break;
-            case 4:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_four));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_four));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_four));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_four));
-                break;
-            case 5:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_five));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_five));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_five));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_five));
-                break;
-            case 6:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_six));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_six));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_six));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_six));
-                break;
-            case 7:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_seven));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_seven));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_seven));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_seven));
-                break;
-            case 8:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_eight));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_eight));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_eight));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_eight));
-                break;
-            case 9:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_nine));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_nine));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_nine));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_nine));
-                break;
-            case 10:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_ten));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_ten));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_ten));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_ten));
-                break;
-            case 11:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_eleven));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_eleven));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_eleven));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_eleven));
-                break;
-            case 12:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_twelve));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_twelve));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_twelve));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_twelve));
-                break;
-            case 13:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_thirteen));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_thirteen));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_thirteen));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_thirteen));
-                break;
-            case 14:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_fourteen));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_fourteen));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_fourteen));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_fourteen));
-                break;
-            case 15:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_fifteen));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_fifteen));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_fifteen));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_fifteen));
-                break;
-
-            default:
-                Coin.setImageDrawable(context.getDrawable(R.drawable.level_one));
-                Turbo.setImageDrawable(context.getDrawable(R.drawable.level_one));
-                mainProfile.setImageDrawable(context.getDrawable(R.drawable.level_one));
-                drawerProfile.setImageDrawable(context.getDrawable(R.drawable.level_one));
-                break;
-
-        }
     }
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     public void initLevelDialog(Context context, long coin, ProgressBar progressBar, AppCompatImageView Coin,
-                                AppCompatTextView textView,RecyclerView recyclerView,TextView tap) {
+                                AppCompatTextView textView, RecyclerView recyclerView, TextView tap) {
         totalBalance = coin;
         if (totalBalance < LEVEL_COIN[0]) {
             level = 1;
@@ -340,20 +249,20 @@ public class ApplicationManager {
         textView.setText("Level : " + level);
         tap.setText("Tap : +" + minter);
         ProgressBar(level, progressBar, coin);
-        setLevelListManager(recyclerView,context,level);
+        setLevelListManager(recyclerView, context, level);
     }
 
-    private void setLevelListManager(RecyclerView recyclerView,Context context,int level){
+    private void setLevelListManager(RecyclerView recyclerView, Context context, int level) {
         for (int i = 0; i < level; i++) {
             LEVEL_PASSED[i] = true;
         }
 
         managerModels = new ArrayList<>();
-        for (int i = 0; i < LEVEL.length;i++){
-            managerModels.add(new LevelManagerModel(LEVEL[i] ,LEVEL_ITEM[i], LEVEL_PASSED[i], LEVEL_ENERGY[i], LEVEL_TAP[i], LEVEL_COIN[i]));
+        for (int i = 0; i < LEVEL.length; i++) {
+            managerModels.add(new LevelManagerModel(LEVEL[i], LEVEL_ITEM[i], LEVEL_PASSED[i], LEVEL_ENERGY[i], LEVEL_TAP[i], LEVEL_COIN[i]));
         }
 
-        LevelManagerAdapter adapter = new LevelManagerAdapter(context,managerModels,level);
+        LevelManagerAdapter adapter = new LevelManagerAdapter(context, managerModels, level);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.refreshDrawableState();
         recyclerView.setHasFixedSize(true);
@@ -361,7 +270,7 @@ public class ApplicationManager {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void setLevelImagesDialog(int levelValue, AppCompatImageView character,Context context) {
+    private void setLevelImagesDialog(int levelValue, AppCompatImageView character, Context context) {
         switch (levelValue) {
             case 2:
                 character.setImageDrawable(context.getDrawable(R.drawable.level_two));
@@ -501,7 +410,7 @@ public class ApplicationManager {
     }
 
 
-    private void ChangeColorProgressState(int progress, ProgressBar progressBar,Context context) {
+    private void ChangeColorProgressState(int progress, ProgressBar progressBar, Context context) {
         progressBar.setProgress(progress);
 
         int color;

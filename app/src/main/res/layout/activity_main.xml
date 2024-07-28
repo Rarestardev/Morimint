@@ -352,6 +352,7 @@
                             android:layout_width="@dimen/IconEnergySize"
                             android:layout_height="@dimen/IconEnergySize"
                             android:layout_marginEnd="5dp"
+                            android:padding="1dp"
                             android:src="@drawable/energy_ic"
                             app:layout_constraintEnd_toStartOf="@id/tvEnergy"
                             app:layout_constraintTop_toTopOf="parent"/>

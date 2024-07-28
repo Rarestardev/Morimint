@@ -9,12 +9,10 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,8 +25,8 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.ApplicationManager;
 import com.rarestardev.morimint.ApplicationSetup.CustomLevelDialog;
+import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.ApplicationSetup.CheckActiveUser;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
@@ -49,20 +47,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private static final long COIN_SHAKE_ANIMATION_TIMER = 250;
     private static final int[] animationAxis = {-250, 70, 500, 700, -200, 70, 500, -100, 70, 200};
     private static final int[] TEXT_ANIMATION_COLOR = {R.color.white, R.color.MidWhite, R.color.DarkGray, R.color.Gray};
-    private static final long IncreaseEnergyTime = 1000;
     private static final String TAG = "HomeLog";// Log tag
 
-    // Energy
-    private final Handler handler = new Handler(); // energy timer
-    private Runnable runnable; // energy charger
-    int energy; // energy
-    private SharedPreferences.Editor editor; // current energy applicationManager
-    private ApplicationManager applicationManager; // ApplicationManager Charge Energy   // true = clicked    // false = not clicked recharged energy
+    private ApplicationManager applicationManager;
 
     // value
     private int clickerCounter;
     private int clickerCounterTurbo; // number of clicked for mint applicationManager
-    private boolean isClicked = false;
     boolean isUserData;
     private int TurboCount = 0; // Turbo ApplicationManager
     private boolean is_active;
@@ -73,9 +64,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private CoinMintManager coinMintManager;
     private CountDownTimer turboDownTimer; // Turbo timer ApplicationManager 12 second
     private NetworkChangeReceiver networkChangeReceiver;
+    private EnergyManager energyManager;
 
     // ViewModels
-    private ApplicationDataViewModel applicationDataViewModel;
+    ApplicationDataViewModel applicationDataViewModel;
     UserDataViewModel userDataViewModel;
     private CoinManagerViewModel coinManagerViewModel;
 
@@ -83,19 +75,18 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
         networkChangeReceiver = new NetworkChangeReceiver(this);
         coinMintManager = new CoinMintManager(MainActivity.this);
-        applicationManager = new ApplicationManager();
-
-        SharedPreferences sharedPreferences = getSharedPreferences("CurrentTime", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        applicationManager = new ApplicationManager(MainActivity.this);
+        energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
+        energyManager.IncreasedEnergy();
 
         StartActivities();
         NavigationDrawerHandle();
-        RechargedEnergy();
 
         binding.applicationManagerLayout.setOnClickListener(v -> {
-            CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this,coinMintManager.getBalance());
+            CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this, coinMintManager.getBalance());
             customLevelDialog.show();
         });
     }
@@ -177,15 +168,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     case 3:
                     case 4:
                     case 5:
-                        if (!applicationManager.mintStop(applicationManager.getMinter())) {
+                        if (!energyManager.mintStop(applicationManager.getMinter())) {
                             clickerCounter++;
                             coinMintManager.IncreaseBalance(clickerCounter, false, applicationManager.getMinter());
-                            applicationManager.decrement(applicationManager.getMinter());
-                            binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
-                            applicationManager.initLevelValues(MainActivity.this, coinMintManager.getBalance(),
-                                    binding.levelXpProgressBar, binding.coinImage, binding.turboImage, binding.tvLevelShow,
-                                    binding.imageViewProfile, binding.drawerProfile);
-                            isClicked = true;
+                            applicationManager.initLevelValues(coinMintManager.getBalance(),
+                                    binding.levelXpProgressBar);
+                            energyManager.clicked(true);
+
+                            energyManager.ReduceEnergy(applicationManager.getMinter());
 
                             CreateAnimation(x, y);
                         }
@@ -193,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 }
 
             } else if (actionType == MotionEvent.ACTION_UP) {
-                isClicked = false;
+                energyManager.clicked(false);
             }
             return true;
         });
@@ -219,11 +209,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         Thread thread = new Thread(() -> {
 
-            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[1])), 300);
+            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[1])), 500);
 
-            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[2])), 500);
+            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[2])), 700);
 
-            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[3])), 700);
+            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[3])), 800);
         });
         thread.start();
 
@@ -274,48 +264,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         numberFormat.setGroupingSize(3);
         numberFormat.setMaximumFractionDigits(2);
         tvBalance.setText(numberFormat.format(balance));
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void RechargedEnergy() {
-        if (applicationManager.getValue() >= applicationManager.getMaxValue()) {
-            editor.clear();
-        }
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (!isClicked) {
-                    if (applicationManager.getValue() < applicationManager.getMaxValue()) {
-                        applicationManager.increment();
-                        YoYo.with(Techniques.Flash).duration(1000).playOn(binding.iconEnergy);
-                    }
-                }
-                binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
-                handler.postDelayed(this, IncreaseEnergyTime);
-            }
-        };
-        handler.post(runnable);
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences("CurrentTime", MODE_PRIVATE);
-        long currentTime = sharedPreferences.getLong("Time", -1);
-        energy = sharedPreferences.getInt("Energy", applicationManager.getMaxValue());
-
-        if (currentTime != -1) {
-            long lastTime = System.currentTimeMillis();
-            long timeDifInSecond = (lastTime - currentTime) / 1000;
-
-            if (energy < applicationManager.getMaxValue()) {
-                applicationManager.increase((int) timeDifInSecond, energy);
-            }
-            if (energy > applicationManager.getMaxValue()) {
-                energy = applicationManager.getMaxValue();
-                editor.clear();
-            }
-
-            binding.tvEnergy.setText(applicationManager.getValue() + " / " + applicationManager.getMaxValue());
-        }
     }
 
     private void NavigationDrawerHandle() {
@@ -372,43 +320,29 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         binding.wallet.setOnClickListener(v ->
                 startActivity(new Intent(this, WalletActivity.class)));
+
+        binding.referral.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ReferralActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
     protected void onStop() {
+        energyManager.getTimeFromSystemsOnStopMethod();
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
         coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         Log.d(TAG, "onStop");
         super.onStop();
-        getCurrentTimeUserActiveToOfflineMode();
-    }
-
-    private void getCurrentTimeUserActiveToOfflineMode() {
-        CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
-        activeUser.isActiveUserInApp(false);
-
-        editor.putLong("Time", System.currentTimeMillis());
-        editor.putInt("Energy", applicationManager.getValue());
-        editor.apply();
     }
 
     @Override
     protected void onDestroy() {
+        energyManager.onDestroyApp();
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
         coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         Log.d(TAG, "onDestroy");
-
-        handler.removeCallbacks(runnable);
-        CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
-        activeUser.isActiveUserInApp(false);
         super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
-        activeUser.isActiveUserInApp(false);
     }
 
     @Override
@@ -418,10 +352,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         if (binding.tvBalanceCoin.getText().toString().isEmpty()) {
             binding.tvBalanceCoin.setText("0");
         }
-
-        CheckActiveUser activeUser = new CheckActiveUser(MainActivity.this);
-        activeUser.isActiveUserInApp(true);
-
     }
 
     @Override
@@ -447,6 +377,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     dialog.show();
                 } else {
                     HandleResponseData();
+                    applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+                    applicationDataViewModel.PinnedNews(binding.moriNewsDot, binding.tvNewsMessage);
                 }
 
                 if (is_mint_on) {
@@ -491,13 +423,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         userDataViewModel.getUserData(MainActivity.this).observe(this, users -> {
             if (users != null) {
                 isUserData = true;
-                binding.referral.setOnClickListener(v -> {
-                    Intent intent = new Intent(MainActivity.this, ReferralActivity.class);
-                    intent.putExtra("Referral", users.getReferral_code());
-                    intent.putExtra("TotalReferral", users.getTotal_invites());
-                    startActivity(intent);
-                });
-
                 DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
                 decimalFormatSymbols.setGroupingSeparator(',');
                 DecimalFormat numberFormat = new DecimalFormat("###,###,###,###,###", decimalFormatSymbols);
@@ -508,34 +433,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.drawerTvUsername.setText(users.getUsername());
                 coinMintManager.setBalance(users.getCoin());
                 binding.tvBalanceCoin.setText(numberFormat.format(coinMintManager.getBalance()));
-
-                applicationManager.initLevelValues(MainActivity.this, coinMintManager.getBalance(),
-                        binding.levelXpProgressBar, binding.coinImage, binding.turboImage, binding.tvLevelShow,
-                        binding.imageViewProfile, binding.drawerProfile);
+                energyManager.getLevelFromServer(users.getLevel());
+                applicationManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
+                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.drawerProfile);
 
             } else {
                 isUserData = false;
             }
-        });
-
-        applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-        applicationDataViewModel.SetDataMoriNews().observe(this, moriNewsModels -> {
-            boolean is_pinned_news = moriNewsModels.get(0).isIs_published();
-
-            if (is_pinned_news) {
-                binding.tvNewsMessage.setText(moriNewsModels.get(0).getContent());
-            } else {
-                binding.tvNewsMessage.setText("");
-            }
-
-            String isNews = moriNewsModels.get(0).getTitle();
-
-            if (isNews.isEmpty()) {
-                binding.moriNewsDot.setVisibility(View.GONE);
-            } else {
-                binding.moriNewsDot.setVisibility(View.VISIBLE);
-            }
-
         });
     }
 }

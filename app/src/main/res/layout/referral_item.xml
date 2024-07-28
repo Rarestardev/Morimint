@@ -15,27 +15,29 @@
         android:src="@drawable/drawer_profile_ic"/>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Level : 1"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_toEndOf="@id/imageViewProfile"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="15dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvRefUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Soheyl Darzi"
-        android:layout_toEndOf="@id/imageViewProfile"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/tvLevel"
+        android:layout_marginStart="15dp"
+        android:layout_centerVertical="true"
         android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ 50.000"
-        android:layout_toEndOf="@id/imageViewProfile"
-        android:layout_below="@id/tvRefUsername"
-        android:layout_marginStart="25dp"
-        android:maxLines="1"
-        android:textColor="#00C853"
-        android:textSize="15sp"/>
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="30dp"
@@ -49,12 +51,13 @@
         android:id="@+id/tvRefNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="50.000"
+        android:text="+ 50,000"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="15dp"
         android:maxLines="1"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        tools:ignore="HardcodedText" />
 
 </RelativeLayout>

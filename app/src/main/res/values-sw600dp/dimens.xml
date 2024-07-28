@@ -16,7 +16,7 @@
     <dimen name="MintFrameHeight">350dp</dimen>
     <dimen name="MintFrameWidth">365dp</dimen>
     <dimen name="MintFrameMarginTop">180dp</dimen>
-    <dimen name="IconEnergySize">35dp</dimen>
+    <dimen name="IconEnergySize">30dp</dimen>
     <dimen name="tvEnergyTextSize">20sp</dimen>
     <dimen name="LevelProgressBarHeight">30dp</dimen>
     <dimen name="LevelProgressBarMarginTop">15dp</dimen>

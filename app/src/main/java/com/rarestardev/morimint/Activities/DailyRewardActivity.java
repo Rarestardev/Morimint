@@ -1,6 +1,7 @@
 package com.rarestardev.morimint.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 
 public class DailyRewardActivity extends AppCompatActivity {
     RecyclerView dailyRewardRecyclerView;
+    AppCompatTextView tvNoData;
     RelativeLayout dailyBonus;
     ApplicationDataViewModel applicationDataViewModel;
 
@@ -23,11 +25,12 @@ public class DailyRewardActivity extends AppCompatActivity {
 
         dailyRewardRecyclerView = findViewById(R.id.dailyRewardRecyclerView);
         dailyBonus = findViewById(R.id.dailyBonus);
+        tvNoData = findViewById(R.id.tvNoData);
 
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-        applicationDataViewModel.GetDataDailyReward(dailyRewardRecyclerView, this);
+        applicationDataViewModel.GetDataDailyReward(dailyRewardRecyclerView, this,tvNoData);
 
 
-        dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this, DailyBonusActivity.class)));
+        dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this, DailyCheckActivity.class)));
     }
 }

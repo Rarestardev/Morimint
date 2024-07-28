@@ -1,6 +1,7 @@
 package com.rarestardev.morimint.Api;
 
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
+import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.GiftCodeModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
@@ -27,6 +28,11 @@ public interface ApiService {
     @GET("/controls/news")
     Call<List<MoriNewsModel>> GetMoriNews(@Header("Authorization") String token);
 
+    @GET("/controls/news")
+    Call<List<MoriNewsModel>> GetMoriNewsPinned(@Header("Authorization") String token);
+
+    @GET("/user/userDailyGift")
+    Call<List<DailyCheckModel>> GetDailyCheckReward(@Header("Authorization") String token);
 
     @GET("/controls/confing")
     Call<ApplicationSetupModel> GetApplicationSetup(@Header("Authorization") String token);
@@ -39,14 +45,20 @@ public interface ApiService {
 
 
     @Headers("Content-Type: application/json")
+    @POST("/controls/tasks")
+    Call<SingleResponse> ClaimTask(@Header("Authorization") String token, @Body TaskModel taskModel);
+
+
+    @Headers("Content-Type: application/json")
     @POST("/controls/Dailybonus")
-    Call<DailyRewardResponse> SetDailyReward(@Header("Authorization") String token,@Body DailyRewardModel dailyRewardModel);
+    Call<SingleResponse> SetDailyReward(@Header("Authorization") String token, @Body DailyRewardModel dailyRewardModel);
 
     @Multipart
     @POST("/user/signup")
     Call<ApiResponse> Sign_up(@Part("username") RequestBody username,
                               @Part("email") RequestBody email,
-                              @Part("password") RequestBody password);
+                              @Part("password") RequestBody password,
+                              @Part("referralCode") RequestBody refCode);
 
     @Multipart
     @POST("/user/login")
@@ -67,5 +79,10 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("/user/code")
     Call<ApiResponse> GiftCode(@Header("Authorization") String token, @Body GiftCodeModel giftCodeModel);
+
+
+    @Multipart
+    @PUT("/user/resetpassword")
+    Call<ApiResponse> ChangePassword(@Part("email") RequestBody email, @Part("new_password") RequestBody new_password);
 
 }

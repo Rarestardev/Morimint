@@ -5,23 +5,25 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Toast;
 
 import com.rarestardev.morimint.R;
+import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityForgetPasswordBinding;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
     private ActivityForgetPasswordBinding binding;
+    UserDataViewModel userDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_forget_password);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
 
         binding.btnSendLink.setOnClickListener(v -> {
             String email_address = String.valueOf(binding.editTextEmail.getText());
@@ -30,16 +32,16 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void ChangePassword(String email_address) {
-        if (!Patterns.EMAIL_ADDRESS.matcher(email_address).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email_address).matches()) {
             Toast.makeText(this, "Wrong email address", Toast.LENGTH_SHORT).show();
-        }else if (email_address.isEmpty()){
+        } else if (email_address.isEmpty()) {
             Toast.makeText(this, "Email is empty", Toast.LENGTH_SHORT).show();
-        }else {
-            OpenDialogCreateNewPassword();
+        } else {
+            OpenDialogCreateNewPassword(email_address);
         }
     }
 
-    private void OpenDialogCreateNewPassword() {
+    private void OpenDialogCreateNewPassword(String email) {
         Dialog dialog = new Dialog(ForgetPasswordActivity.this);
         dialog.setContentView(R.layout.dialog_change_password);
         dialog.setCancelable(false);
@@ -52,23 +54,21 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         close_dialog.setOnClickListener(v -> dialog.dismiss());
 
 
-        btn_change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String pass = String.valueOf(editTextPassword.getText());
-                if (pass.length() >= 8){
+        btn_change.setOnClickListener(v -> {
+            String pass = String.valueOf(editTextPassword.getText());
+            if (pass.length() >= 8) {
 
-                    ApplyNewPassword(pass);
-                    dialog.dismiss();
+                ApplyNewPassword(email, pass);
+                dialog.dismiss();
 
-                }else {
-                    Toast.makeText(ForgetPasswordActivity.this, "Password is small", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            private void ApplyNewPassword(String pass) {
-                Toast.makeText(ForgetPasswordActivity.this, pass, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ForgetPasswordActivity.this, "Password is small", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void ApplyNewPassword(String email, String pass) {
+        userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+        userDataViewModel.ChangeUserPassword(email, pass, ForgetPasswordActivity.this);
     }
 }
