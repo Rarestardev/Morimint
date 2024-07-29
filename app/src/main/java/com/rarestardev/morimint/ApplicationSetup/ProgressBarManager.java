@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 
 import com.rarestardev.morimint.R;
 
-public class ApplicationManager {
+public class ProgressBarManager {
     private int minter;
     private long totalBalance;
     private int progressStatus;
@@ -22,7 +22,7 @@ public class ApplicationManager {
     private static final int[] LEVEL_TAP = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18};
 
 
-    public ApplicationManager(Context context) {
+    public ProgressBarManager(Context context) {
         this.context = context;
         this.minter = 1;
     }

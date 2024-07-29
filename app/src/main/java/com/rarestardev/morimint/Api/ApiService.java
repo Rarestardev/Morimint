@@ -72,6 +72,10 @@ public interface ApiService {
     @PUT("/user/UpdateUserData")
     Call<Users> putCoinData(@Part MultipartBody.Part coin, @Header("Authorization") String token);
 
+    @Multipart
+    @PUT("/user/UpdateUserData")
+    Call<Users> putLevelData(@Part MultipartBody.Part level, @Header("Authorization") String token);
+
     @Headers("Content-Type: application/json")
     @POST("/user/giftcheck")
     Call<ApiResponse> SiteGiftCode(@Header("Authorization") String token, @Body GiftCodeModel giftCodeModel);

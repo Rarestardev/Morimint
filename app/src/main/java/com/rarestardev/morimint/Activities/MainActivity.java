@@ -23,7 +23,8 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.rarestardev.morimint.ApplicationSetup.ApplicationManager;
+import com.rarestardev.morimint.ApplicationSetup.LevelManager;
+import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.ApplicationSetup.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
@@ -31,7 +32,6 @@ import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
-import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
@@ -50,27 +50,27 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private static final int[] TEXT_ANIMATION_COLOR = {R.color.white, R.color.MidWhite, R.color.DarkGray, R.color.Gray};
     private static final String TAG = "HomeLog";// Log tag
 
-    private ApplicationManager applicationManager;
+    private ProgressBarManager progressBarManager;
 
     // value
     private int clickerCounter;
-    private int clickerCounterTurbo; // number of clicked for mint applicationManager
+    private int clickerCounterTurbo; // number of clicked for mint progressBarManager
     boolean isUserData;
-    private int TurboCount = 0; // Turbo ApplicationManager
+    private int TurboCount = 0; // Turbo ProgressBarManager
     private boolean is_active;
     private boolean is_mint_on;
     private long DayValue;
 
     // Class
     private CoinMintManager coinMintManager;
-    private CountDownTimer turboDownTimer; // Turbo timer ApplicationManager 12 second
+    private CountDownTimer turboDownTimer; // Turbo timer ProgressBarManager 12 second
     private NetworkChangeReceiver networkChangeReceiver;
     private EnergyManager energyManager;
+    private LevelManager levelManager;
 
     // ViewModels
     ApplicationDataViewModel applicationDataViewModel;
     UserDataViewModel userDataViewModel;
-    private CoinManagerViewModel coinManagerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +78,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         networkChangeReceiver = new NetworkChangeReceiver(this);
-        coinMintManager = new CoinMintManager(MainActivity.this);
 
-        applicationManager = new ApplicationManager(MainActivity.this);
+        progressBarManager = new ProgressBarManager(MainActivity.this);
+
+        levelManager = new LevelManager(MainActivity.this);
 
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             case 4:
                             case 5:
                                 clickerCounterTurbo++;
-                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true, applicationManager.getMinter());
+                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true, progressBarManager.getMinter());
                                 CreateAnimation(x, y);
                                 break;
                         }
@@ -175,14 +176,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     case 3:
                     case 4:
                     case 5:
-                        if (!energyManager.mintStop(applicationManager.getMinter())) {
+                        if (!energyManager.mintStop(progressBarManager.getMinter())) {
                             clickerCounter++;
-                            coinMintManager.IncreaseBalance(clickerCounter, false, applicationManager.getMinter());
+                            coinMintManager.IncreaseBalance(clickerCounter, false, progressBarManager.getMinter());
                             energyManager.clicked(true);
 
-                            energyManager.ReduceEnergy(applicationManager.getMinter());
+                            energyManager.ReduceEnergy(progressBarManager.getMinter());
 
-                            applicationManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
+                            progressBarManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
+
+                            levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
+
                             CreateAnimation(x, y);
                         }
                         break;
@@ -203,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
         TextView animationTextView = new TextView(MainActivity.this);
-        animationTextView.setText("+" + applicationManager.getMinter());
+        animationTextView.setText("+" + progressBarManager.getMinter());
         animationTextView.setTextSize(30);
         animationTextView.setTypeface(Typeface.DEFAULT_BOLD);
         animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[0]));
@@ -333,11 +337,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         });
     }
 
+    public void refreshActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        HandleResponseData();
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     protected void onStop() {
         energyManager.getTimeFromSystemsOnStopMethod();
-        coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
-        coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         Log.d(TAG, "onStop");
         super.onStop();
     }
@@ -345,8 +355,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onDestroy() {
         energyManager.onDestroyApp();
-        coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
-        coinManagerViewModel.UpdateCoin(coinMintManager.SendNewValue(), MainActivity.this);
         Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
@@ -424,29 +432,32 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
     }
 
-    private void HandleResponseData() {
+    public void HandleResponseData() {
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         userDataViewModel.getUserData(MainActivity.this).observe(this, users -> {
             if (users != null) {
                 isUserData = true;
-                DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
-                decimalFormatSymbols.setGroupingSeparator(',');
-                DecimalFormat numberFormat = new DecimalFormat("###,###,###,###,###", decimalFormatSymbols);
-                numberFormat.setGroupingSize(3);
-                numberFormat.setMaximumFractionDigits(2);
 
+                coinMintManager = new CoinMintManager(MainActivity.this);
                 binding.tvUsername.setText(users.getUsername());
                 binding.drawerTvUsername.setText(users.getUsername());
                 coinMintManager.setBalance(users.getCoin());
-                binding.tvBalanceCoin.setText(numberFormat.format(coinMintManager.getBalance()));
+
+                levelManager.getTotalBalance(users.getLevel());
+                levelManager.HandleLevelWithCoin(users.getCoin());
+                levelManager.getCoinInMint(coinMintManager.getBalance());
+
+                coinMintManager.SendNewValue(users.getCoin());
+                NumberFormat(coinMintManager.getBalance(),binding.tvBalanceCoin);
 
                 energyManager.getLevelFromServer(users.getLevel());
 
-                applicationManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
-                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.drawerProfile);
-                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.coinImage);
-                applicationManager.setImageWithCurrentLevel(users.getLevel(),binding.turboImage);
-                applicationManager.ProgressBar(users.getLevel(),binding.levelXpProgressBar);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.drawerProfile);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.coinImage);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.turboImage);
+                progressBarManager.ProgressBar(users.getLevel(),binding.levelXpProgressBar);
+                progressBarManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
 
             } else {
                 isUserData = false;
