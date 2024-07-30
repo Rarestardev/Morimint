@@ -29,7 +29,7 @@ public interface ApiService {
     Call<List<MoriNewsModel>> GetMoriNews(@Header("Authorization") String token);
 
     @GET("/controls/news")
-    Call<List<MoriNewsModel>> GetMoriNewsPinned(@Header("Authorization") String token);
+    Call<MoriNewsModel> GetMoriNewsPinned(@Header("Authorization") String token);
 
     @GET("/user/userDailyGift")
     Call<List<DailyCheckModel>> GetDailyCheckReward(@Header("Authorization") String token);

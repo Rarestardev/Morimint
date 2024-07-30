@@ -20,10 +20,9 @@
     <color name="JackpotBonusAnim3">#ECCD6F</color>
 
 
-    <color name="progressMinValue">#07AF0E</color>
-    <color name="progressOneValue">#CC9A07</color>
-    <color name="progressTwoValue">#DF4B1C</color>
-    <color name="progressThreeValue">#0C79CF</color>
+    <color name="progressMinValue">#038697</color>
+    <color name="progressTwoValue">#0C8BC5</color>
+    <color name="progressThreeValue">#25379A</color>
     <color name="progressMaxValue">#40228d</color>
 
 

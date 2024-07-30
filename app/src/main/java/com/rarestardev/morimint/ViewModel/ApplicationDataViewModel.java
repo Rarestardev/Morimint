@@ -29,8 +29,8 @@ public class ApplicationDataViewModel extends ViewModel {
         applicationDataRepository.GetDataMoriNews(context, recyclerView);
     }
 
-    public void PinnedNews(AppCompatImageView imageView,TextView textView){
-        applicationDataRepository.GetPinnedNews(imageView, textView);
+    public void PinnedNews(Context context){
+        applicationDataRepository.GetPinnedNews(context);
     }
 
     public LiveData<ApplicationSetupModel> SetApplicationSetup(){

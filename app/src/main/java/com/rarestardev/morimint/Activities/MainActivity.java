@@ -2,14 +2,20 @@ package com.rarestardev.morimint.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -23,6 +29,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.rarestardev.morimint.ApplicationSetup.DaysManager;
 import com.rarestardev.morimint.ApplicationSetup.LevelManager;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.ApplicationSetup.CustomLevelDialog;
@@ -31,12 +38,18 @@ import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.Utilities.RewardTimer;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Objects;
 import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -49,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private static final int[] animationAxis = {-250, 70, 500, 700, -200, 70, 500, -100, 70, 200};
     private static final int[] TEXT_ANIMATION_COLOR = {R.color.white, R.color.MidWhite, R.color.DarkGray, R.color.Gray};
     private static final String TAG = "HomeLog";// Log tag
+    final String SHARED_TIMER_NAME = "RewardTimer";
+    final String SHARED_TIMER_KEY_Turbo = "Turbo";
 
     private ProgressBarManager progressBarManager;
 
@@ -56,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private int clickerCounter;
     private int clickerCounterTurbo; // number of clicked for mint progressBarManager
     boolean isUserData;
-    private int TurboCount = 0; // Turbo ProgressBarManager
+    private int TurboCount; // Turbo
     private boolean is_active;
     private boolean is_mint_on;
     private long DayValue;
@@ -67,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private NetworkChangeReceiver networkChangeReceiver;
     private EnergyManager energyManager;
     private LevelManager levelManager;
+    private RewardTimer rewardTimer;
 
     // ViewModels
     ApplicationDataViewModel applicationDataViewModel;
@@ -86,10 +102,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
 
+        rewardTimer = new RewardTimer(this);
+        rewardTimer.StartTimer();
+
         StartActivities();
         NavigationDrawerHandle();
 
-        binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
+        binding.tvTurboCount.setText(String.valueOf(currentTurbo));
+
+        binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
@@ -99,18 +122,31 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         });
     }
 
+    public void getTurboCount(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
+        if (currentTurbo == 0){
+            binding.tvTurboCount.setText(String.valueOf(2));
+        } else {
+            binding.tvTurboCount.setText(String.valueOf(currentTurbo));
+        }
+    }
+
     private void MintHandler() {
-        if (TurboCount != 0) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
+        if (currentTurbo > 0) {
             binding.turboMint.setVisibility(View.VISIBLE);
+            binding.turboCountLayout.setVisibility(View.VISIBLE);
             binding.coin.setVisibility(View.VISIBLE);
             binding.turbo.setVisibility(View.GONE);
             MintCoinAnimation();
             binding.turboMint.setOnClickListener(v -> TurboAnimation());
-
-        } else {
+        } else if (currentTurbo == 0){
             binding.turboMint.setVisibility(View.GONE);
             binding.coin.setVisibility(View.VISIBLE);
             binding.turbo.setVisibility(View.GONE);
+            binding.turboCountLayout.setVisibility(View.GONE);
             MintCoinAnimation();
         }
     }
@@ -122,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             public void onTick(long millisUntilFinished) {
                 binding.turboMint.setVisibility(View.GONE);
                 binding.coin.setVisibility(View.GONE);
+                binding.turboCountLayout.setVisibility(View.GONE);
                 binding.turbo.setVisibility(View.VISIBLE);
                 coinMintManager = new CoinMintManager(MainActivity.this);
                 binding.CoinLayout.setOnTouchListener((v, event) -> {
@@ -137,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             case 4:
                             case 5:
                                 clickerCounterTurbo++;
-                                coinMintManager.IncreaseBalance(clickerCounterTurbo, true, progressBarManager.getMinter());
+                                coinMintManager.IncreaseBalanceWithTurbo(clickerCounterTurbo, progressBarManager.getMinter());
+                                progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
                                 CreateAnimation(x, y);
                                 break;
                         }
@@ -148,21 +186,29 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
             @Override
             public void onFinish() {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
+                TurboCount = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
                 binding.turbo.setVisibility(View.GONE);
-                MintHandler();
                 if (TurboCount > 0) {
                     TurboCount--;
+                    MintHandler();
                 } else {
                     TurboCount = 0;
+                    binding.tvTurboCount.setText(String.valueOf(TurboCount));
                     turboDownTimer.cancel();
+                    MintHandler();
                 }
+                binding.tvTurboCount.setText(String.valueOf(TurboCount));
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(SHARED_TIMER_KEY_Turbo,TurboCount);
+                editor.apply();
             }
         };
         turboDownTimer.start();
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-    public void MintCoinAnimation() {
+    private void MintCoinAnimation() {
         binding.CoinLayout.setOnTouchListener((v, event) -> {
             float x = event.getX();
             float y = event.getY();
@@ -178,14 +224,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     case 5:
                         if (!energyManager.mintStop(progressBarManager.getMinter())) {
                             clickerCounter++;
-                            coinMintManager.IncreaseBalance(clickerCounter, false, progressBarManager.getMinter());
+                            coinMintManager.IncreaseBalance(clickerCounter, progressBarManager.getMinter());
                             energyManager.clicked(true);
 
                             energyManager.ReduceEnergy(progressBarManager.getMinter());
 
-                            progressBarManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
-
-                            levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
+                            progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
 
                             CreateAnimation(x, y);
                         }
@@ -194,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
             } else if (actionType == MotionEvent.ACTION_UP) {
                 energyManager.clicked(false);
+                levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
             }
             return true;
         });
@@ -207,7 +252,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
         TextView animationTextView = new TextView(MainActivity.this);
-        animationTextView.setText("+" + progressBarManager.getMinter());
+
+        if (binding.turbo.getVisibility() == View.GONE){
+            animationTextView.setText("+" + progressBarManager.getMinter());
+        }else {
+            animationTextView.setText("+" + progressBarManager.getMinter() * 3);
+        }
         animationTextView.setTextSize(30);
         animationTextView.setTypeface(Typeface.DEFAULT_BOLD);
         animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[0]));
@@ -276,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         tvBalance.setText(numberFormat.format(balance));
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void NavigationDrawerHandle() {
         binding.drawerNavigationView.bringToFront();
         binding.openDrawer.setOnClickListener(v ->
@@ -303,6 +354,18 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.drawer.closeDrawers();
                 startActivity(new Intent(MainActivity.this, AdvertisingActivity.class));
             }
+            if (item.getItemId() == R.id.info_app_menu) {
+                ShowDialogAboutApp(R.drawable.info_ic, getString(R.string.features), "info_app.txt");
+            }
+
+            if (item.getItemId() == R.id.road_map_menu) {
+                ShowDialogAboutApp(R.drawable.roadmap_ic, getString(R.string.roadmap), "roadmap.txt");
+            }
+
+            if (item.getItemId() == R.id.blue_icon_menu) {
+                ShowDialogAboutApp(R.drawable.blue_tick_menu_ic, getString(R.string.blue_tick), "blue_tick.txt");
+            }
+
             if (item.getItemId() == R.id.exitApp) {
                 binding.drawer.closeDrawers();
                 finish();
@@ -310,6 +373,42 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
             return true;
         });
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void ShowDialogAboutApp(int drawable, String title, String fileName) {
+        binding.drawer.closeDrawers();
+        Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.info_menu_dialog);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialog.setCancelable(true);
+        dialog.show();
+        AppCompatTextView tvInfo = dialog.findViewById(R.id.tvInfo);
+        AppCompatImageView dialogImage = dialog.findViewById(R.id.dialogImage);
+        AppCompatTextView dialogTitle = dialog.findViewById(R.id.dialogTitle);
+        dialogTitle.setText(title);
+        dialogImage.setImageDrawable(getDrawable(drawable));
+        tvInfo.setText(readFromAssets(fileName));
+    }
+
+    private String readFromAssets(String fileName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            InputStream is = getAssets().open(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append('\n');
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 
     private void StartActivities() {
@@ -337,17 +436,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         });
     }
 
-    public void refreshActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        HandleResponseData();
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onStop() {
         energyManager.getTimeFromSystemsOnStopMethod();
+        rewardTimer.OnStopActivity();
         Log.d(TAG, "onStop");
         super.onStop();
     }
@@ -374,7 +466,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         Log.d(TAG, "onResume");
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
+        getData();
+        rewardTimer.OnResumeActivity();
+    }
 
+    private void getData() {
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
         applicationDataViewModel.SetApplicationSetup().observe(this, applicationSetupModel -> {
             if (applicationSetupModel != null) {
@@ -382,17 +478,29 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 is_mint_on = applicationSetupModel.isIs_mint_on();
                 DayValue = applicationSetupModel.getCount();
                 binding.tvDay.setText(String.valueOf(DayValue));
+
+                SharedPreferences preferences = getSharedPreferences("Days", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                long allDays = preferences.getLong("Day", 0);
+                if (allDays == 0) {
+                    editor.putLong("Day", DayValue);
+                    editor.apply();
+                }
+                DaysManager daysManager = new DaysManager(MainActivity.this);
+                daysManager.getCurrentDay(DayValue);
+
                 if (!is_active) {
                     final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
                     dialog.setCancelable(false);
                     dialog.setTitle("Under repair");
-                    dialog.setContentText("Please try again later");
+                    dialog.setContentText("Please try again later or check for new update");
                     dialog.setConfirmButton("Exit", sweetAlertDialog -> finish());
                     dialog.show();
                 } else {
                     HandleResponseData();
                     applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-                    applicationDataViewModel.PinnedNews(binding.moriNewsDot, binding.tvNewsMessage);
+                    applicationDataViewModel.PinnedNews(MainActivity.this);
                 }
 
                 if (is_mint_on) {
@@ -415,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     protected void onPause() {
         super.onPause();
         unregisterReceiver(networkChangeReceiver);
+        rewardTimer.StartTimer();
     }
 
     @Override
@@ -443,21 +552,20 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.drawerTvUsername.setText(users.getUsername());
                 coinMintManager.setBalance(users.getCoin());
 
-                levelManager.getTotalBalance(users.getLevel());
-                levelManager.HandleLevelWithCoin(users.getCoin());
-                levelManager.getCoinInMint(coinMintManager.getBalance());
+                levelManager.getLevel(users.getLevel());
+                levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
 
                 coinMintManager.SendNewValue(users.getCoin());
-                NumberFormat(coinMintManager.getBalance(),binding.tvBalanceCoin);
+                NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
                 energyManager.getLevelFromServer(users.getLevel());
 
                 progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.drawerProfile);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.coinImage);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(),binding.turboImage);
-                progressBarManager.ProgressBar(users.getLevel(),binding.levelXpProgressBar);
-                progressBarManager.getCurrentCoin(coinMintManager.getBalance(),binding.levelXpProgressBar);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.drawerProfile);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.coinImage);
+                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.turboImage);
+                progressBarManager.ProgressBar(users.getLevel(), binding.levelXpProgressBar);
+                progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
 
             } else {
                 isUserData = false;

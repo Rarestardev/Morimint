@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Toast;
 
 import com.rarestardev.morimint.R;
@@ -15,6 +16,7 @@ import com.rarestardev.morimint.databinding.ActivitySignInBinding;
 public class SignInActivity extends AppCompatActivity {
 
     private ActivitySignInBinding binding;
+    private boolean showing_password = false;
 
     UserDataViewModel userDataViewModel;
 
@@ -34,6 +36,24 @@ public class SignInActivity extends AppCompatActivity {
             String username = String.valueOf(binding.editTextUsername.getText());
             String password = String.valueOf(binding.editTextPassword.getText());
             LoginUserAccount(username,password);
+        });
+
+        binding.passwordState.setOnClickListener(v -> {
+
+            // checking if password showing or not
+            if (showing_password) {
+                // visible
+                showing_password = false;
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                binding.passwordState.setImageResource(R.drawable.icon_show_password);
+            } else {
+                // gone
+                showing_password = true;
+                binding.editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                binding.passwordState.setImageResource(R.drawable.icon_hide_password);
+            }
+            // move the cursor at last of the text
+            binding.editTextPassword.setSelection(binding.editTextPassword.length());
         });
 
 

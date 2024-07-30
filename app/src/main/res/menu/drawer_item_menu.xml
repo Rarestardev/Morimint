@@ -21,11 +21,21 @@
         android:title="@string/ads"
         android:icon="@drawable/advert_ic"/>
 
+    <item android:id="@+id/blue_icon_menu"
+        android:title="@string/blue_tick"
+        android:icon="@drawable/blue_tick_menu_ic"/>
+
+    <item android:id="@+id/road_map_menu"
+        android:title="@string/roadmap"
+        android:icon="@drawable/roadmap_ic"/>
+
+    <item android:id="@+id/info_app_menu"
+        android:title="@string/features"
+        android:icon="@drawable/info_ic"/>
+
     <item android:id="@+id/exitApp"
         android:title="@string/exit"
         android:icon="@drawable/exit_ic"/>
-
-
 
 
 </menu>

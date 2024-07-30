@@ -80,5 +80,8 @@
     <string name="yourCode">Your Code</string>
     <string name="yourLevel">Your Level</string>
     <string name="noData">No Data!</string>
+    <string name="features">Features</string>
+    <string name="roadmap">Roadmap</string>
+    <string name="blue_tick">Blue tick features</string>
 
 </resources>

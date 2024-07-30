@@ -1,75 +1,74 @@
 package com.rarestardev.morimint.Utilities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.widget.TextView;
+import android.util.Log;
 
-public class CountdownTimer {
+import com.rarestardev.morimint.Activities.MainActivity;
 
-    private Context context;
+public class RewardTimer {
+
+    Context context;
     private CountDownTimer countDownTimer;
 
-    private long totalTime = 86400000;// 24 hour
-    private static final String SHARED_TIMER_NAME = "CountdownTimer";
+    //private long totalTime = 86400000;// 24 hour
+    private long totalTime = 20000;// 24 hour
+    private static final String SHARED_TIMER_NAME = "RewardTimer";
     private static final String SHARED_TIMER_KEY = "timeLeft";
+    private static final String SHARED_TIMER_KEY_Turbo = "Turbo";
 
-    public CountdownTimer(Context context) {
+    public RewardTimer(Context context) {
         this.context = context;
     }
 
-
-    public void initTimer(){
-        
-    }
-
-
-    private void StartTimer(){
-        countDownTimer = new CountDownTimer(totalTime,1000) {
+    public void StartTimer() {
+        countDownTimer = new CountDownTimer(totalTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 totalTime = millisUntilFinished;
-            }
 
+                int seconds = (int) (millisUntilFinished / 1000) % 60;
+
+                Log.i("CountTimer" + ":",seconds + "");
+            }
             @Override
             public void onFinish() {
-                SetTurboValue();
-                SetJackpotPlayed();
+                SharedPreferences preferences = context.getSharedPreferences(SHARED_TIMER_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(SHARED_TIMER_KEY_Turbo,2);
+                editor.apply();
+                ((MainActivity) context).getTurboCount();
+
+                countDownTimer.start();
             }
         };
+        countDownTimer.start();
     }
 
-    @SuppressLint("DefaultLocale")
-    public void setTimeInTextView(TextView textView){
-        int hours = (int) (totalTime / 1000) / 3600;
-        int minutes = (int) ((totalTime / 1000) % 3600) / 60;
-        int seconds = (int) (totalTime / 1000) % 60;
-        String timeLeftFormatted = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        textView.setText(timeLeftFormatted);
-    }
-
-    private void SetJackpotPlayed() {
-
-    }
-
-    private void SetTurboValue() {
-
-    }
-
-
-    public void OnStopActivity(){
-        SharedPreferences preferences = context.getSharedPreferences(SHARED_TIMER_NAME,Context.MODE_PRIVATE);
+    public void OnStopActivity() {
+        SharedPreferences preferences = context.getSharedPreferences(SHARED_TIMER_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong(SHARED_TIMER_KEY, totalTime);
         editor.apply();
-
         countDownTimer.cancel();
     }
 
-    public void OnResumeActivity(){
-        SharedPreferences preferences = context.getSharedPreferences(SHARED_TIMER_NAME,Context.MODE_PRIVATE);
-        totalTime = preferences.getLong(SHARED_TIMER_KEY, totalTime);
-        StartTimer();
+    public void OnResumeActivity() {
+        SharedPreferences preferences = context.getSharedPreferences(SHARED_TIMER_NAME, Context.MODE_PRIVATE);
+        long time = preferences.getLong(SHARED_TIMER_KEY, 0);
+        if (time == 0) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(SHARED_TIMER_KEY_Turbo , 2);
+            editor.apply();
+            StartTimer();
+        } else {
+            long systemTime = System.currentTimeMillis();
+            totalTime = time - systemTime;
+
+            if (totalTime == 0){
+                StartTimer();
+            }
+        }
     }
 }

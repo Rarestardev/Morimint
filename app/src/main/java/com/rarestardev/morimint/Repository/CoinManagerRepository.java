@@ -1,8 +1,6 @@
 package com.rarestardev.morimint.Repository;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -16,7 +14,6 @@ import com.rarestardev.morimint.Model.Users;
 
 import java.io.IOException;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -70,35 +67,13 @@ public class CoinManagerRepository {
         RequestBody levelRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(level));
         MultipartBody.Part levelPart = MultipartBody.Part.createFormData("level", null, levelRequest);
 
-        SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.SUCCESS_TYPE);
-        SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Good Job!");
-        dialog.setContentText("Great! , Your level has been upgraded.");
-        dialog.setCancelable(false);
-        dialog.setConfirmButton("Thanks", sweetAlertDialog -> {
-            alertDialog.setTitle("Update");
-            alertDialog.setCancelable(false);
-            alertDialog.show();
-            if (context instanceof MainActivity) {
-                ((MainActivity) context).refreshActivity();
-            } else {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                if (context instanceof Activity) {
-                    ((Activity) context).finish();
-                }
-            }
-            sweetAlertDialog.dismiss();
-        }).show();
-
         Call<Users> call = apiService.putCoinData(levelPart, token);
         call.enqueue(new Callback<Users>() {
             @Override
             public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {
                 if (response.isSuccessful()) {
                     Log.d("UpdateLevel", "Success");
-                    alertDialog.dismiss();
+                    ((MainActivity) context).HandleResponseData();
 
                 } else {
                     try {

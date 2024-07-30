@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="+ 18,000"
-        android:textColor="@color/progressOneValue"
+        android:textColor="@color/JackpotBonusAnim1"
         android:textStyle="bold"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

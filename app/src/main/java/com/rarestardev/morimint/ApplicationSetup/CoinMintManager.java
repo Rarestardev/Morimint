@@ -9,7 +9,6 @@ import com.rarestardev.morimint.Repository.CoinManagerRepository;
 public class CoinMintManager {
 
     private long balance;
-    int mintValue;
 
     Context context;
 
@@ -23,15 +22,27 @@ public class CoinMintManager {
         this.balance = coin;
     }
 
-    public void IncreaseBalance(int click, boolean turboMode, int mint) {
-        if (turboMode) {
-            mintValue = mint * click * 3 / click;
-        } else {
-            mintValue = mint * click / click;
-        }
-        balance += mintValue;
-        mintValue = 0;
-        SavedTotalCoin();
+    public void IncreaseBalance(int click, int mint) {
+        SharedPreferences preferences = context.getSharedPreferences("Balance", Context.MODE_PRIVATE);
+        long current_coin = preferences.getLong("Coin", 0);
+        int value = mint * click / click;
+
+        long total = current_coin + value;
+        SavedTotalCoin(total);
+
+        balance = total;
+    }
+
+    public void IncreaseBalanceWithTurbo(int click, int mint) {
+        SharedPreferences preferences = context.getSharedPreferences("Balance", Context.MODE_PRIVATE);
+        long current_coin = preferences.getLong("Coin", 0);
+        int Value = mint * click * 3 / click;
+
+        long total = current_coin + Value;
+
+        SavedTotalCoinTurbo(total);
+
+        balance = total;
     }
 
     public void SendNewValue(long coin) {
@@ -48,12 +59,25 @@ public class CoinMintManager {
         }
     }
 
+    private void LevelCalculate() {
+        //Log.i("CoinValue", getBalance() + "");
+    }
+
     // send new value coin and update database
-    private void SavedTotalCoin() {
+    private void SavedTotalCoin(long coin) {
         SharedPreferences preferences = context.getSharedPreferences("Balance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor1 = preferences.edit();
-        editor1.putLong("Coin", balance);
+        editor1.putLong("Coin", coin);
         editor1.apply();
+        LevelCalculate();
+    }
+
+    private void SavedTotalCoinTurbo(long coin) {
+        SharedPreferences preferences = context.getSharedPreferences("Balance", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = preferences.edit();
+        editor1.putLong("Coin", coin);
+        editor1.apply();
+        LevelCalculate();
     }
 
     public long getBalance() {

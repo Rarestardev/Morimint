@@ -24,6 +24,7 @@ import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.Utilities.RewardTimer;
 import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.databinding.ActivityJackpotBinding;
 
@@ -75,6 +76,16 @@ public class JackpotActivity extends AppCompatActivity {
         binding.jackpotInfo.setOnClickListener(v ->
                 startActivity(new Intent(JackpotActivity.this, JackpotInformationActivity.class)));
     }
+
+
+    public void setPlay_chance(){
+        Play_chance = 5;
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SHARED_JACKPOT_KEY,false);
+        editor.apply();
+    }
+
 
     private void JackpotPlayHandle() {
         binding.playJackpot.setOnClickListener(new NoDoubleClickListener() {

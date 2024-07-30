@@ -196,13 +196,11 @@ public class ProgressBarManager {
         progressBar.setProgress(progress);
 
         int color;
-        if (progress < 20) {
+        if (progress < 40) {
             color = R.color.progressMinValue;
-        } else if (progress < 40) {
-            color = R.color.progressOneValue;
         } else if (progress < 60) {
             color = R.color.progressTwoValue;
-        } else if (progress < 80) {
+        } else if (progress < 90) {
             color = R.color.progressThreeValue;
         } else {
             color = R.color.progressMaxValue;
