@@ -11,6 +11,7 @@ public class UserConstants {
 
     public static final String APP_LOG_TAG = "MorimintApp";
 
-    public static final long[] LEVEL_COIN = {200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+    public static final long[] LEVEL_COIN = {300, 600, 900, 1200, 1500, 1800, 2100,
+            2400, 2700, 3000, 3300, 3500, 3800, 4100, 4400};
 
 }

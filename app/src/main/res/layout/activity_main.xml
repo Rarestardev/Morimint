@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -414,8 +413,6 @@
                             android:layout_width="@dimen/LevelProgressBarWidth"
                             android:layout_height="@dimen/LevelProgressBarHeight"
                             android:layout_marginTop="@dimen/LevelProgressBarMarginTop"
-                            android:indeterminate="false"
-                            android:progressTintMode="src_in"
                             android:progressDrawable="@drawable/custom_progress_level_bg"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

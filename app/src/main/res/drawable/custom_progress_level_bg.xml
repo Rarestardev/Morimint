@@ -3,7 +3,7 @@
 <!-- Background -->
 <item android:id="@android:id/background">
     <shape>
-        <corners android:radius="30dp" />
+        <corners android:radius="20dp" />
         <solid android:color="#838383" />
         <stroke android:color="@color/white" android:width="0.5dp"/>
     </shape>
@@ -15,6 +15,7 @@
         <shape>
             <padding android:bottom="1dp" android:top="1dp"/>
             <corners android:radius="20dp"/>
+            <solid android:color="@color/progressMaxValue"/>
             <stroke android:width="0.5dp" android:color="@color/white"/>
         </shape>
     </clip>

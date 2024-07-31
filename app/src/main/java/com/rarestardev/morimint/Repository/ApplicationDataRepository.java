@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Activities.NewsActivity;
 import com.rarestardev.morimint.Adapters.DailyRewardAdapter;
 import com.rarestardev.morimint.Adapters.MoriNewsAdapter;
 import com.rarestardev.morimint.Adapters.TaskListAdapter;
@@ -59,16 +59,25 @@ public class ApplicationDataRepository {
                     recyclerView.setAdapter(adapter);
                 }
                 if (response.isSuccessful()) {
-                    Log.d("MoriNews", "Success");
+                    Log.d(UserConstants.APP_LOG_TAG, "MoriNews : Success");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<MoriNewsModel>> call, @NonNull Throwable t) {
                 if (t instanceof java.net.SocketTimeoutException) {
-                    Log.e("MoriNews", "Timeout", t);
+                    Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Timeout", t);
                 } else {
-                    Log.e("MoriNews", "Failed", t);
+                    Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Failed", t);
+                    SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                    dialog.setCancelable(false);
+                    dialog.setTitle("No Internet!");
+                    dialog.setContentText("Please check the internet connection");
+                    dialog.setConfirmButton("Exit", sweetAlertDialog -> {
+                        ((NewsActivity) context).finish();
+                        dialog.dismiss();
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -133,7 +142,6 @@ public class ApplicationDataRepository {
         });
     }
 
-
     public LiveData<ApplicationSetupModel> ApplicationConfig() {
         MutableLiveData<ApplicationSetupModel> data = new MutableLiveData<>();
         Call<ApplicationSetupModel> call = apiService.GetApplicationSetup(ApiClient.SERVER_TOKEN);
@@ -153,7 +161,6 @@ public class ApplicationDataRepository {
         });
         return data;
     }
-
 
     public void ClaimDailyReward(Context context, DailyRewardModel dailyRewardModel) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
@@ -196,7 +203,6 @@ public class ApplicationDataRepository {
             }
         });
     }
-
 
     public void SiteGiftCode(Context context, String code) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);

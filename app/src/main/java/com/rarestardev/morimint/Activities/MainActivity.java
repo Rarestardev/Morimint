@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             @Override
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
-                CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this, coinMintManager.getBalance());
+                CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this);
                 customLevelDialog.show();
             }
         });
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             case 5:
                                 clickerCounterTurbo++;
                                 coinMintManager.IncreaseBalanceWithTurbo(clickerCounterTurbo, progressBarManager.getMinter());
-                                progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
+                                progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
                                 CreateAnimation(x, y);
                                 break;
                         }
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
                             energyManager.ReduceEnergy(progressBarManager.getMinter());
 
-                            progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
+                            progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
 
                             CreateAnimation(x, y);
                         }
@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @SuppressLint("SetTextI18n")
     private void CreateAnimation(float x, float y) {
         YoYo.with(Techniques.Shake).duration(COIN_SHAKE_ANIMATION_TIMER).playOn(binding.coin);
+        progressBarManager.ProgressBar(binding.levelXpProgressBar);
 
         NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
@@ -536,6 +537,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void HandleResponseData() {
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         userDataViewModel.getUserData(MainActivity.this).observe(this, users -> {
@@ -549,15 +551,19 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
                 coinMintManager.SendNewValue(users.getCoin());
                 NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
+                progressBarManager.ProgressBar(binding.levelXpProgressBar);
 
                 energyManager.getLevelFromServer(users.getLevel());
 
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.imageViewProfile);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.drawerProfile);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.coinImage);
-                progressBarManager.setImageWithCurrentLevel(users.getLevel(), binding.turboImage);
-                progressBarManager.ProgressBar(users.getLevel(), binding.levelXpProgressBar);
-                progressBarManager.getCurrentCoin(coinMintManager.getBalance(), binding.levelXpProgressBar);
+                progressBarManager.setImageWithCurrentLevel(binding.imageViewProfile);
+                progressBarManager.setImageWithCurrentLevel(binding.drawerProfile);
+                progressBarManager.setImageWithCurrentLevel(binding.coinImage);
+                progressBarManager.setImageWithCurrentLevel(binding.turboImage);
+                progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
+
+                if (users.getLevel() == 15){
+                    binding.tvYourLevel.setText("Level Max");
+                }
 
             } else {
                 isUserData = false;
