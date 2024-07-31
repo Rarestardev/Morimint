@@ -7,4 +7,5 @@
 -->
 <full-backup-content>
     <include domain="sharedpref" path="Energy Manager.xml"/>
+    <include domain="sharedpref" path="RewardTimer.xml"/>
 </full-backup-content>

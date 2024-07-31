@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.coin.setVisibility(View.GONE);
                 binding.turboCountLayout.setVisibility(View.GONE);
                 binding.turbo.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.Swing).duration(500).playOn(binding.turbo);
                 coinMintManager = new CoinMintManager(MainActivity.this);
                 binding.CoinLayout.setOnTouchListener((v, event) -> {
                     float x = event.getX();
@@ -242,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @SuppressLint("SetTextI18n")
     private void CreateAnimation(float x, float y) {
         YoYo.with(Techniques.Shake).duration(COIN_SHAKE_ANIMATION_TIMER).playOn(binding.coin);
-        YoYo.with(Techniques.Shake).duration(COIN_SHAKE_ANIMATION_TIMER).playOn(binding.turbo);
 
         NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
 
@@ -494,8 +494,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     dialog.show();
                 } else {
                     HandleResponseData();
-                    applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-                    applicationDataViewModel.PinnedNews(MainActivity.this);
+                    //applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+                    //applicationDataViewModel.PinnedNews(MainActivity.this);
                 }
 
                 if (is_mint_on) {
