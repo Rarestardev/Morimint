@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.ApplicationSetup;
+package com.rarestardev.morimint.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.R;
 
 import java.text.DecimalFormat;

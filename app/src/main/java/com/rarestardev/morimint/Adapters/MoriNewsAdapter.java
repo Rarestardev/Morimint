@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -41,12 +42,18 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
         holder.tvNews.setText(moriNewsModels.get(position).getContent());
         holder.tvLink.setText(moriNewsModels.get(position).getLink());
 
-        holder.tvLink.setOnClickListener(v -> {
-            String link = moriNewsModels.get(position).getLink();
-            Intent openBrowser = new Intent(Intent.ACTION_VIEW);
-            openBrowser.setData(Uri.parse(link));
-            context.startActivity(openBrowser);
-        });
+        String link = moriNewsModels.get(position).getLink();
+
+        if (link.isEmpty()){
+            holder.linkLayout.setVisibility(View.GONE);
+        }else {
+            holder.linkLayout.setVisibility(View.VISIBLE);
+            holder.linkLayout.setOnClickListener(v -> {
+                Intent openBrowser = new Intent(Intent.ACTION_VIEW);
+                openBrowser.setData(Uri.parse(link));
+                context.startActivity(openBrowser);
+            });
+        }
     }
 
     @Override
@@ -57,6 +64,7 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
     static class NewsHolder extends RecyclerView.ViewHolder {
 
         AppCompatTextView title, tvNews, tvLink;
+        RelativeLayout linkLayout;
 
         public NewsHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +72,7 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
             title = itemView.findViewById(R.id.title);
             tvNews = itemView.findViewById(R.id.tvNews);
             tvLink = itemView.findViewById(R.id.tvLink);
+            linkLayout = itemView.findViewById(R.id.linkLayout);
 
         }
     }

@@ -30,9 +30,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.DaysManager;
-import com.rarestardev.morimint.ApplicationSetup.LevelManager;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
-import com.rarestardev.morimint.ApplicationSetup.CustomLevelDialog;
+import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
@@ -81,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private CountDownTimer turboDownTimer; // Turbo timer ProgressBarManager 12 second
     private NetworkChangeReceiver networkChangeReceiver;
     private EnergyManager energyManager;
-    private LevelManager levelManager;
     private RewardTimer rewardTimer;
 
     // ViewModels
@@ -96,8 +94,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         networkChangeReceiver = new NetworkChangeReceiver(this);
 
         progressBarManager = new ProgressBarManager(MainActivity.this);
-
-        levelManager = new LevelManager(MainActivity.this);
 
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
@@ -238,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
             } else if (actionType == MotionEvent.ACTION_UP) {
                 energyManager.clicked(false);
-                levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
             }
             return true;
         });
@@ -551,9 +546,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 binding.tvUsername.setText(users.getUsername());
                 binding.drawerTvUsername.setText(users.getUsername());
                 coinMintManager.setBalance(users.getCoin());
-
-                levelManager.getLevel(users.getLevel());
-                levelManager.HandleLevelWithCoin(coinMintManager.getBalance());
 
                 coinMintManager.SendNewValue(users.getCoin());
                 NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
