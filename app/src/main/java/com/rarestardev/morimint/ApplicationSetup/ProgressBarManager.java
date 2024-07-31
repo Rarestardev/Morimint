@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -15,8 +14,8 @@ public class ProgressBarManager {
     private int minter;
     private long totalBalance;
     private int progressStatus;
-    int maxProgress;
-    int minProgress;
+    private int maxProgress;
+    private int minProgress;
     Context context;
 
     private static final int[] LEVEL_TAP = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18};
@@ -202,7 +201,6 @@ public class ProgressBarManager {
         new Thread(() -> {
             if (progressStatus < max) {
                 progressStatus++;
-                Log.i("ProgressValue", progressStatus + "");
             }
             progressBar.setProgress(progressStatus, true);
             try {
