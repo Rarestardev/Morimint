@@ -1,6 +1,6 @@
 Advantages of the Blue Tick in Our Program:
 
-Users with a Blue Tick enjoy exclusive benefits, including:
+--Users with a Blue Tick enjoy exclusive benefits, including:
 
 - $1 Million Big Win Lottery: The grand prize of $1 million will be drawn among Blue Tick holders.
 - Early Project Notifications: Receive alerts one week before the launch of lucrative projects.
@@ -8,3 +8,10 @@ Users with a Blue Tick enjoy exclusive benefits, including:
 - Special Features and Services: Access unique facilities and services throughout all phases of the program.
 
 Elevate your experience with our Blue Tick and seize these exceptional opportunities!
+
+--To qualify for a blue check mark, the following criteria must be met:
+
+1. Have a minimum level of 14 and at least 550 million tokens.
+2. Publish 10 videos in one month, highlighting the features of the app on social media.
+3. Have at least 30 referrals.
+4. Complete all tasks.

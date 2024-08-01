@@ -8,4 +8,7 @@
 <full-backup-content>
     <include domain="sharedpref" path="Energy Manager.xml"/>
     <include domain="sharedpref" path="RewardTimer.xml"/>
+    <include domain="sharedpref" path="Tasks.xml"/>
+    <include domain="sharedpref" path="Daily Reward.xml"/>
+    <include domain="sharedpref" path="DailyCheck.xml"/>
 </full-backup-content>

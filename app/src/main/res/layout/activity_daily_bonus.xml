@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/base_app_bg"
@@ -55,27 +55,17 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rewardRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLayout">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rewardRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:paddingBottom="10dp"
-                android:scrollbars="none" />
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingBottom="30dp"
+            android:scrollbars="none" />
 
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

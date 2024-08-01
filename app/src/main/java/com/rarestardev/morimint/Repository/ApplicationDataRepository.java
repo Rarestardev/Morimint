@@ -30,6 +30,7 @@ import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.TaskModel;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -65,7 +66,7 @@ public class ApplicationDataRepository {
 
             @Override
             public void onFailure(@NonNull Call<List<MoriNewsModel>> call, @NonNull Throwable t) {
-                if (t instanceof java.net.SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Timeout", t);
                 } else {
                     Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Failed", t);
@@ -304,10 +305,9 @@ public class ApplicationDataRepository {
                     dialog.setConfirmButton("Ok", Dialog::dismiss).show();
                 } else {
                     SingleResponse task = response.body();
-                    assert task != null;
                     final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                    dialog.setTitle("Success");
-                    dialog.setContentText(task.getDetail());
+                    dialog.setTitle("Failed");
+                    dialog.setContentText(task != null ? task.getDetail() : null);
                     dialog.setCancelable(false);
                     dialog.setConfirmButton("Ok", Dialog::dismiss).show();
 

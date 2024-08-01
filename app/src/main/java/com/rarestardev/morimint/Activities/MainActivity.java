@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         energyManager.IncreasedEnergy();
 
         rewardTimer = new RewardTimer(this);
-        rewardTimer.StartTimer();
 
         StartActivities();
         NavigationDrawerHandle();
@@ -435,14 +434,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onStop() {
         energyManager.getTimeFromSystemsOnStopMethod();
-        rewardTimer.OnStopActivity();
+        //rewardTimer.OnStopActivity();
         Log.d(TAG, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        energyManager.onDestroyApp();
+        //energyManager.onDestroyApp();
         Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
@@ -463,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
         getData();
-        rewardTimer.OnResumeActivity();
+        //rewardTimer.OnResumeActivity();
     }
 
     private void getData() {
@@ -519,7 +518,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     protected void onPause() {
         super.onPause();
         unregisterReceiver(networkChangeReceiver);
-        rewardTimer.StartTimer();
     }
 
     @Override

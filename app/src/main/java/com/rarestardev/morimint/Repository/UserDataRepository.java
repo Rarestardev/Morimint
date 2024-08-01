@@ -40,37 +40,56 @@ public class UserDataRepository {
     public LiveData<Users> UserData(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
-        Log.d("UserData", token);
+        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Update");
+        dialog.setContentText("Please wait");
+        dialog.setCancelable(false);
+        dialog.show();
         MutableLiveData<Users> data = new MutableLiveData<>();
         Call<Users> call = apiService.UserData(token);
         call.enqueue(new Callback<Users>() {
             @Override
             public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("UserData", "Success");
+                    Log.d(UserConstants.APP_LOG_TAG, "UserData : Success");
                     data.setValue(response.body());
+                    dialog.dismiss();
                 } else {
-                    Log.e("UserData", "Failed :" + response.errorBody());
+                    Log.e(UserConstants.APP_LOG_TAG, "UserData : Failed : " + response.errorBody());
+                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                    alertDialog.setTitle("Something wrong!");
+                    alertDialog.setContentText("Please check your internet connection");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setConfirmButton("Retry", sweetAlertDialog -> {
+                        UserData(context);
+                        sweetAlertDialog.dismiss();
+                    }).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Users> call, @NonNull Throwable t) {
-                Log.e("UserData", "Error", t);
+                Log.e(UserConstants.APP_LOG_TAG, "UserData : onFailure : ", t);
+                Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
             }
         });
         return data;
     }
-
 
     public void SendUserDataSignUp(Context context, String username, String email, String password, long referral) {
         RequestBody Username = RequestBody.create(MediaType.parse("text/plain"), username);
         RequestBody Email = RequestBody.create(MediaType.parse("text/plain"), email);
         RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), password);
 
-        RequestBody coinRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(referral));
+        RequestBody refRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(referral));
 
-        Call<ApiResponse> call = apiService.Sign_up(Username, Email, Password, coinRequest);
+        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Checked");
+        dialog.setContentText("Please wait");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Call<ApiResponse> call = apiService.Sign_up(Username, Email, Password, refRequest);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
@@ -78,23 +97,26 @@ public class UserDataRepository {
                     ApiResponse apiResponse = response.body();
                     String status = apiResponse.getStatus();
                     String message = apiResponse.getMessage();
-                    Log.d("Sign UP", status + "\n" + message);
+                    Log.d(UserConstants.APP_LOG_TAG, "SignUp : " + status + "\n" + message);
 
                     if (status.equals("success")) {
+                        dialog.dismiss();
                         Toast.makeText(context, "Registered account success.", Toast.LENGTH_SHORT).show();
                         CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
-                        coinManagerRepository.UpdateCoin(100000,context);
+                        coinManagerRepository.UpdateCoin(100000, context);
                         Intent intent = new Intent(context, SignInActivity.class);
                         context.startActivity(intent);
                     }
                 } else {
-                    Log.e("Signup", "Failed :" + response.errorBody());
+                    Log.e(UserConstants.APP_LOG_TAG, "SignUp : Failed :" + response.errorBody());
+                    Toast.makeText(context, "Failed :" + response.errorBody(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
-                Log.e("Signup", "Failed" + t.getMessage());
+                Log.e(UserConstants.APP_LOG_TAG, "SignUp : onFailure :", t);
+                Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -103,6 +125,12 @@ public class UserDataRepository {
         RequestBody Username = RequestBody.create(MediaType.parse("text/plain"), username);
         RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), password);
 
+        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Check");
+        dialog.setContentText("Please wait");
+        dialog.setCancelable(false);
+        dialog.show();
+
         Call<ApiResponse> call = apiService.Login(Username, Password);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -110,14 +138,14 @@ public class UserDataRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse apiResponse = response.body();
                     String token = apiResponse.getToken();
-                    Log.d("Login", token);
+                    Log.d(UserConstants.APP_LOG_TAG, "Login : token" + token);
 
                     SharedPreferences preferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(UserConstants.SHARED_KEY_USERNAME, username);
                     editor.putString(UserConstants.SHARED_KEY_TOKEN, "Token " + token);
                     editor.apply();
-
+                    dialog.dismiss();
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
@@ -129,11 +157,11 @@ public class UserDataRepository {
 
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
-                Log.e("Login", "Failed" + t.getMessage());
+                Log.e(UserConstants.APP_LOG_TAG, "Login : onFailure :" + t.getMessage());
+                Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
             }
         });
     }
-
 
     public void ChangePassword(String email, String newPassword, Context context) {
         RequestBody Email = RequestBody.create(MediaType.parse("text/plain"), email);
@@ -154,7 +182,7 @@ public class UserDataRepository {
                 } else {
                     try {
                         assert response.errorBody() != null;
-                        Log.e("ChangePassword", response.errorBody().string());
+                        Log.e(UserConstants.APP_LOG_TAG, "ChangePass :" + response.errorBody().string());
                         ApiResponse apiResponse = response.body();
                         final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
                         assert apiResponse != null;
@@ -171,7 +199,8 @@ public class UserDataRepository {
 
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
-                Log.e("ChangePassword", "Error", t);
+                Log.e(UserConstants.APP_LOG_TAG, "ChangePass : onFailure :", t);
+                Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
             }
         });
     }

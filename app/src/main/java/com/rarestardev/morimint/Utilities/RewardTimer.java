@@ -3,7 +3,6 @@ package com.rarestardev.morimint.Utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.util.Log;
 
 import com.rarestardev.morimint.Activities.MainActivity;
 
@@ -13,7 +12,7 @@ public class RewardTimer {
     private CountDownTimer countDownTimer;
 
     //private long totalTime = 86400000;// 24 hour
-    private long totalTime = 20000;// 24 hour
+    private long totalTime = 360000;// 24 hour
     private static final String SHARED_TIMER_NAME = "RewardTimer";
     private static final String SHARED_TIMER_KEY = "timeLeft";
     private static final String SHARED_TIMER_KEY_Turbo = "Turbo";
@@ -26,11 +25,7 @@ public class RewardTimer {
         countDownTimer = new CountDownTimer(totalTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                totalTime = millisUntilFinished;
-
-                int seconds = (int) (millisUntilFinished / 1000) % 60;
-
-                Log.i("CountTimer" + ":",seconds + "");
+                    totalTime = millisUntilFinished;
             }
             @Override
             public void onFinish() {
@@ -40,10 +35,10 @@ public class RewardTimer {
                 editor.apply();
                 ((MainActivity) context).getTurboCount();
 
-                countDownTimer.start();
+                //countDownTimer.start();
             }
         };
-        countDownTimer.start();
+        //countDownTimer.start();
     }
 
     public void OnStopActivity() {

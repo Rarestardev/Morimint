@@ -1,57 +1,49 @@
 package com.rarestardev.morimint.Model;
 
-import com.google.gson.annotations.SerializedName;
 
 public class DailyCheckModel {
 
-    @SerializedName("id")
-    private int id;
+    private int day;
+    private boolean isClaimed;
+    private String reward;
+    private long coin;
 
-    @SerializedName("gift")
-    private long gift;
-
-    @SerializedName("days")
-    private long days;
-
-    @SerializedName("date_time")
-    private String date_time;
-
-    public DailyCheckModel(int id, long gift, long days, String date_time) {
-        this.id = id;
-        this.gift = gift;
-        this.days = days;
-        this.date_time = date_time;
+    public DailyCheckModel(int day, boolean isClaimed,String reward,long coin) {
+        this.day = day;
+        this.isClaimed = isClaimed;
+        this.reward = reward;
+        this.coin = coin;
     }
 
-    public int getId() {
-        return id;
+    public int getDay() {
+        return day;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDay(int day) {
+        this.day = day;
     }
 
-    public long getGift() {
-        return gift;
+    public boolean isClaimed() {
+        return isClaimed;
     }
 
-    public void setGift(long gift) {
-        this.gift = gift;
+    public void setClaimed(boolean claimed) {
+        isClaimed = claimed;
     }
 
-    public long getDays() {
-        return days;
+    public String getReward() {
+        return reward;
     }
 
-    public void setDays(long days) {
-        this.days = days;
+    public void setReward(String reward) {
+        this.reward = reward;
     }
 
-    public String getDate_time() {
-        return date_time;
+    public long getCoin() {
+        return coin;
     }
 
-    public void setDate_time(String date_time) {
-        this.date_time = date_time;
+    public void setCoin(long coin) {
+        this.coin = coin;
     }
 }

@@ -3,13 +3,13 @@ package com.rarestardev.morimint.Repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiService;
-import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
 
@@ -41,22 +41,23 @@ public class CoinManagerRepository {
             @Override
             public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {
                 if (response.isSuccessful()) {
-                    Log.d("UpdateCoin", "Success");
+                    Log.d(UserConstants.APP_LOG_TAG, "UpdateCoin : Success");
                 } else {
                     try {
                         assert response.errorBody() != null;
                         String errorBodyString = response.errorBody().string();
-                        Log.e("UpdateCoin", "Error: " + errorBodyString);
+                        Log.e(UserConstants.APP_LOG_TAG, "UpdateCoin : Error: " + errorBodyString);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("UpdateCoin", "Error parsing error body");
+                        Log.e(UserConstants.APP_LOG_TAG, "UpdateCoin : Error parsing error body");
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Users> call, @NonNull Throwable t) {
-                Log.e("UpdateCoin", "ERROR", t);
+                Log.e(UserConstants.APP_LOG_TAG, "UpdateCoin : onFailure :", t);
+                Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
         });
     }

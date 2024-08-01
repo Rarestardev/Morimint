@@ -47,6 +47,7 @@ public class MoriNewsAdapter extends RecyclerView.Adapter<MoriNewsAdapter.NewsHo
         if (link == null){
             holder.linkLayout.setVisibility(View.GONE);
         }else {
+            holder.linkLayout.setVisibility(View.VISIBLE);
             holder.linkLayout.setOnClickListener(v -> {
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW);
                 openBrowser.setData(Uri.parse(link));
