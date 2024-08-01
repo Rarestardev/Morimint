@@ -31,13 +31,13 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.DaysManager;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
-import com.rarestardev.morimint.Utilities.RewardTimer;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private static final int[] animationAxis = {-250, 70, 500, 700, -200, 70, 500, -100, 70, 200};
     private static final int[] TEXT_ANIMATION_COLOR = {R.color.white, R.color.MidWhite, R.color.DarkGray, R.color.Gray};
     private static final String TAG = "HomeLog";// Log tag
-    final String SHARED_TIMER_NAME = "RewardTimer";
-    final String SHARED_TIMER_KEY_Turbo = "Turbo";
 
     private ProgressBarManager progressBarManager;
 
@@ -80,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private CountDownTimer turboDownTimer; // Turbo timer ProgressBarManager 12 second
     private NetworkChangeReceiver networkChangeReceiver;
     private EnergyManager energyManager;
-    private RewardTimer rewardTimer;
 
     // ViewModels
     ApplicationDataViewModel applicationDataViewModel;
@@ -98,14 +95,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
 
-        rewardTimer = new RewardTimer(this);
 
         StartActivities();
         NavigationDrawerHandle();
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
-        binding.tvTurboCount.setText(String.valueOf(currentTurbo));
 
         binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener() {
             @Override
@@ -115,22 +107,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 customLevelDialog.show();
             }
         });
-    }
 
-    public void getTurboCount(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
-        if (currentTurbo == 0){
-            binding.tvTurboCount.setText(String.valueOf(2));
-        } else {
-            binding.tvTurboCount.setText(String.valueOf(currentTurbo));
-        }
+        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        TurboCount = sharedPreferences.getInt("value",0);
+        binding.tvTurboCount.setText(String.valueOf(TurboCount));
+        MintHandler();
     }
 
     private void MintHandler() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
-        if (currentTurbo > 0) {
+        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt("value",0);
+        if (currentTurbo == 2 || currentTurbo == 1) {
             binding.turboMint.setVisibility(View.VISIBLE);
             binding.turboCountLayout.setVisibility(View.VISIBLE);
             binding.coin.setVisibility(View.VISIBLE);
@@ -144,63 +131,70 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             binding.turboCountLayout.setVisibility(View.GONE);
             MintCoinAnimation();
         }
+        Log.i(UserConstants.APP_LOG_TAG,currentTurbo + "");
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void TurboAnimation() {
-        turboDownTimer = new CountDownTimer(12000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                binding.turboMint.setVisibility(View.GONE);
-                binding.coin.setVisibility(View.GONE);
-                binding.turboCountLayout.setVisibility(View.GONE);
-                binding.turbo.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.Swing).duration(500).playOn(binding.turbo);
-                coinMintManager = new CoinMintManager(MainActivity.this);
-                binding.CoinLayout.setOnTouchListener((v, event) -> {
-                    float x = event.getX();
-                    float y = event.getY();
-                    int actionType = event.getActionMasked();
-                    if (actionType == MotionEvent.ACTION_DOWN || actionType == MotionEvent.ACTION_POINTER_DOWN) {
+        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt("value",0);
+        if (currentTurbo != 0){
+            turboDownTimer = new CountDownTimer(12000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    binding.turboMint.setVisibility(View.GONE);
+                    binding.coin.setVisibility(View.GONE);
+                    binding.turboCountLayout.setVisibility(View.GONE);
+                    binding.turbo.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.Swing).duration(500).playOn(binding.turbo);
+                    coinMintManager = new CoinMintManager(MainActivity.this);
+                    binding.CoinLayout.setOnTouchListener((v, event) -> {
+                        float x = event.getX();
+                        float y = event.getY();
+                        int actionType = event.getActionMasked();
+                        if (actionType == MotionEvent.ACTION_DOWN || actionType == MotionEvent.ACTION_POINTER_DOWN) {
 
-                        switch (event.getPointerCount()) {
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                clickerCounterTurbo++;
-                                coinMintManager.IncreaseBalanceWithTurbo(clickerCounterTurbo, progressBarManager.getMinter());
-                                progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
-                                CreateAnimation(x, y);
-                                break;
+                            switch (event.getPointerCount()) {
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                case 5:
+                                    clickerCounterTurbo++;
+                                    coinMintManager.IncreaseBalanceWithTurbo(clickerCounterTurbo, progressBarManager.getMinter());
+                                    progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
+                                    CreateAnimation(x, y);
+                                    break;
+                            }
                         }
-                    }
-                    return true;
-                });
-            }
+                        return true;
+                    });
+                }
 
-            @Override
-            public void onFinish() {
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_TIMER_NAME,MODE_PRIVATE);
-                TurboCount = sharedPreferences.getInt(SHARED_TIMER_KEY_Turbo,0);
-                binding.turbo.setVisibility(View.GONE);
-                if (TurboCount > 0) {
-                    TurboCount--;
-                    MintHandler();
-                } else {
-                    TurboCount = 0;
+                @Override
+                public void onFinish() {
+                    SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+                    TurboCount = sharedPreferences.getInt("value",0);
+                    binding.turbo.setVisibility(View.GONE);
+                    if (TurboCount == 2) {
+                        TurboCount = 1;
+                    }else if (TurboCount == 1){
+                        TurboCount = 0;
+                        binding.turboCountLayout.setVisibility(View.GONE);
+                        turboDownTimer.cancel();
+                    }
                     binding.tvTurboCount.setText(String.valueOf(TurboCount));
-                    turboDownTimer.cancel();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("value",TurboCount);
+                    editor.apply();
+
                     MintHandler();
                 }
-                binding.tvTurboCount.setText(String.valueOf(TurboCount));
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(SHARED_TIMER_KEY_Turbo,TurboCount);
-                editor.apply();
-            }
-        };
-        turboDownTimer.start();
+            };
+            turboDownTimer.start();
+        }else {
+            MintHandler();
+        }
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -434,14 +428,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onStop() {
         energyManager.getTimeFromSystemsOnStopMethod();
-        //rewardTimer.OnStopActivity();
         Log.d(TAG, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        //energyManager.onDestroyApp();
         Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
@@ -462,7 +454,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
         getData();
-        //rewardTimer.OnResumeActivity();
     }
 
     private void getData() {

@@ -24,7 +24,6 @@ import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
-import com.rarestardev.morimint.Utilities.RewardTimer;
 import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.databinding.ActivityJackpotBinding;
 
