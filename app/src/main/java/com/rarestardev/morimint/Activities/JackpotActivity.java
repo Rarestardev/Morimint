@@ -344,10 +344,6 @@ public class JackpotActivity extends AppCompatActivity {
         dialog.setContentText("Great , you won " + numberFormat.format(reward) + " MoriBit Coin");
         dialog.setConfirmButton("Claim", sweetAlertDialog -> {
             if (reward != 0) {
-                SharedPreferences sharedPreferences = getSharedPreferences("Balance",MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putLong("Coin",reward);
-                editor.apply();
                 coinManagerViewModel.UpdateCoin(reward, JackpotActivity.this);
                 updateScoreDisplay();
                 dialog.dismiss();
@@ -370,7 +366,6 @@ public class JackpotActivity extends AppCompatActivity {
                 .setEmissionDuration(4000);
 
     }
-
 
     private void updateScoreDisplay() {
         binding.tvBonusJackpot.setText(String.valueOf(Score));

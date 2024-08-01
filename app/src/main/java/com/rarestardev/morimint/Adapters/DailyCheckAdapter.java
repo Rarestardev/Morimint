@@ -74,15 +74,6 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
                         CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
                         coinManagerRepository.UpdateCoin(coin, context);
 
-                        SharedPreferences preferences = context.getSharedPreferences("Balance",Context.MODE_PRIVATE);
-                        long currentCoin = preferences.getLong("Coin",0);
-
-                        long totalCoin = currentCoin + coin;
-
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putLong("Coin",totalCoin);
-                        editor.apply();
-
                         sweetAlertDialog.dismiss();
                     }).show();
                 }

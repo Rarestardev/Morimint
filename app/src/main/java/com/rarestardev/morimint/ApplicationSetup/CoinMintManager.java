@@ -67,6 +67,9 @@ public class CoinMintManager {
                 coinManagerRepository.UpdateCoin(total, context);
                 ((MainActivity) context).HandleResponseData();
             }
+            if (coin > current_coin){
+                SavedTotalCoin(coin);
+            }
         }
     }
 

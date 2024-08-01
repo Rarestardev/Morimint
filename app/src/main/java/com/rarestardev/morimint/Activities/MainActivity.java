@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.rarestardev.morimint.ApplicationSetup.DaysManager;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
@@ -462,17 +461,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 is_mint_on = applicationSetupModel.isIs_mint_on();
                 DayValue = applicationSetupModel.getCount();
                 binding.tvDay.setText(String.valueOf(DayValue));
-
-                SharedPreferences preferences = getSharedPreferences("Days", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-
-                long allDays = preferences.getLong("Day", 0);
-                if (allDays == 0) {
-                    editor.putLong("Day", DayValue);
-                    editor.apply();
-                }
-                DaysManager daysManager = new DaysManager(MainActivity.this);
-                daysManager.getCurrentDay(DayValue);
 
                 if (!is_active) {
                     final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
