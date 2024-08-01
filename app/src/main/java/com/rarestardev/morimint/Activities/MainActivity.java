@@ -31,7 +31,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.DaysManager;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
-import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
@@ -109,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
-        TurboCount = sharedPreferences.getInt("value",0);
+        TurboCount = sharedPreferences.getInt("turbo",0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
     }
 
     private void MintHandler() {
         SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt("value",0);
+        int currentTurbo = sharedPreferences.getInt("turbo",0);
         if (currentTurbo == 2 || currentTurbo == 1) {
             binding.turboMint.setVisibility(View.VISIBLE);
             binding.turboCountLayout.setVisibility(View.VISIBLE);
@@ -131,13 +130,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             binding.turboCountLayout.setVisibility(View.GONE);
             MintCoinAnimation();
         }
-        Log.i(UserConstants.APP_LOG_TAG,currentTurbo + "");
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void TurboAnimation() {
         SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt("value",0);
+        int currentTurbo = sharedPreferences.getInt("turbo",0);
         if (currentTurbo != 0){
             turboDownTimer = new CountDownTimer(12000, 1000) {
                 @Override
@@ -174,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 @Override
                 public void onFinish() {
                     SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
-                    TurboCount = sharedPreferences.getInt("value",0);
+                    TurboCount = sharedPreferences.getInt("turbo",0);
                     binding.turbo.setVisibility(View.GONE);
                     if (TurboCount == 2) {
                         TurboCount = 1;
@@ -185,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     }
                     binding.tvTurboCount.setText(String.valueOf(TurboCount));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("value",TurboCount);
+                    editor.putInt("turbo",TurboCount);
                     editor.apply();
 
                     MintHandler();

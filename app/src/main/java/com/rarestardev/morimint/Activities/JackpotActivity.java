@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,13 +42,11 @@ public class JackpotActivity extends AppCompatActivity {
     private int value_one;
     private int value_two;
     private int value_three;
-    private int Play_chance = 2;
+    private int Play_chance;
     private long Score = 0;
     double[] probabilities = {0.05, 0.10, 0.15, 0.15, 0.20, 0.35};
-    private int playJackpot_ad = 1;
-    private boolean isGameFinished = false;
-    private static final String SHARED_JACKPOT = "Jackpot";
-    private static final String SHARED_JACKPOT_KEY = "ChanceActive";
+    private static final int playJackpot_ad = 5;
+    private int jackpotAds;
 
     CoinManagerViewModel coinManagerViewModel;
 
@@ -58,31 +57,35 @@ public class JackpotActivity extends AppCompatActivity {
 
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
-        boolean isPlay = sharedPreferences.getBoolean(SHARED_JACKPOT_KEY,false);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        Play_chance = sharedPreferences.getInt("jackpot", 0);
+        jackpotAds = sharedPreferences.getInt("jackpotAds", 0);
 
-        if (isPlay){
+        binding.jackpotInfo.setOnClickListener(v ->
+                startActivity(new Intent(JackpotActivity.this, JackpotInformationActivity.class)));
+
+        UpdatePlayedJackpot();
+    }
+
+    private void UpdatePlayedJackpot() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        Play_chance = sharedPreferences.getInt("jackpot", 0);
+        jackpotAds = sharedPreferences.getInt("jackpotAds", 0);
+        binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
+        if (Play_chance == 0) {
             binding.playJackpot.setVisibility(View.GONE);
             binding.stopJackpot.setVisibility(View.VISIBLE);
-            Play_chance = 0;
-            binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
-        }else {
+            if (jackpotAds != 0){
+                MoreChanceJackpotPlay();
+            } else {
+                binding.playJackpot.setVisibility(View.GONE);
+                binding.stopJackpot.setVisibility(View.VISIBLE);
+            }
+        } else {
             binding.playJackpot.setVisibility(View.VISIBLE);
             binding.stopJackpot.setVisibility(View.GONE);
             JackpotPlayHandle();
         }
-
-        binding.jackpotInfo.setOnClickListener(v ->
-                startActivity(new Intent(JackpotActivity.this, JackpotInformationActivity.class)));
-    }
-
-
-    public void setPlay_chance(){
-        Play_chance = 5;
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SHARED_JACKPOT_KEY,false);
-        editor.apply();
     }
 
 
@@ -92,6 +95,10 @@ public class JackpotActivity extends AppCompatActivity {
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
                 Play_chance--;
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("jackpot", Play_chance);
+                editor.apply();
 
                 Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 if (vibrator != null) {
@@ -237,44 +244,38 @@ public class JackpotActivity extends AppCompatActivity {
                         vibrator.vibrate(70); // oldest device
                     }
                 }
+                UpdatePlayedJackpot();
+
                 checkAndAwardPoints();
-                if (Play_chance == 0) {
-                    isGameFinished = true;
-                    binding.playJackpot.setVisibility(View.GONE);
-                    binding.stopJackpot.setVisibility(View.VISIBLE);
-                    playJackpot_ad--;
-                    if (playJackpot_ad != 0) {
-                        isGameFinished = false;
-                        MoreChanceJackpotPlay();
-                    }else {
-                        isGameFinished = true;
-                    }
-                } else {
-                    binding.playJackpot.setVisibility(View.VISIBLE);
-                    binding.stopJackpot.setVisibility(View.GONE);
-                    isGameFinished = false;
-                }
                 break;
         }
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_JACKPOT,MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SHARED_JACKPOT_KEY,isGameFinished);
-        editor.apply();
     }
 
     private void MoreChanceJackpotPlay() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        jackpotAds --;
+
+        if (jackpotAds < 0){
+            jackpotAds = 0;
+        }
+
+        editor.putInt("jackpotAds",jackpotAds);
+        editor.apply();
+
         SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
         dialog.setCancelable(false);
         dialog.setTitle("Try again");
         dialog.setContentText("More chance by seeing the ad");
         dialog.setConfirmButton("Show Ad", sweetAlertDialog -> {
-            Play_chance += 1;
-            binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
+            editor.putInt("jackpot", playJackpot_ad);
+            editor.apply();
             binding.playJackpot.setVisibility(View.VISIBLE);
             binding.stopJackpot.setVisibility(View.GONE);
+            UpdatePlayedJackpot();
             dialog.dismiss();
         });
+        dialog.setCancelButton("Cancel", Dialog::dismiss);
         dialog.show();
     }
 
@@ -312,7 +313,7 @@ public class JackpotActivity extends AppCompatActivity {
 
     private void ShowDialogClimbReward(int reward) {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (reward == 5000000){
+        if (reward == 5000000) {
             if (vibrator != null) {
                 // newest device
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -321,7 +322,7 @@ public class JackpotActivity extends AppCompatActivity {
                     vibrator.vibrate(600); // oldest device
                 }
             }
-        }else {
+        } else {
             if (vibrator != null) {
                 // newest device
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -343,6 +344,10 @@ public class JackpotActivity extends AppCompatActivity {
         dialog.setContentText("Great , you won " + numberFormat.format(reward) + " MoriBit Coin");
         dialog.setConfirmButton("Claim", sweetAlertDialog -> {
             if (reward != 0) {
+                SharedPreferences sharedPreferences = getSharedPreferences("Balance",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong("Coin",reward);
+                editor.apply();
                 coinManagerViewModel.UpdateCoin(reward, JackpotActivity.this);
                 updateScoreDisplay();
                 dialog.dismiss();
@@ -356,9 +361,9 @@ public class JackpotActivity extends AppCompatActivity {
         final int containerMiddleY = 0;
         final ConfettiSource confettiSource = new ConfettiSource(containerMiddleX, containerMiddleY);
 
-        CommonConfetti.rainingConfetti(binding.parentRelative,confettiSource,
-                        new int[] { getColor(R.color.JackpotBonusAnim1),getColor(R.color.JackpotBonusAnim2) ,
-                        getColor(R.color.JackpotBonusAnim3)})
+        CommonConfetti.rainingConfetti(binding.parentRelative, confettiSource,
+                        new int[]{getColor(R.color.JackpotBonusAnim1), getColor(R.color.JackpotBonusAnim2),
+                                getColor(R.color.JackpotBonusAnim3)})
 
                 .infinite()
                 .setEmissionRate(150)
