@@ -62,7 +62,7 @@ public class ReferralActivity extends AppCompatActivity {
                 numberFormat.setGroupingSize(3);
                 numberFormat.setMaximumFractionDigits(2);
 
-                int total_bonus = total_friend * 50000;
+                int total_bonus = total_friend * 10000;
                 binding.totalBonus.setText("+ " + numberFormat.format(total_bonus));
 
                 binding.inviteCode.setText("Invite code : " + users.getReferral_code());
@@ -70,7 +70,7 @@ public class ReferralActivity extends AppCompatActivity {
                 binding.btnCopyReferralCode.setOnClickListener(v -> {
                     String code = String.valueOf(users.getReferral_code());
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", code);
+                    ClipData clip = ClipData.newPlainText("Morimint", code);
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(this, "Copied!", Toast.LENGTH_LONG).show();
                 });

@@ -15,11 +15,7 @@
         android:xlargeScreens="true" />
 
     <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/morimint_app_icon"
-        android:name=".Utilities.MyApp"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="false"

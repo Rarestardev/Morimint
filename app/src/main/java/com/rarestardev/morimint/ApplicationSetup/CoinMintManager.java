@@ -181,7 +181,7 @@ public class CoinMintManager {
 
     private void updateLevelInServer() {
         CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
-        coinManagerRepository.UpdateLevel(1, context);
+        coinManagerRepository.UpdateLevel(level, context);
     }
 
     // send new value coin and update database

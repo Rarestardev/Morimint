@@ -18,6 +18,7 @@
     <string name="Next">Next</string>
     <string name="or">OR</string>
     <string name="Click">Click</string>
+    <string name="refHint">Invitation Code (Optional)</string>
 
     <!-- Main  Activity  & menu item title -->
     <string name="welcomeApp">Welcome to Morimint</string>
@@ -72,13 +73,11 @@
 
 
     <string name="dailyRewardDesc">Login every day to claim your rewards!</string>
-    <string name="gotIt">Got It</string>
-    <string name="Climb">Climb</string>
-    <string name="refHint">Invitation Code (Optional)</string>
+    <string name="Climb">Claim</string>
     <string name="bonusCode">Enter the code you already received in site</string>
     <string name="bonusCodeApp">Enter the code you already received</string>
     <string name="yourCode">Your Code</string>
-    <string name="yourLevel">Your Level</string>
+    <string name="yourLevel">Tap Show Level</string>
     <string name="noData">No Data!</string>
     <string name="features">Features</string>
     <string name="roadmap">Roadmap</string>

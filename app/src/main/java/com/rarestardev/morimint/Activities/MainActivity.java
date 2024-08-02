@@ -34,6 +34,7 @@ import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
+import com.rarestardev.morimint.Utilities.DailyUpdater;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         energyManager = new EnergyManager(this, binding.tvLevelShow, binding.tvEnergy, binding.iconEnergy);
         energyManager.IncreasedEnergy();
 
+        DailyUpdater dailyUpdater = new DailyUpdater(this);
+        dailyUpdater.updateValueIfNeeded();
+
 
         StartActivities();
         NavigationDrawerHandle();
@@ -106,14 +110,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
         TurboCount = sharedPreferences.getInt("turbo",0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
     }
 
     private void MintHandler() {
-        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
         int currentTurbo = sharedPreferences.getInt("turbo",0);
         if (currentTurbo == 2 || currentTurbo == 1) {
             binding.turboMint.setVisibility(View.VISIBLE);
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void TurboAnimation() {
-        SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
         int currentTurbo = sharedPreferences.getInt("turbo",0);
         if (currentTurbo != 0){
             turboDownTimer = new CountDownTimer(12000, 1000) {
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
                 @Override
                 public void onFinish() {
-                    SharedPreferences sharedPreferences = getSharedPreferences("Worker",MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
                     TurboCount = sharedPreferences.getInt("turbo",0);
                     binding.turbo.setVisibility(View.GONE);
                     if (TurboCount == 2) {
@@ -367,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.info_menu_dialog);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
         dialog.setCancelable(true);

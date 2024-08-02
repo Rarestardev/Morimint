@@ -38,7 +38,9 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/rewardLayout"
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/card_layout_bg"
@@ -81,12 +83,14 @@
 
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_layout_bg"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
                 >
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
@@ -98,7 +102,7 @@
                     android:layout_marginEnd="15dp"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/editTextCode"
+                    android:id="@+id/editTextCodeSite"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="15dp"
@@ -131,11 +135,14 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_layout_bg"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginBottom="100dp"
                 android:orientation="vertical"
                 >
                 <androidx.appcompat.widget.AppCompatTextView

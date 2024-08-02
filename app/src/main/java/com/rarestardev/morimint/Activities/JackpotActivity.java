@@ -57,7 +57,7 @@ public class JackpotActivity extends AppCompatActivity {
 
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         Play_chance = sharedPreferences.getInt("jackpot", 0);
         jackpotAds = sharedPreferences.getInt("jackpotAds", 0);
 
@@ -68,7 +68,7 @@ public class JackpotActivity extends AppCompatActivity {
     }
 
     private void UpdatePlayedJackpot() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         Play_chance = sharedPreferences.getInt("jackpot", 0);
         jackpotAds = sharedPreferences.getInt("jackpotAds", 0);
         binding.tvChanceJackpot.setText(String.valueOf(Play_chance));
@@ -95,7 +95,7 @@ public class JackpotActivity extends AppCompatActivity {
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
                 Play_chance--;
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("jackpot", Play_chance);
                 editor.apply();

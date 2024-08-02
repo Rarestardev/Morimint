@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rarestardev.morimint.Model.ReferralTeamModel;
 import com.rarestardev.morimint.R;
+
 import java.util.List;
 
-public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapter.TeamViewHolder>{
+public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapter.TeamViewHolder> {
 
     List<ReferralTeamModel> referralTeamModels;
     Context context;
-    private LayoutInflater inflater;
+    LayoutInflater inflater;
     private View view;
 
     private static final int[] LEVEL_ITEM = {R.drawable.level_one, R.drawable.level_two, R.drawable.level_three, R.drawable.level_four,
@@ -27,7 +28,7 @@ public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapte
             R.drawable.level_nine, R.drawable.level_ten, R.drawable.level_eleven, R.drawable.level_twelve, R.drawable.level_thirteen,
             R.drawable.level_fourteen, R.drawable.level_fifteen};
 
-    public ReferralTeamAdapter(Context context , List<ReferralTeamModel> referralTeamModels) {
+    public ReferralTeamAdapter(Context context, List<ReferralTeamModel> referralTeamModels) {
         this.context = context;
         this.referralTeamModels = referralTeamModels;
     }
@@ -35,8 +36,8 @@ public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapte
     @NonNull
     @Override
     public TeamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (inflater == null){
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.referral_item,parent,false);
+        if (inflater == null) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.referral_item, parent, false);
         }
         return new TeamViewHolder(view);
     }
@@ -44,11 +45,11 @@ public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapte
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull TeamViewHolder holder, int position) {
-        holder.tvLevel.setText("Level : " + referralTeamModels.get(position).getLevel());
+        holder.tvLevel.setText(referralTeamModels.get(position).getLevel() + ". ");
         holder.tvRefUsername.setText(referralTeamModels.get(position).getUsername());
 
         int level = referralTeamModels.get(position).getLevel();
-        switch (level){
+        switch (level) {
             case 1:
                 holder.imageViewProfile.setImageDrawable(context.getDrawable(LEVEL_ITEM[0]));
                 break;
@@ -104,10 +105,10 @@ public class ReferralTeamAdapter extends RecyclerView.Adapter<ReferralTeamAdapte
         return referralTeamModels.size();
     }
 
-    public static class TeamViewHolder extends RecyclerView.ViewHolder{
+    public static class TeamViewHolder extends RecyclerView.ViewHolder {
 
         AppCompatImageView imageViewProfile;
-        AppCompatTextView tvRefUsername,tvLevel;
+        AppCompatTextView tvRefUsername, tvLevel;
 
         public TeamViewHolder(@NonNull View itemView) {
             super(itemView);

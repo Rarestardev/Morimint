@@ -34,7 +34,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
@@ -71,7 +71,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/SigningMarginTop"
@@ -108,7 +108,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/SigningMarginTop"
@@ -156,7 +156,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/SigningMarginTop"
@@ -204,7 +204,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningBackgroundFieldsWidth"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/SigningBackgroundFieldsHeight"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/SigningMarginTop"
@@ -241,12 +241,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/SigningMaxWidth"
+                android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/signing_button_border">
 
                 <androidx.appcompat.widget.AppCompatButton

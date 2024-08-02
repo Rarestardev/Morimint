@@ -58,6 +58,14 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
             holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
         }
 
+        if (holder.isCompleteSmall.getDrawable() == context.getDrawable(R.drawable.green_tick)){
+            holder.bonusLockedSmall.setVisibility(View.GONE);
+        }else if (holder.isCompleteSmall.getDrawable() == context.getDrawable(R.drawable.close_ic)){
+            holder.bonusLockedSmall.setVisibility(View.GONE);
+        }else if (holder.isCompleteSmall.getVisibility() == View.GONE){
+            holder.bonusLockedSmall.setVisibility(View.VISIBLE);
+        }
+
         if (isToday) {
             holder.bonusLockedSmall.setVisibility(View.GONE);
             holder.items.setOnClickListener(v -> {
@@ -85,6 +93,7 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
 
         if (isClaim) {
             holder.isCompleteSmall.setVisibility(View.VISIBLE);
+            holder.bonusLockedSmall.setVisibility(View.GONE);
             holder.items.setOnClickListener(v -> Toast.makeText(context, "You won today's prize!", Toast.LENGTH_SHORT).show());
         } else {
             holder.isCompleteSmall.setVisibility(View.GONE);

@@ -3,10 +3,10 @@
     <dimen name="NavigationTextSize">10sp</dimen>
     <dimen name="NavigationLayoutSize">60dp</dimen>
     <dimen name="NavigationIconSize">28dp</dimen>
-    <dimen name="NavigationIconMarginTop">10dp</dimen>
-    <dimen name="PriceLayoutWidth">120dp</dimen>
-    <dimen name="priceTextSize">10sp</dimen>
-    <dimen name="priceMarginTop">3dp</dimen>
+    <dimen name="NavigationIconMarginTop">5dp</dimen>
     <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
-    <dimen name="dailyRewardRecyclerViewWidth">360dp</dimen>
+    <dimen name="dailyCheckItemWidth">120dp</dimen>
+    <dimen name="dailyCheckItemHeight">165dp</dimen>
+    <dimen name="dailyCheckIconSize">100dp</dimen>
+    <dimen name="dailyCheckTextSize">16sp</dimen>
 </resources>

@@ -75,7 +75,7 @@ public class CoinManagerRepository {
         dialog.setContentText("Your Level is upgraded");
         dialog.setCancelable(false);
         dialog.setConfirmButton("Thanks", sweetAlertDialog -> {
-            Call<Users> call = apiService.putCoinData(levelPart, token);
+            Call<Users> call = apiService.putLevelData(levelPart, token);
             call.enqueue(new Callback<Users>() {
                 @Override
                 public void onResponse(@NonNull Call<Users> call, @NonNull Response<Users> response) {

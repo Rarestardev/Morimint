@@ -55,6 +55,7 @@ public class UserDataRepository {
                     data.setValue(response.body());
                     dialog.dismiss();
                 } else {
+                    dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "UserData : Failed : " + response.errorBody());
                     final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
                     alertDialog.setTitle("Something wrong!");
@@ -71,6 +72,7 @@ public class UserDataRepository {
             public void onFailure(@NonNull Call<Users> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "UserData : onFailure : ", t);
                 Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
         return data;
@@ -94,6 +96,7 @@ public class UserDataRepository {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    dialog.dismiss();
                     ApiResponse apiResponse = response.body();
                     String status = apiResponse.getStatus();
                     String message = apiResponse.getMessage();
@@ -106,10 +109,12 @@ public class UserDataRepository {
                         coinManagerRepository.UpdateCoin(100000, context);
                         Intent intent = new Intent(context, SignInActivity.class);
                         context.startActivity(intent);
+                    }else {
+                        Toast.makeText(context, status + message, Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "SignUp : Failed :" + response.errorBody());
-                    Toast.makeText(context, "Failed :" + response.errorBody(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -117,6 +122,7 @@ public class UserDataRepository {
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "SignUp : onFailure :", t);
                 Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
     }
@@ -151,6 +157,7 @@ public class UserDataRepository {
                     context.startActivity(intent);
 
                 } else {
+                    dialog.dismiss();
                     Toast.makeText(context, "Wrong username or password!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -159,6 +166,7 @@ public class UserDataRepository {
             public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "Login : onFailure :" + t.getMessage());
                 Toast.makeText(context, "Something wrong try again later", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
     }

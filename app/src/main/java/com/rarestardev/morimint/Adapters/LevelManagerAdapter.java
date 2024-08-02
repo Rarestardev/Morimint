@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rarestardev.morimint.OfflineModel.LevelManagerModel;
 import com.rarestardev.morimint.R;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 public class LevelManagerAdapter extends RecyclerView.Adapter<LevelManagerAdapter.LevelManagerViewHolder>{
@@ -45,11 +47,18 @@ public class LevelManagerAdapter extends RecyclerView.Adapter<LevelManagerAdapte
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull LevelManagerViewHolder holder, int position) {
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setGroupingSeparator(',');
+        DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
+        numberFormat.setGroupingSize(3);
+        numberFormat.setMaximumFractionDigits(2);
+
+
         holder.imageViewCharacter.setImageDrawable(context.getDrawable(levelManagerModels.get(position).getImageId()));
         holder.textViewEnergy.setText("+ " + levelManagerModels.get(position).getEnergy());
         holder.textViewLevel.setText("Level : " + levelManagerModels.get(position).getLevel());
         holder.textViewTap.setText("Tap : " + "+ " + levelManagerModels.get(position).getTap());
-        holder.textViewMinCoin.setText("+ " + levelManagerModels.get(position).getCoin());
+        holder.textViewMinCoin.setText("+ " + numberFormat.format(levelManagerModels.get(position).getCoin()));
         boolean isPassed = levelManagerModels.get(position).isPassed();
 
         if (isPassed){
@@ -82,10 +91,5 @@ public class LevelManagerAdapter extends RecyclerView.Adapter<LevelManagerAdapte
             layoutIsPassed = itemView.findViewById(R.id.layoutIsPassed);
 
         }
-    }
-
-
-    private void ActiveLevelManager(){
-
     }
 }

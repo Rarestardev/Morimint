@@ -3,7 +3,6 @@ package com.rarestardev.morimint.ViewModel;
 import android.content.Context;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +41,7 @@ public class ApplicationDataViewModel extends ViewModel {
     }
 
     public void GiftCode(Context context,String code){
-        applicationDataRepository.SiteGiftCode(context, code);
+        applicationDataRepository.GiftCode(context, code);
     }
 
     public void getTasks(Context context, RecyclerView recyclerView, TextView textView){

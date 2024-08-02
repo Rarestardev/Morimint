@@ -1,7 +1,6 @@
 package com.rarestardev.morimint.Api;
 
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
-import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Model.GiftCodeModel;
 import com.rarestardev.morimint.Model.MoriNewsModel;
@@ -30,9 +29,6 @@ public interface ApiService {
 
     @GET("/controls/news")
     Call<MoriNewsModel> GetMoriNewsPinned(@Header("Authorization") String token);
-
-    @GET("/user/userDailyGift")
-    Call<List<DailyCheckModel>> GetDailyCheckReward(@Header("Authorization") String token);
 
     @GET("/controls/confing")
     Call<ApplicationSetupModel> GetApplicationSetup(@Header("Authorization") String token);
@@ -82,8 +78,7 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/user/code")
-    Call<ApiResponse> GiftCode(@Header("Authorization") String token, @Body GiftCodeModel giftCodeModel);
-
+    Call<ApiResponse> GiftCode(@Header("Authorization") String token, @Body String code);
 
     @Multipart
     @PUT("/user/resetpassword")

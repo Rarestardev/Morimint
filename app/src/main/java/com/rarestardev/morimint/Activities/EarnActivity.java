@@ -30,7 +30,7 @@ public class EarnActivity extends AppCompatActivity {
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
 
 
-        binding.editTextCode.addTextChangedListener(new TextWatcher() {
+        binding.editTextCodeSite.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.btnCheckCode.setVisibility(View.GONE);
@@ -40,8 +40,7 @@ public class EarnActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()){
                     binding.btnCheckCode.setVisibility(View.VISIBLE);
-                    binding.btnCheckCode.setOnClickListener(v ->
-                            applicationDataViewModel.SiteGiftCode(EarnActivity.this,s.toString()));
+                    binding.btnCheckCode.setOnClickListener(v -> applicationDataViewModel.SiteGiftCode(EarnActivity.this,s.toString().trim()));
                 }
             }
 
@@ -62,7 +61,7 @@ public class EarnActivity extends AppCompatActivity {
                 if (!s.toString().isEmpty()){
                     binding.btnCheckCodeApp.setVisibility(View.VISIBLE);
                     binding.btnCheckCodeApp.setOnClickListener(v ->
-                            applicationDataViewModel.GiftCode(EarnActivity.this,s.toString()));
+                            applicationDataViewModel.GiftCode(EarnActivity.this,s.toString().trim()));
                 }
             }
 

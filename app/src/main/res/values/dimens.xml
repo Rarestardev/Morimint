@@ -39,7 +39,7 @@
     <dimen name="MintLogoMarginTop">20dp</dimen>
     <dimen name="MintBalanceMarginTop">30dp</dimen>
     <dimen name="MintBalanceTextSize">28sp</dimen>
-    <dimen name="BaseCoinLayoutWidth">410dp</dimen>
+    <dimen name="BaseCoinLayoutWidth">400dp</dimen>
     <dimen name="BaseCoinLayoutHeight">400dp</dimen>
     <dimen name="CoinMintImage">350dp</dimen>
     <dimen name="CoinMintImageMarginTop">95dp</dimen>
@@ -50,10 +50,10 @@
     <dimen name="tvEnergyTextSize">14sp</dimen>
     <dimen name="LevelProgressBarHeight">25dp</dimen>
     <dimen name="LevelProgressBarMarginTop">8dp</dimen>
-    <dimen name="levelShow">60dp</dimen>
+    <dimen name="levelShow">70dp</dimen>
     <dimen name="levelShowMarginTop">13dp</dimen>
-    <dimen name="levelShowStroke">55dp</dimen>
-    <dimen name="levelShowSecond">48dp</dimen>
+    <dimen name="levelShowStroke">65dp</dimen>
+    <dimen name="levelShowSecond">58dp</dimen>
     <dimen name="levelShowTextSize">14sp</dimen>
     <dimen name="levelShowTextMarginTop">15dp</dimen>
     <dimen name="MainCardHeight">75dp</dimen>
@@ -66,4 +66,12 @@
     <dimen name="NavigationTextSize">12sp</dimen>
     <dimen name="NavigationIconMarginTop">5dp</dimen>
     <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
+    <dimen name="avatarSize">235dp</dimen>
+    <dimen name="avatarMarginTop">40dp</dimen>
+    <dimen name="NavigationSizeHeight">70dp</dimen>
+    <dimen name="moriNewsIcon">40dp</dimen>
+    <dimen name="dailyCheckItemWidth">120dp</dimen>
+    <dimen name="dailyCheckItemHeight">165dp</dimen>
+    <dimen name="dailyCheckIconSize">100dp</dimen>
+    <dimen name="dailyCheckTextSize">16sp</dimen>
 </resources>

@@ -11,8 +11,8 @@ public class UserConstants {
 
     public static final String APP_LOG_TAG = "MorimintApp";
 
-    public static final long[] LEVEL_COIN = {300, 600, 900, 1200, 1500, 1800, 2100,
-            2400, 2700, 3000, 3300, 3500, 3800, 4100, 4400};
+    public static final long[] LEVEL_COIN = {100000, 101000, 300000, 400000, 500000, 600000, 700000,
+            800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000, 1500000};
 
 
     public static final int TurboCountCharge = 2;
