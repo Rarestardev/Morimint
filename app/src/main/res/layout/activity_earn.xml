@@ -108,6 +108,8 @@
                     android:textStyle="normal"
                     android:drawableStart="@drawable/info_ic"
                     android:drawablePadding="10dp"
+                    android:textAlignment="gravity"
+                    android:gravity="center_vertical"
                     />
 
 

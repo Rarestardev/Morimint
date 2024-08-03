@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.github.jinatonic.confetti.ConfettiSource;
@@ -76,7 +77,7 @@ public class JackpotActivity extends AppCompatActivity {
         StartAppSDK.init(this, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
         Banner startAppBanner = binding.startappBanner;
-        Log.d(ADS_TAG,startAppBanner + "");
+        Log.d(ADS_TAG, startAppBanner + "");
         startAppBanner.loadAd();
         startAppAd = new StartAppAd(this);
 
@@ -91,11 +92,13 @@ public class JackpotActivity extends AppCompatActivity {
         if (Play_chance == 0) {
             binding.playJackpot.setVisibility(View.GONE);
             binding.stopJackpot.setVisibility(View.VISIBLE);
-            if (jackpotAds != 0){
+            if (jackpotAds != 0) {
                 MoreChanceJackpotPlay();
             } else {
                 binding.playJackpot.setVisibility(View.GONE);
                 binding.stopJackpot.setVisibility(View.VISIBLE);
+                binding.stopJackpot.setOnClickListener(v ->
+                        Toast.makeText(JackpotActivity.this, "The game will be activated the next day", Toast.LENGTH_LONG).show());
             }
         } else {
             binding.playJackpot.setVisibility(View.VISIBLE);
@@ -269,12 +272,12 @@ public class JackpotActivity extends AppCompatActivity {
     private void MoreChanceJackpotPlay() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        jackpotAds --;
-        if (jackpotAds == 0){
-            editor.putInt("jackpotAds",0);
+        jackpotAds--;
+        if (jackpotAds == 0) {
+            editor.putInt("jackpotAds", 0);
             editor.apply();
-        }else {
-            editor.putInt("jackpotAds",jackpotAds);
+        } else {
+            editor.putInt("jackpotAds", jackpotAds);
             editor.apply();
         }
 
@@ -287,7 +290,7 @@ public class JackpotActivity extends AppCompatActivity {
             sweetAlertDialog.dismiss();
         });
         dialog.setCancelButton("Cancel", sweetAlertDialog -> {
-            editor.putInt("jackpotAds",0);
+            editor.putInt("jackpotAds", 0);
             editor.apply();
             sweetAlertDialog.dismiss();
         });
@@ -298,7 +301,7 @@ public class JackpotActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        final SweetAlertDialog alertDialog = new SweetAlertDialog(JackpotActivity.this,SweetAlertDialog.PROGRESS_TYPE);
+        final SweetAlertDialog alertDialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         alertDialog.setTitle("Loading");
         alertDialog.setContentText("Please wait");
         alertDialog.setCancelable(false);
@@ -333,7 +336,7 @@ public class JackpotActivity extends AppCompatActivity {
                     sweetAlertDialog.dismiss();
                 });
                 dialog.setCancelButton("Cancel", sweetAlertDialog -> {
-                    editor.putInt("jackpotAds",0);
+                    editor.putInt("jackpotAds", 0);
                     editor.apply();
                     sweetAlertDialog.dismiss();
                 });
@@ -375,7 +378,7 @@ public class JackpotActivity extends AppCompatActivity {
     }
 
     private void loadAndShowInterstitialAd(int reward) {
-        final SweetAlertDialog dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
+        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         dialog.setTitle("Loading");
         dialog.setContentText("Please wait");
         dialog.setCancelable(false);

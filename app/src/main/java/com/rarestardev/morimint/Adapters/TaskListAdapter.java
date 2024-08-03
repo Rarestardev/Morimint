@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,14 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.TaskModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.ApplicationDataRepository;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -35,6 +41,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     private static final String SHARED_TASK = "Tasks";
     private static final String SHARED_TASK_KEY_ID = "ID";
 
+    private StartAppAd startAppAd;
+    private static final String ADS_TAG = "StartApp";
+
     public TaskListAdapter(Context context, List<TaskModel> taskModels) {
         this.context = context;
         this.taskModels = taskModels;
@@ -50,6 +59,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        StartAppSDK.init(context, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        startAppAd = new StartAppAd(context);
+
+
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setGroupingSeparator(',');
         DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
@@ -86,16 +100,38 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
                     @Override
                     public void onFinish() {
-                        checkDialog.dismiss();
-                        holder.item.setOnClickListener(null);
-                        holder.taskComplete.setVisibility(View.VISIBLE);
-                        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_TASK, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHARED_TASK_KEY_ID + taskModels.get(position).getId(), taskModels.get(position).getId());
-                        editor.apply();
+                        startAppAd.setVideoListener(() -> {
+                            checkDialog.dismiss();
+                            holder.item.setOnClickListener(null);
+                            SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_TASK, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(SHARED_TASK_KEY_ID + taskModels.get(position).getId(), taskModels.get(position).getId());
+                            editor.apply();
+                            ApplicationDataRepository applicationDataRepository = new ApplicationDataRepository();
+                            applicationDataRepository.ClaimTask(context, taskModels.get(position));
+                            holder.taskComplete.setVisibility(View.VISIBLE);
+                        });
+                        startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO, new AdEventListener() {
+                            @Override
+                            public void onReceiveAd(@NonNull Ad ad) {
+                                Log.d(ADS_TAG, "Video ad received.");
+                                startAppAd.showAd();
+                            }
 
-                        ApplicationDataRepository applicationDataRepository = new ApplicationDataRepository();
-                        applicationDataRepository.ClaimTask(context, taskModels.get(position));
+                            @Override
+                            public void onFailedToReceiveAd(Ad ad) {
+                                Log.e(ADS_TAG, "Failed to receive video ad.");
+                                SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                                dialog.setCancelable(false);
+                                dialog.setTitle("Try again");
+                                dialog.setContentText("Failed to receive ad");
+                                dialog.setConfirmButton("Retry", sweetAlertDialog -> {
+                                    startAppAd.showAd();
+                                    sweetAlertDialog.dismiss();
+                                });
+                                dialog.show();
+                            }
+                        });
                     }
                 };
                 countDownTimer.start();

@@ -124,6 +124,8 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="50"
                 tools:listitem="@layout/task_item"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:visibility="gone"
                 />
         </RelativeLayout>

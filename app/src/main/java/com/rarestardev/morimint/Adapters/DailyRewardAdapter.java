@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +18,28 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.ApplicationDataRepository;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.DailyRewardViewHolder> {
 
     List<DailyRewardModel> dailyRewardModels;
     Context context;
+    private StartAppAd startAppAd;
+    private static final String ADS_TAG = "StartApp";
 
     public DailyRewardAdapter(List<DailyRewardModel> dailyRewardModels, Context context) {
         this.dailyRewardModels = dailyRewardModels;
@@ -45,6 +56,11 @@ public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DailyRewardViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
+        StartAppSDK.init(context, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        startAppAd = new StartAppAd(context);
+
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setGroupingSeparator(',');
         DecimalFormat numberFormat = new DecimalFormat("###,###,###,###", decimalFormatSymbols);
@@ -67,7 +83,7 @@ public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.
             holder.getRewardItem.setOnClickListener(v -> {
                 holder.dailyCheck.setVisibility(View.VISIBLE);
                 holder.rewardTimer.setVisibility(View.VISIBLE);
-                final long timeCheckTask = 15 * 1000;
+                final long timeCheckTask = 60 * 1000;
                 CountDownTimer countDownTimer = new CountDownTimer(timeCheckTask, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -81,13 +97,49 @@ public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.
                         holder.rewardTimer.setVisibility(View.GONE);
                         holder.rewardCheck.setVisibility(View.VISIBLE);
                         holder.rewardCheck.setOnClickListener(v1 -> {
-                            SharedPreferences preferences = context.getSharedPreferences(Shared_pref_daily_reward,Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putInt(Shared_pref_daily_reward_KEY + dailyRewardModels.get(position).getId(),dailyRewardModels.get(position).getId());
-                            editor.apply();
-                            ApplicationDataRepository applicationDataRepository = new ApplicationDataRepository();
-                            applicationDataRepository.ClaimDailyReward(context,dailyRewardModels.get(position));
-                            holder.rewardSuccess.setVisibility(View.VISIBLE);
+                            final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
+                            dialog.setTitle("Loading");
+                            dialog.setContentText("Please wait");
+                            dialog.setCancelable(false);
+                            dialog.show();
+                            startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad ad) {
+                                    startAppAd.showAd(new AdDisplayListener() {
+                                        @Override
+                                        public void adHidden(Ad ad) {
+                                            dialog.dismiss();
+                                            SharedPreferences preferences = context.getSharedPreferences(Shared_pref_daily_reward,Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putInt(Shared_pref_daily_reward_KEY + dailyRewardModels.get(position).getId(),dailyRewardModels.get(position).getId());
+                                            editor.apply();
+                                            ApplicationDataRepository applicationDataRepository = new ApplicationDataRepository();
+                                            applicationDataRepository.ClaimDailyReward(context,dailyRewardModels.get(position));
+                                            holder.rewardSuccess.setVisibility(View.VISIBLE);
+                                        }
+
+                                        @Override
+                                        public void adDisplayed(Ad ad) {
+                                        }
+
+                                        @Override
+                                        public void adClicked(Ad ad) {
+                                        }
+
+                                        @Override
+                                        public void adNotDisplayed(Ad ad) {
+                                            dialog.dismiss();
+                                            Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad ad) {
+                                    dialog.dismiss();
+                                    Log.e(ADS_TAG, "Failed to receive interstitial ad.");
+                                }
+                            });
                         });
                     }
                 };

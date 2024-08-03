@@ -3,6 +3,7 @@ package com.rarestardev.morimint.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,15 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.CoinManagerRepository;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.util.List;
 
@@ -28,6 +35,9 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
     List<DailyCheckModel> dailyCheckModels;
     int currentDay;
     private static final String SHARED_PREF_NAME = "DailyCheck";
+    boolean isToday;
+    private StartAppAd startAppAd;
+    private static final String ADS_TAG = "StartApp";
 
     public DailyCheckAdapter(Context context, List<DailyCheckModel> dailyCheckModels, int currentDay) {
         this.context = context;
@@ -45,51 +55,85 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        StartAppSDK.init(context, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        startAppAd = new StartAppAd(context);
+
         holder.tvDaySmall.setText("Day : " + dailyCheckModels.get(position).getDay());
         holder.tvRewardSmall.setText(dailyCheckModels.get(position).getReward());
         boolean isClaim = dailyCheckModels.get(position).isClaimed();
 
-        boolean isToday = dailyCheckModels.get(position).getDay() == currentDay;
+        int Day = dailyCheckModels.get(position).getDay();
 
+        isToday = Day == currentDay;
 
-        if (dailyCheckModels.get(position).getDay() == currentDay && !isClaim) {
+        if (Day < currentDay){
+            holder.bonusLockedSmall.setVisibility(View.GONE);
+            holder.isCompleteSmall.setVisibility(View.VISIBLE);
             holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.close_ic));
-        } else {
-            holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
-        }
-
-        if (holder.isCompleteSmall.getDrawable() == context.getDrawable(R.drawable.green_tick)){
-            holder.bonusLockedSmall.setVisibility(View.GONE);
-        }else if (holder.isCompleteSmall.getDrawable() == context.getDrawable(R.drawable.close_ic)){
-            holder.bonusLockedSmall.setVisibility(View.GONE);
-        }else if (holder.isCompleteSmall.getVisibility() == View.GONE){
+            if (!isClaim){
+                holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.close_ic));
+            }else {
+                holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
+            }
+        }else if (Day > currentDay){
             holder.bonusLockedSmall.setVisibility(View.VISIBLE);
-        }
-
-        if (isToday) {
+        }else {
             holder.bonusLockedSmall.setVisibility(View.GONE);
             holder.items.setOnClickListener(v -> {
                 if (!isClaim) {
                     long coin = dailyCheckModels.get(position).getCoin();
-                    SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                    dialog.setTitle("Success");
-                    dialog.setContentText("You are won :" + coin + "MoriBit");
+                    final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
+                    dialog.setTitle("Loading");
+                    dialog.setContentText("Please wait");
                     dialog.setCancelable(false);
-                    dialog.setConfirmButton("Claim", sweetAlertDialog -> {
-                        dailyCheckModels.get(position).setClaimed(true);
-                        notifyItemChanged(position);
-                        saveRewardStatus(dailyCheckModels.get(position).getDay());
-                        CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
-                        coinManagerRepository.UpdateCoin(coin, context);
+                    dialog.show();
+                    startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
+                        @Override
+                        public void onReceiveAd(@NonNull Ad ad) {
+                            startAppAd.showAd(new AdDisplayListener() {
+                                @Override
+                                public void adHidden(Ad ad) {
+                                    dialog.dismiss();
+                                    SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                                    dialog.setTitle("Success");
+                                    dialog.setContentText("You are won :" + coin + "MoriBit");
+                                    dialog.setCancelable(false);
+                                    dialog.setConfirmButton("Claim", sweetAlertDialog -> {
+                                        dailyCheckModels.get(position).setClaimed(true);
+                                        notifyItemChanged(position);
+                                        saveRewardStatus(dailyCheckModels.get(position).getDay());
+                                        CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
+                                        coinManagerRepository.UpdateCoin(coin, context);
 
-                        sweetAlertDialog.dismiss();
-                    }).show();
+                                        sweetAlertDialog.dismiss();
+                                    }).show();
+                                }
+
+                                @Override
+                                public void adDisplayed(Ad ad) {
+                                }
+
+                                @Override
+                                public void adClicked(Ad ad) {
+                                }
+
+                                @Override
+                                public void adNotDisplayed(Ad ad) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailedToReceiveAd(Ad ad) {
+                            dialog.dismiss();
+                            Log.e(ADS_TAG, "Failed to receive interstitial ad.");
+                        }
+                    });
                 }
             });
-        } else {
-            holder.bonusLockedSmall.setVisibility(View.VISIBLE);
         }
-
 
         if (isClaim) {
             holder.isCompleteSmall.setVisibility(View.VISIBLE);
