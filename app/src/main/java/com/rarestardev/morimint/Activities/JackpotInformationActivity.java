@@ -7,11 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.rarestardev.morimint.Adapters.InformationJackpotAdapter;
 import com.rarestardev.morimint.Constants.JackpotValues;
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.OfflineModel.InformationJackpotModel;
 import com.rarestardev.morimint.R;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +28,7 @@ public class JackpotInformationActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     AppCompatTextView tvDescJackpot;
     List<InformationJackpotModel> jackpotModels = new ArrayList<>();
+    private static final String ADS_TAG = "StartApp";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -32,6 +37,16 @@ public class JackpotInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_jackpot_information);
         recyclerView = findViewById(R.id.recyclerView);
         tvDescJackpot = findViewById(R.id.tvDescJackpot);
+
+
+        StartAppSDK.init(this, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        Banner startAppBanner = findViewById(R.id.startapp_banner);
+        Log.d(ADS_TAG,startAppBanner + "");
+        startAppBanner.loadAd();
+
+
+
 
         tvDescJackpot.setText(readFromAssets());
 

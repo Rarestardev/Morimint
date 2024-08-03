@@ -11,7 +11,6 @@
     <string name="register">Register</string>
     <string name="SignUpToSignIn">Already an user? SIGN IN</string>
     <string name="SignIn">Sign in</string>
-    <string name="SignInToSignUp">Don,t have an account?</string>
     <string name="ForgetPass">Forget your password?</string>
     <string name="ForgetPassHint">Please enter your email address, so we will send are set link.</string>
     <string name="emailTitle">EMAIL :</string>
@@ -82,5 +81,11 @@
     <string name="features">Features</string>
     <string name="roadmap">Roadmap</string>
     <string name="blue_tick">Blue tick features</string>
+    <string name="SignInToSignUp">Don\'t have an account</string>
+    <string name="RewardCode">Bonus Codes</string>
+    <string name="dailyRewardInfo">Click to top button for claim your daily reward</string>
+    <string name="walletConnection">Connect Wallet</string>
+    <string name="walletDesc">Connect your TON wallet for claim rewards</string>
+    <string name="walletTonKeeper">Based on Ton Keeper</string>
 
 </resources>

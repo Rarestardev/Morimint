@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.rarestardev.morimint.Adapters.DailyCheckAdapter;
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.databinding.ActivityDailyBonusBinding;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +23,7 @@ import java.util.List;
 public class DailyCheckActivity extends AppCompatActivity {
     private ActivityDailyBonusBinding binding;
     List<DailyCheckModel> dailyCheckModel = new ArrayList<>();
+    private static final String ADS_TAG = "StartApp";
 
     private static final String[] REWARDS = {"","1K","2K","5K","8K","10K","12K","15K","20K"
             ,"30K","40K","50K","100K","120K","140K","180K","200K","250K","280K","300K"
@@ -35,6 +40,15 @@ public class DailyCheckActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_daily_bonus);
         setDailyChecks();
+
+
+        StartAppSDK.init(this, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        Banner startAppBanner = binding.startappBanner;
+        Log.d(ADS_TAG,startAppBanner + "");
+        startAppBanner.loadAd();
+
+
     }
 
 

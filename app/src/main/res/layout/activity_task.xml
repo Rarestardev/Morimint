@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,112 +8,113 @@
     android:background="@drawable/base_app_bg"
     tools:context=".Activities.TaskActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/task_ic"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
-        />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/task"
-        android:layout_gravity="center_horizontal"
-        android:fontFamily="@font/opensans_bold"
-        android:layout_marginTop="5dp"
-        android:textSize="20sp"/>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="@string/taskTitle"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/opensans_bold"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="350dp"
-        android:layout_height="65dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:minHeight="50dp"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/startapp_banner"
+        android:layout_marginBottom="10dp"
         >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/card_layout_bg"
-            >
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="40dp"
-                android:src="@drawable/telegram_ic"
-                android:layout_centerVertical="true"
-                android:padding="2dp"
-                />
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="110dp"
-                android:padding="2dp"
-                android:src="@drawable/facebook_ic"
-                android:layout_centerVertical="true"
-                />
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="40dp"
-                android:src="@drawable/youtube_ic"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
-
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/task_ic"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/taskTitle"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/opensans_bold"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="350dp"
             android:layout_height="65dp"
-            android:src="@drawable/insta_ic"
-            android:padding="15dp"
-            android:layout_marginEnd="110dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/card_layout_bg"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:minHeight="50dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/card_layout_bg"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="40dp"
+                    android:src="@drawable/telegram_ic"
+                    android:layout_centerVertical="true"
+                    android:padding="2dp"
+                    />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="110dp"
+                    android:padding="2dp"
+                    android:src="@drawable/error_center_x"
+                    android:layout_centerVertical="true"
+                    />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="40dp"
+                    android:src="@drawable/youtube_ic"
+                    android:layout_centerVertical="true"
+                    />
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/insta_ic"
+                android:padding="15dp"
+                android:layout_marginEnd="110dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/card_layout_bg"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <ScrollView
-        android:layout_width="350dp"
-        android:layout_height="530dp"
-        android:scrollbars="none"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        >
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             >
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvNoData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_centerInParent="true"
                 android:text="@string/noData"
+                android:textAlignment="gravity"
+                android:gravity="center"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -127,6 +128,15 @@
                 />
         </RelativeLayout>
 
-    </ScrollView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <com.startapp.sdk.ads.banner.Banner
+        android:id="@+id/startapp_banner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

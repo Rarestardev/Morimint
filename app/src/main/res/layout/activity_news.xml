@@ -1,47 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/base_app_bg"
     tools:context=".Activities.NewsActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/morinews_ic"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
-        />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/moriNews"
-        android:layout_gravity="center_horizontal"
-        android:fontFamily="@font/opensans_bold"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/TitleActivity"
-        />
-
-    <ScrollView
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/startapp_banner"
+        android:layout_marginBottom="10dp"
         >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/morinews_ic"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/moriNews"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_marginTop="10dp"
+            android:textSize="@dimen/TitleActivity"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMoriNews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/mori_news_items"
+            tools:itemCount="3"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             />
-    </ScrollView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.startapp.sdk.ads.banner.Banner
+        android:id="@+id/startapp_banner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>

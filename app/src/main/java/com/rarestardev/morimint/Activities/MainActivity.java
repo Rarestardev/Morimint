@@ -39,6 +39,7 @@ import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
+import com.rarestardev.morimint.Wallet.WalletActivity;
 import com.rarestardev.morimint.databinding.ActivityMainBinding;
 
 import java.io.BufferedReader;
@@ -436,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy");
+        energyManager.onDestroyApp();
         super.onDestroy();
     }
 
@@ -475,8 +477,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     dialog.show();
                 } else {
                     HandleResponseData();
-                    //applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-                    //applicationDataViewModel.PinnedNews(MainActivity.this);
+                    applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+                    applicationDataViewModel.PinnedNews(binding.tvNewsMessage);
+                    binding.moriNewsDot.setVisibility(View.VISIBLE);
                 }
 
                 if (is_mint_on) {

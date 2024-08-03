@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -23,10 +23,17 @@ import android.widget.TextView;
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.databinding.ActivityJackpotBinding;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -47,8 +54,10 @@ public class JackpotActivity extends AppCompatActivity {
     double[] probabilities = {0.05, 0.10, 0.15, 0.15, 0.20, 0.35};
     private static final int playJackpot_ad = 5;
     private int jackpotAds;
+    private static final String ADS_TAG = "StartApp";
 
     CoinManagerViewModel coinManagerViewModel;
+    private StartAppAd startAppAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,13 @@ public class JackpotActivity extends AppCompatActivity {
 
         binding.jackpotInfo.setOnClickListener(v ->
                 startActivity(new Intent(JackpotActivity.this, JackpotInformationActivity.class)));
+
+        StartAppSDK.init(this, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        Banner startAppBanner = binding.startappBanner;
+        Log.d(ADS_TAG,startAppBanner + "");
+        startAppBanner.loadAd();
+        startAppAd = new StartAppAd(this);
 
         UpdatePlayedJackpot();
     }
@@ -87,7 +103,6 @@ public class JackpotActivity extends AppCompatActivity {
             JackpotPlayHandle();
         }
     }
-
 
     private void JackpotPlayHandle() {
         binding.playJackpot.setOnClickListener(new NoDoubleClickListener() {
@@ -252,31 +267,79 @@ public class JackpotActivity extends AppCompatActivity {
     }
 
     private void MoreChanceJackpotPlay() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Worker", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         jackpotAds --;
-
-        if (jackpotAds < 0){
-            jackpotAds = 0;
+        if (jackpotAds == 0){
+            editor.putInt("jackpotAds",0);
+            editor.apply();
+        }else {
+            editor.putInt("jackpotAds",jackpotAds);
+            editor.apply();
         }
-
-        editor.putInt("jackpotAds",jackpotAds);
-        editor.apply();
 
         SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
         dialog.setCancelable(false);
         dialog.setTitle("Try again");
         dialog.setContentText("More chance by seeing the ad");
         dialog.setConfirmButton("Show Ad", sweetAlertDialog -> {
+            loadAndShowVideoAd();
+            sweetAlertDialog.dismiss();
+        });
+        dialog.setCancelButton("Cancel", sweetAlertDialog -> {
+            editor.putInt("jackpotAds",0);
+            editor.apply();
+            sweetAlertDialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    private void loadAndShowVideoAd() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        final SweetAlertDialog alertDialog = new SweetAlertDialog(JackpotActivity.this,SweetAlertDialog.PROGRESS_TYPE);
+        alertDialog.setTitle("Loading");
+        alertDialog.setContentText("Please wait");
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        startAppAd.setVideoListener(() -> {
+            alertDialog.dismiss();
             editor.putInt("jackpot", playJackpot_ad);
             editor.apply();
             binding.playJackpot.setVisibility(View.VISIBLE);
             binding.stopJackpot.setVisibility(View.GONE);
             UpdatePlayedJackpot();
-            dialog.dismiss();
         });
-        dialog.setCancelButton("Cancel", Dialog::dismiss);
-        dialog.show();
+        startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO, new AdEventListener() {
+            @Override
+            public void onReceiveAd(@NonNull Ad ad) {
+                Log.d(ADS_TAG, "Video ad received.");
+                alertDialog.dismiss();
+                startAppAd.showAd();
+            }
+
+            @Override
+            public void onFailedToReceiveAd(Ad ad) {
+                alertDialog.dismiss();
+                Log.e(ADS_TAG, "Failed to receive video ad.");
+                SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
+                dialog.setCancelable(false);
+                dialog.setTitle("Try again");
+                dialog.setContentText("Failed to receive ad");
+                dialog.setConfirmButton("Retry", sweetAlertDialog -> {
+                    loadAndShowVideoAd();
+                    sweetAlertDialog.dismiss();
+                });
+                dialog.setCancelButton("Cancel", sweetAlertDialog -> {
+                    editor.putInt("jackpotAds",0);
+                    editor.apply();
+                    sweetAlertDialog.dismiss();
+                });
+                dialog.show();
+            }
+        });
     }
 
     private void checkAndAwardPoints() {
@@ -288,27 +351,68 @@ public class JackpotActivity extends AppCompatActivity {
     private int calculateReward(int value) {
         switch (value) {
             case 0:
-                ShowDialogClimbReward(5000000);
+                loadAndShowInterstitialAd(5000000);
                 return 5000000;
             case 1:
-                ShowDialogClimbReward(1000000);
+                loadAndShowInterstitialAd(1000000);
                 return 1000000;
             case 2:
-                ShowDialogClimbReward(500000);
+                loadAndShowInterstitialAd(500000);
                 return 500000;
             case 3:
-                ShowDialogClimbReward(100000);
+                loadAndShowInterstitialAd(100000);
                 return 100000;
             case 4:
-                ShowDialogClimbReward(50000);
+                loadAndShowInterstitialAd(50000);
                 return 50000;
             case 5:
-                ShowDialogClimbReward(10000);
+                loadAndShowInterstitialAd(10000);
                 return 10000;
 
             default:
                 return 0;
         }
+    }
+
+    private void loadAndShowInterstitialAd(int reward) {
+        final SweetAlertDialog dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Loading");
+        dialog.setContentText("Please wait");
+        dialog.setCancelable(false);
+        dialog.show();
+        startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
+            @Override
+            public void onReceiveAd(@NonNull Ad ad) {
+                Log.d(ADS_TAG, "Interstitial ad received.");
+                startAppAd.showAd(new AdDisplayListener() {
+                    @Override
+                    public void adHidden(Ad ad) {
+                        dialog.dismiss();
+                        ShowDialogClimbReward(reward);
+                    }
+
+                    @Override
+                    public void adDisplayed(Ad ad) {
+                    }
+
+                    @Override
+                    public void adClicked(Ad ad) {
+                    }
+
+                    @Override
+                    public void adNotDisplayed(Ad ad) {
+                        dialog.dismiss();
+                        ShowDialogClimbReward(reward);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailedToReceiveAd(Ad ad) {
+                dialog.dismiss();
+                Log.e(ADS_TAG, "Failed to receive interstitial ad.");
+            }
+        });
     }
 
     private void ShowDialogClimbReward(int reward) {

@@ -28,7 +28,7 @@ public interface ApiService {
     Call<List<MoriNewsModel>> GetMoriNews(@Header("Authorization") String token);
 
     @GET("/controls/news")
-    Call<MoriNewsModel> GetMoriNewsPinned(@Header("Authorization") String token);
+    Call<List<MoriNewsModel>> GetMoriNewsPinned(@Header("Authorization") String token);
 
     @GET("/controls/confing")
     Call<ApplicationSetupModel> GetApplicationSetup(@Header("Authorization") String token);

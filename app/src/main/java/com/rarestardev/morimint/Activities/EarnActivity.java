@@ -8,20 +8,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.databinding.ActivityEarnBinding;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 public class EarnActivity extends AppCompatActivity {
     ActivityEarnBinding binding;
     ApplicationDataViewModel applicationDataViewModel;
+    private static final String ADS_TAG = "StartApp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_earn);
+
+        StartAppSDK.init(this, UserConstants.startAppId, true);
+        StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
+        Banner startAppBanner = binding.startappBanner;
+        Log.d(ADS_TAG,startAppBanner + "");
+        startAppBanner.loadAd();
 
 
         binding.dailyReward.setOnClickListener(v ->

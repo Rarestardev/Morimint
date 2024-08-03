@@ -58,7 +58,6 @@
                     android:id="@+id/score_layout"
                     android:layout_width="300dp"
                     android:layout_height="150dp"
-                    android:layout_marginTop="30dp"
                     android:background="@drawable/jackpot_score_banner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -343,6 +342,13 @@
             android:layout_alignParentBottom="true"
             />
 
+
+        <com.startapp.sdk.ads.banner.Banner
+            android:id="@+id/startapp_banner"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

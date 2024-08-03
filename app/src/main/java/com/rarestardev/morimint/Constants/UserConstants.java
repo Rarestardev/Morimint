@@ -19,4 +19,7 @@ public class UserConstants {
     public static final int JackpotPlayed = 20;
     public static final int JackpotPlayedAds = 2;
 
+    public static final String startAppId = "207548984";
+    public static final boolean startAppIsTested = true;
+
 }

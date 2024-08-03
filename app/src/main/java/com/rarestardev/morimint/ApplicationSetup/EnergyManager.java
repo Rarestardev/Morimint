@@ -75,6 +75,15 @@ public class EnergyManager {
                 if (valueEnergy > maxEnergy) {
                     valueEnergy = maxEnergy;
                 }
+                if (total_sec >= 3600) {
+                    valueEnergy = maxEnergy;
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("current" + PREF_ENERGY, valueEnergy);
+                    editor.putLong(PREF_KEY_CURRENT_TIME, 0);
+                    editor.apply();
+                }
+
+
                 tvEnergy.setText(valueEnergy + " / " + maxEnergy);
             }
         }

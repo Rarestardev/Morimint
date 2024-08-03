@@ -47,11 +47,19 @@ public class ApplicationDataRepository {
     }
 
     public void GetDataMoriNews(Context context, RecyclerView recyclerView) {
+
+        final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Updated");
+        dialog.setContentText("Please wait");
+        dialog.setCancelable(false);
+        dialog.show();
+
         Call<List<MoriNewsModel>> call = apiService.GetMoriNews(ApiClient.SERVER_TOKEN);
         call.enqueue(new Callback<List<MoriNewsModel>>() {
             @Override
             public void onResponse(@NonNull Call<List<MoriNewsModel>> call, @NonNull Response<List<MoriNewsModel>> response) {
                 if (response.body() != null) {
+                    dialog.dismiss();
                     List<MoriNewsModel> moriNewsModel = response.body();
                     MoriNewsAdapter adapter = new MoriNewsAdapter(moriNewsModel, context);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -66,6 +74,7 @@ public class ApplicationDataRepository {
 
             @Override
             public void onFailure(@NonNull Call<List<MoriNewsModel>> call, @NonNull Throwable t) {
+                dialog.dismiss();
                 if (t instanceof SocketTimeoutException) {
                     Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Timeout", t);
                 } else {
@@ -84,23 +93,32 @@ public class ApplicationDataRepository {
         });
     }
 
-    public void GetPinnedNews(Context context) {
-        Call<MoriNewsModel> call = apiService.GetMoriNewsPinned(ApiClient.SERVER_TOKEN);
-        call.enqueue(new Callback<MoriNewsModel>() {
+    public void GetPinnedNews(TextView textView) {
+        Call<List<MoriNewsModel>> call = apiService.GetMoriNewsPinned(ApiClient.SERVER_TOKEN);
+        call.enqueue(new Callback<List<MoriNewsModel>>() {
             @Override
-            public void onResponse(@NonNull Call<MoriNewsModel> call, @NonNull Response<MoriNewsModel> response) {
+            public void onResponse(@NonNull Call<List<MoriNewsModel>> call, @NonNull Response<List<MoriNewsModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    MoriNewsModel moriNewsModel = response.body();
-                    SharedPreferences preferences = context.getSharedPreferences("News", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
+                    List<MoriNewsModel> moriNewsModel = response.body();
 
-                    editor.putInt("id" + moriNewsModel.getId(), moriNewsModel.getId());
-                    editor.apply();
+                    String msg = moriNewsModel.get(0).getContent();
+                    boolean isPin = moriNewsModel.get(0).isIs_published();
+
+                    if (msg != null){
+                        if (isPin){
+                            textView.setText(msg);
+                        }else {
+                            textView.setText("");
+                        }
+                    }else {
+                        textView.setText("");
+                    }
+
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<MoriNewsModel> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<MoriNewsModel>> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "Pinned news : onFailure", t);
             }
         });

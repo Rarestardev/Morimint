@@ -28,8 +28,8 @@ public class ApplicationDataViewModel extends ViewModel {
         applicationDataRepository.GetDataMoriNews(context, recyclerView);
     }
 
-    public void PinnedNews(Context context){
-        applicationDataRepository.GetPinnedNews(context);
+    public void PinnedNews(TextView textView){
+        applicationDataRepository.GetPinnedNews(textView);
     }
 
     public LiveData<ApplicationSetupModel> SetApplicationSetup(){
