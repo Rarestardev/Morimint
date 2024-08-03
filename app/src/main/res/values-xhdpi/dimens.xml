@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Signing Activities -->
+    <dimen name="LogoSize">80dp</dimen>
+
+    <!-- Main Activities -->
+    <dimen name="NavigationIconSize">25dp</dimen>
+    <dimen name="NavigationLayoutSize">60dp</dimen>
+
+    <!-- Signing Activities -->
+    <dimen name="SigningMarginStartEnd">30dp</dimen>
+    <dimen name="SigningMarginTop">30dp</dimen>
+    <dimen name="SigningTitle">30sp</dimen>
+    <dimen name="SigningIconSize">28dp</dimen>
+    <dimen name="SigningBackgroundFieldsHeight">60dp</dimen>
+    <dimen name="SigningBackgroundFieldsWidth">320dp</dimen>
+    <dimen name="SigningIconPadding">15dp</dimen>
+    <dimen name="SigningMaxWidth">320dp</dimen>
+    <dimen name="TextSize">15sp</dimen>
+
+    <!-- Jackpot Activities -->
+    <dimen name="jackpotColSizeWidth">60dp</dimen>
+    <dimen name="jackpotColSizeHeight">150dp</dimen>
+    <dimen name="jackpotIconSize">35dp</dimen>
+    <dimen name="jackpotHandleWidth">50dp</dimen>
+    <dimen name="jackpotHandleHeight">180dp</dimen>
+
+    <dimen name="TitleActivityImageSize">50dp</dimen>
+    <dimen name="TitleActivityMarginTop">30dp</dimen>
+    <dimen name="TitleActivity">18sp</dimen>
+    <dimen name="MaxWidthViews">350dp</dimen>
+
+    <dimen name="MainCardWidth">300dp</dimen>
+    <dimen name="MintLogoBrain">50dp</dimen>
+    <dimen name="DrawerWidth">270dp</dimen>
+    <dimen name="bottomNavigationBarWidth">420dp</dimen>
+    <dimen name="MintLogoMarginTop">20dp</dimen>
+    <dimen name="MintBalanceMarginTop">30dp</dimen>
+    <dimen name="MintBalanceTextSize">28sp</dimen>
+    <dimen name="BaseCoinLayoutWidth">400dp</dimen>
+    <dimen name="BaseCoinLayoutHeight">400dp</dimen>
+    <dimen name="CoinMintImage">260dp</dimen>
+    <dimen name="CoinMintImageMarginTop">95dp</dimen>
+    <dimen name="MintFrameHeight">210dp</dimen>
+    <dimen name="MintFrameWidth">230dp</dimen>
+    <dimen name="MintFrameMarginTop">120dp</dimen>
+    <dimen name="IconEnergySize">25dp</dimen>
+    <dimen name="tvEnergyTextSize">12sp</dimen>
+    <dimen name="LevelProgressBarHeight">20dp</dimen>
+    <dimen name="LevelProgressBarMarginTop">8dp</dimen>
+    <dimen name="levelShow">60dp</dimen>
+    <dimen name="levelShowMarginTop">10dp</dimen>
+    <dimen name="levelShowStroke">55dp</dimen>
+    <dimen name="levelShowSecond">48dp</dimen>
+    <dimen name="levelShowTextSize">12sp</dimen>
+    <dimen name="levelShowTextMarginTop">12dp</dimen>
+    <dimen name="MainCardHeight">75dp</dimen>
+    <dimen name="MainCardMarginTop">15dp</dimen>
+    <dimen name="jackpotSizeWidth">340dp</dimen>
+    <dimen name="jackpotSizeHeight">240dp</dimen>
+    <dimen name="jackpotColOneMarginStart">45dp</dimen>
+    <dimen name="JackpotItemHeight">60dp</dimen>
+    <dimen name="referral_layout_size">350dp</dimen>
+    <dimen name="NavigationTextSize">10sp</dimen>
+    <dimen name="NavigationIconMarginTop">5dp</dimen>
+    <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
+    <dimen name="avatarSize">180dp</dimen>
+    <dimen name="avatarMarginTop">30dp</dimen>
+    <dimen name="NavigationSizeHeight">70dp</dimen>
+    <dimen name="moriNewsIcon">40dp</dimen>
+
+    <dimen name="dailyCheckItemWidth">110dp</dimen>
+    <dimen name="dailyCheckItemHeight">155dp</dimen>
+    <dimen name="dailyCheckIconSize">90dp</dimen>
+    <dimen name="dailyCheckTextSize">12sp</dimen>
+
+
+    <dimen name="profile_layout">140dp</dimen>
+    <dimen name="tvYourLevel">10sp</dimen>
+    <dimen name="tvDaySmall">11sp</dimen>
+    <dimen name="TurboMargin">35dp</dimen>
+    <dimen name="TurboSize">60dp</dimen>
+</resources>

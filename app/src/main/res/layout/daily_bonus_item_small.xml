@@ -29,18 +29,19 @@
             tools:text="Day 10"
             android:layout_centerVertical="true"
             android:layout_marginStart="15dp"
+            android:textSize="@dimen/tvDaySmall"
             android:textColor="@color/white"
             android:fontFamily="@font/opensans_bold"
             tools:ignore="RelativeOverlap" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/isCompleteSmall"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/IconEnergySize"
+            android:layout_height="@dimen/IconEnergySize"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:layout_marginEnd="10dp"
+            android:visibility="visible"
+            android:layout_marginEnd="5dp"
             android:src="@drawable/green_tick"
             />
     </RelativeLayout>

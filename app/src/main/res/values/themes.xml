@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Morimint" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/BaseColor</item>
+        <item name="colorPrimaryVariant">@color/BaseColor</item>
+        <item name="colorOnPrimary">@color/Views</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/IconColor</item>
+        <item name="colorSecondaryVariant">@color/Views</item>
+        <item name="colorOnSecondary">@color/TextColor</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:textColor">?colorOnSecondary</item>
+        <item name="android:textSize">@dimen/TextSize</item>
+        <item name="android:layoutDirection">ltr</item>
+    </style>
+
+
+    <style name="DrawerTextStyles" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/opensans_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+</resources>

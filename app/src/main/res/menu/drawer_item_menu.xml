@@ -21,6 +21,10 @@
         android:title="@string/ads"
         android:icon="@drawable/advert_ic"/>
 
+    <item android:id="@+id/mori_ai_menu"
+        android:title="@string/moriAi"
+        android:icon="@drawable/mori_info_icon"/>
+
     <item android:id="@+id/blue_icon_menu"
         android:title="@string/blue_tick"
         android:icon="@drawable/blue_tick_menu_ic"/>

@@ -73,7 +73,7 @@
                     android:layout_height="30dp"
                     android:layout_marginStart="110dp"
                     android:padding="2dp"
-                    android:src="@drawable/error_center_x"
+                    android:src="@drawable/x_icon"
                     android:layout_centerVertical="true"
                     />
                 <androidx.appcompat.widget.AppCompatImageView

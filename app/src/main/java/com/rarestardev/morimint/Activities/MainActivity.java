@@ -357,6 +357,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 ShowDialogAboutApp(R.drawable.blue_tick_menu_ic, getString(R.string.blue_tick), "blue_tick.txt");
             }
 
+            if (item.getItemId() == R.id.mori_ai_menu) {
+                ShowDialogAboutApp(R.drawable.mori_info_icon, getString(R.string.moriAi), "mori_ai_desc.txt");
+            }
+
             if (item.getItemId() == R.id.exitApp) {
                 binding.drawer.closeDrawers();
                 finish();
@@ -448,6 +452,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         if (binding.tvBalanceCoin.getText().toString().isEmpty()) {
             binding.tvBalanceCoin.setText("0");
         }
+        HandleResponseData();
     }
 
     @Override

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Views">#ad24d8</color>
+    <color name="BaseColor">#30015f</color>
+    <color name="Fields">#40228d</color>
+    <color name="IconColor">#FFFFFFFF</color>
+    <color name="TextColor">#F6F6F6</color>
+    <color name="black">#000000</color>
+
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="MidWhite">#8F8E8E</color>
+    <color name="DarkGray">#4E4E4E</color>
+    <color name="Gray">#232323</color>
+    <color name="DarkGradientLockedView">#B3232323</color>
+
+
+    <color name="JackpotBonusAnim1">#ffc000</color>
+    <color name="JackpotBonusAnim2">#F3DA03</color>
+    <color name="JackpotBonusAnim3">#ECCD6F</color>
+
+
+    <color name="progressMinValue">#038697</color>
+    <color name="progressTwoValue">#0C8BC5</color>
+    <color name="progressThreeValue">#25379A</color>
+    <color name="progressMaxValue">#40228d</color>
+
+
+    <color name="levelImageGradientBg">#BC26014A</color>
+</resources>
