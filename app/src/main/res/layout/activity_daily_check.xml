@@ -14,9 +14,9 @@
             android:id="@+id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_above="@id/startapp_banner"
             android:layout_marginBottom="10dp"
-            android:layout_above="@id/startapp_banner">
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/TitleActivityImageSize"
@@ -54,20 +54,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                tools:listitem="@layout/daily_bonus_item_small"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
                 android:paddingBottom="10dp"
-                android:scrollbars="none" />
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/daily_bonus_item_small" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
 
 
         <com.startapp.sdk.ads.banner.Banner

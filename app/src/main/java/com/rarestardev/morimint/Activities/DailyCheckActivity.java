@@ -2,7 +2,7 @@ package com.rarestardev.morimint.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.rarestardev.morimint.Adapters.DailyCheckAdapter;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.DailyCheckModel;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.databinding.ActivityDailyBonusBinding;
+import com.rarestardev.morimint.databinding.ActivityDailyCheckBinding;
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.adsbase.StartAppSDK;
 
@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class DailyCheckActivity extends AppCompatActivity {
-    private ActivityDailyBonusBinding binding;
+    private ActivityDailyCheckBinding binding;
     List<DailyCheckModel> dailyCheckModel = new ArrayList<>();
     private static final String ADS_TAG = "StartApp";
 
@@ -38,7 +38,7 @@ public class DailyCheckActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_daily_bonus);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_daily_check);
         setDailyChecks();
 
 
@@ -63,7 +63,7 @@ public class DailyCheckActivity extends AppCompatActivity {
         }
 
         DailyCheckAdapter dailyCheckAdapter = new DailyCheckAdapter(this,dailyCheckModel,currentDay);
-        binding.rewardRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        binding.rewardRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.rewardRecyclerView.setHasFixedSize(true);
         binding.rewardRecyclerView.refreshDrawableState();
         binding.rewardRecyclerView.setAdapter(dailyCheckAdapter);

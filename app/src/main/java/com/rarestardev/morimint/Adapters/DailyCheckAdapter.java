@@ -54,7 +54,7 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         StartAppSDK.init(context, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
         startAppAd = new StartAppAd(context);
