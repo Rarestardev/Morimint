@@ -88,5 +88,7 @@
     <string name="walletDesc">Connect your TON wallet for claim rewards</string>
     <string name="walletTonKeeper">Based on Ton Keeper</string>
     <string name="moriAi">Mori AI Company</string>
+    <string name="warning">Warning :</string>
+    <string name="TonKeeper">Ton Keeper</string>
 
 </resources>

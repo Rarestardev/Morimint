@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.Api;
+package com.rarestardev.morimint.Response;
 
 public class SingleResponse {
 

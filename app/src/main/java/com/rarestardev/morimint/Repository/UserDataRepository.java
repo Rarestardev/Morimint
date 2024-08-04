@@ -15,7 +15,7 @@ import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Activities.SignInActivity;
 import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiService;
-import com.rarestardev.morimint.Api.ApiResponse;
+import com.rarestardev.morimint.Response.ApiResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
 

@@ -2,10 +2,13 @@ package com.rarestardev.morimint.Api;
 
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
-import com.rarestardev.morimint.Model.GiftCodeModel;
+import com.rarestardev.morimint.Response.SiteGiftCodeResponse;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.TaskModel;
 import com.rarestardev.morimint.Model.Users;
+import com.rarestardev.morimint.Response.ApiResponse;
+import com.rarestardev.morimint.Response.AppGiftCodeResponse;
+import com.rarestardev.morimint.Response.SingleResponse;
 
 import java.util.List;
 
@@ -74,11 +77,11 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/user/giftcheck")
-    Call<ApiResponse> SiteGiftCode(@Header("Authorization") String token, @Body GiftCodeModel giftCodeModel);
+    Call<ApiResponse> SiteGiftCode(@Header("Authorization") String token, @Body SiteGiftCodeResponse siteGiftCodeResponse);
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("/user/code")
-    Call<ApiResponse> GiftCode(@Header("Authorization") String token, @Body String code);
+    Call<AppGiftCodeResponse> GiftCode(@Header("Authorization") String token, @Part("code") RequestBody code);
 
     @Multipart
     @PUT("/user/resetpassword")

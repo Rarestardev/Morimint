@@ -19,13 +19,14 @@ import com.rarestardev.morimint.Adapters.DailyRewardAdapter;
 import com.rarestardev.morimint.Adapters.MoriNewsAdapter;
 import com.rarestardev.morimint.Adapters.TaskListAdapter;
 import com.rarestardev.morimint.Api.ApiClient;
-import com.rarestardev.morimint.Api.ApiResponse;
+import com.rarestardev.morimint.Response.ApiResponse;
 import com.rarestardev.morimint.Api.ApiService;
-import com.rarestardev.morimint.Api.SingleResponse;
+import com.rarestardev.morimint.Response.AppGiftCodeResponse;
+import com.rarestardev.morimint.Response.SingleResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
-import com.rarestardev.morimint.Model.GiftCodeModel;
+import com.rarestardev.morimint.Response.SiteGiftCodeResponse;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.TaskModel;
 
@@ -34,6 +35,8 @@ import java.net.SocketTimeoutException;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -235,9 +238,9 @@ public class ApplicationDataRepository {
         alertDialog.setCancelable(false);
         alertDialog.show();
 
-        GiftCodeModel giftCodeModel = new GiftCodeModel(code);
+        SiteGiftCodeResponse siteGiftCodeResponse = new SiteGiftCodeResponse(code);
 
-        Call<ApiResponse> call = apiService.SiteGiftCode(token, giftCodeModel);
+        Call<ApiResponse> call = apiService.SiteGiftCode(token, siteGiftCodeResponse);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
@@ -286,14 +289,15 @@ public class ApplicationDataRepository {
         dialog.setCancelable(false);
         dialog.show();
 
-        GiftCodeModel giftCodeModel = new GiftCodeModel(code);
+        RequestBody codec = RequestBody.create(MediaType.parse("text/plain"), code);
 
-        Call<ApiResponse> call = apiService.GiftCode(token, giftCodeModel.getCode());
-        call.enqueue(new Callback<ApiResponse>() {
+        Call<AppGiftCodeResponse> call = apiService.GiftCode(token, codec);
+        call.enqueue(new Callback<AppGiftCodeResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
+            public void onResponse(@NonNull Call<AppGiftCodeResponse> call, @NonNull Response<AppGiftCodeResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse apiResponse = response.body();
+                    AppGiftCodeResponse apiResponse = response.body();
+                    Log.d(UserConstants.APP_LOG_TAG, "GiftCoin : Success" + response.body());
                     String status = apiResponse.getStatus();
                     String message = apiResponse.getMessage();
                     dialog.dismiss();
@@ -315,11 +319,12 @@ public class ApplicationDataRepository {
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "GiftCoin : Error " + response.errorBody());
+                    Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<AppGiftCodeResponse> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "GiftCoin : onFailure :", t);
                 Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }

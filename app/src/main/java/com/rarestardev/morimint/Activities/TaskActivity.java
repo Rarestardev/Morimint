@@ -14,9 +14,14 @@ import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.adsbase.StartAppSDK;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class TaskActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    AppCompatTextView tvNoData;
+    AppCompatTextView tvNoData,tvWarning;
     ApplicationDataViewModel applicationDataViewModel;
     private static final String ADS_TAG = "StartApp";
 
@@ -27,6 +32,10 @@ public class TaskActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         tvNoData = findViewById(R.id.tvNoData);
+        tvWarning = findViewById(R.id.tvWarning);
+
+        tvWarning.setText(readFromAssets());
+
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
         applicationDataViewModel.getTasks(TaskActivity.this,recyclerView,tvNoData);
 
@@ -37,5 +46,23 @@ public class TaskActivity extends AppCompatActivity {
         Log.d(ADS_TAG,startAppBanner + "");
         startAppBanner.loadAd();
 
+    }
+
+
+    private String readFromAssets() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            InputStream is = getAssets().open("warning_text.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append('\n');
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 }

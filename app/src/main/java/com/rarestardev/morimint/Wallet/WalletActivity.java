@@ -1,6 +1,8 @@
 package com.rarestardev.morimint.Wallet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Dialog;
@@ -11,8 +13,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
@@ -24,7 +26,7 @@ import java.util.Objects;
 
 public class WalletActivity extends AppCompatActivity {
 
-    private ActivityWalletBinding binding;
+    ActivityWalletBinding binding;
     private static final String ADS_TAG = "StartApp";
 
     @Override
@@ -52,12 +54,21 @@ public class WalletActivity extends AppCompatActivity {
     private void ShowDialogConnectionWallet() {
         Dialog dialog = new Dialog(WalletActivity.this);
         dialog.setContentView(R.layout.connect_wallet_layout_dialog);
-        Objects.requireNonNull(getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        getWindow().setGravity(Gravity.BOTTOM);
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         dialog.setCancelable(true);
         dialog.show();
+
+
+        AppCompatTextView textAnim = dialog.findViewById(R.id.textAnim);
+        ProgressBar progressBarStatus = dialog.findViewById(R.id.progressBarStatus);
+        CardView isConnectedWallet = dialog.findViewById(R.id.isConnectedWallet);
+        CardView errorConnectedWallet = dialog.findViewById(R.id.errorConnectedWallet);
+        CardView btnConnectWallet = dialog.findViewById(R.id.btnConnectWallet);
+
+
     }
 }

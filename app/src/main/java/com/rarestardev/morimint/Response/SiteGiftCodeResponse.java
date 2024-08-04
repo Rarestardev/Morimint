@@ -1,14 +1,14 @@
-package com.rarestardev.morimint.Model;
+package com.rarestardev.morimint.Response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class GiftCodeModel {
+public class SiteGiftCodeResponse {
 
     @SerializedName("code")
     private String code;
 
 
-    public GiftCodeModel(String code) {
+    public SiteGiftCodeResponse(String code) {
         this.code = code;
     }
 

@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.Api;
+package com.rarestardev.morimint.Response;
 
 import com.google.gson.annotations.SerializedName;
 
