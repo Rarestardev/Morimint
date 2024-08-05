@@ -48,9 +48,11 @@ public class GiftCodeActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()){
                     binding.btnCheckCode.setVisibility(View.VISIBLE);
-                    binding.btnCheckCode.setOnClickListener(v -> applicationDataViewModel.SiteGiftCode(GiftCodeActivity.this,s.toString().trim()));
-                    binding.editTextCodeSite.setText("");
-                    binding.btnCheckCode.setVisibility(View.GONE);
+                    binding.btnCheckCode.setOnClickListener(v -> {
+                        applicationDataViewModel.SiteGiftCode(GiftCodeActivity.this,s.toString().trim());
+                        binding.editTextCodeSite.setText("");
+                        binding.btnCheckCode.setVisibility(View.GONE);
+                    });
                 }
             }
 
@@ -70,11 +72,11 @@ public class GiftCodeActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()){
                     binding.btnCheckCodeApp.setVisibility(View.VISIBLE);
-                    binding.btnCheckCodeApp.setOnClickListener(v ->
-                            applicationDataViewModel.GiftCode(GiftCodeActivity.this,s.toString().trim()));
-
-                    binding.editTextCodeApp.setText("");
-                    binding.btnCheckCodeApp.setVisibility(View.GONE);
+                    binding.btnCheckCodeApp.setOnClickListener(v -> {
+                        applicationDataViewModel.GiftCode(GiftCodeActivity.this,s.toString().trim());
+                        binding.editTextCodeApp.setText("");
+                        binding.btnCheckCodeApp.setVisibility(View.GONE);
+                    });
                 }
             }
 
