@@ -95,7 +95,7 @@
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:text="Qkadjanjanknxkjabshdb5646asjb" />
+                    android:text="@string/walletConnection" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/walletClick"

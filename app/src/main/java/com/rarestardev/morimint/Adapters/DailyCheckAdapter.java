@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rarestardev.morimint.Constants.UserConstants;
-import com.rarestardev.morimint.Model.DailyCheckModel;
+import com.rarestardev.morimint.OfflineModel.DailyCheckModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.CoinManagerRepository;
 import com.startapp.sdk.adsbase.Ad;
@@ -35,7 +35,6 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
     List<DailyCheckModel> dailyCheckModels;
     int currentDay;
     private static final String SHARED_PREF_NAME = "DailyCheck";
-    boolean isToday;
     private StartAppAd startAppAd;
     private static final String ADS_TAG = "StartApp";
 
@@ -61,27 +60,27 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
 
         holder.tvDaySmall.setText("Day : " + dailyCheckModels.get(position).getDay());
         holder.tvRewardSmall.setText(dailyCheckModels.get(position).getReward());
+
         boolean isClaim = dailyCheckModels.get(position).isClaimed();
-
         int Day = dailyCheckModels.get(position).getDay();
-
-        isToday = Day == currentDay;
 
         if (Day < currentDay){
             holder.bonusLockedSmall.setVisibility(View.GONE);
+
             holder.isCompleteSmall.setVisibility(View.VISIBLE);
-            holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.close_ic));
-            if (!isClaim){
-                holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.close_ic));
-            }else {
+            if (isClaim){
                 holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
+            }else {
+                holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.close_ic));
             }
         }else if (Day > currentDay){
             holder.bonusLockedSmall.setVisibility(View.VISIBLE);
+            holder.isCompleteSmall.setVisibility(View.GONE);
         }else {
+            holder.isCompleteSmall.setVisibility(View.GONE);
             holder.bonusLockedSmall.setVisibility(View.GONE);
-            holder.items.setOnClickListener(v -> {
-                if (!isClaim) {
+            if (!isClaim){
+                holder.items.setOnClickListener(v -> {
                     long coin = dailyCheckModels.get(position).getCoin();
                     final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
                     dialog.setTitle("Loading");
@@ -105,6 +104,8 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
                                         saveRewardStatus(dailyCheckModels.get(position).getDay());
                                         CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
                                         coinManagerRepository.UpdateCoin(coin, context);
+                                        holder.isCompleteSmall.setVisibility(View.VISIBLE);
+                                        holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
 
                                         sweetAlertDialog.dismiss();
                                     }).show();
@@ -131,19 +132,19 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
                             Log.e(ADS_TAG, "Failed to receive interstitial ad.");
                         }
                     });
-                }
-            });
+                });
+            }else {
+                holder.isCompleteSmall.setVisibility(View.VISIBLE);
+                holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
+                holder.items.setOnClickListener(v ->
+                    Toast.makeText(context, "You have won today's prize", Toast.LENGTH_LONG).show()
+                );
+            }
+
         }
 
-        if (isClaim) {
-            holder.isCompleteSmall.setVisibility(View.VISIBLE);
-            holder.bonusLockedSmall.setVisibility(View.GONE);
-            holder.items.setOnClickListener(v -> Toast.makeText(context, "You won today's prize!", Toast.LENGTH_SHORT).show());
-        } else {
-            holder.isCompleteSmall.setVisibility(View.GONE);
-        }
+
     }
-
     @Override
     public int getItemCount() {
         return dailyCheckModels.size();

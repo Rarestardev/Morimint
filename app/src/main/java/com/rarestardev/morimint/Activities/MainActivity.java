@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -30,13 +31,13 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
-import com.rarestardev.morimint.Utilities.CustomLevelDialog;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.Utilities.DailyUpdater;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.Utilities.WelcomeDialog;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
 import com.rarestardev.morimint.Wallet.WalletActivity;
@@ -105,21 +106,20 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                startActivity(new Intent(MainActivity.this, LevelActivity.class));
                 super.onSingleClick(v);
-                CustomLevelDialog customLevelDialog = new CustomLevelDialog(MainActivity.this);
-                customLevelDialog.show();
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
-        TurboCount = sharedPreferences.getInt("turbo",0);
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
+        TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
     }
 
     private void MintHandler() {
-        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt("turbo",0);
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt("turbo", 0);
         if (currentTurbo == 2 || currentTurbo == 1) {
             binding.turboMint.setVisibility(View.VISIBLE);
             binding.turboCountLayout.setVisibility(View.VISIBLE);
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             binding.turbo.setVisibility(View.GONE);
             MintCoinAnimation();
             binding.turboMint.setOnClickListener(v -> TurboAnimation());
-        } else if (currentTurbo == 0){
+        } else if (currentTurbo == 0) {
             binding.turboMint.setVisibility(View.GONE);
             binding.coin.setVisibility(View.VISIBLE);
             binding.turbo.setVisibility(View.GONE);
@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void TurboAnimation() {
-        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
-        int currentTurbo = sharedPreferences.getInt("turbo",0);
-        if (currentTurbo != 0){
+        SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
+        int currentTurbo = sharedPreferences.getInt("turbo", 0);
+        if (currentTurbo != 0) {
             turboDownTimer = new CountDownTimer(12000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -175,26 +175,26 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
                 @Override
                 public void onFinish() {
-                    SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater",MODE_PRIVATE);
-                    TurboCount = sharedPreferences.getInt("turbo",0);
+                    SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
+                    TurboCount = sharedPreferences.getInt("turbo", 0);
                     binding.turbo.setVisibility(View.GONE);
                     if (TurboCount == 2) {
                         TurboCount = 1;
-                    }else if (TurboCount == 1){
+                    } else if (TurboCount == 1) {
                         TurboCount = 0;
                         binding.turboCountLayout.setVisibility(View.GONE);
                         turboDownTimer.cancel();
                     }
                     binding.tvTurboCount.setText(String.valueOf(TurboCount));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("turbo",TurboCount);
+                    editor.putInt("turbo", TurboCount);
                     editor.apply();
 
                     MintHandler();
                 }
             };
             turboDownTimer.start();
-        }else {
+        } else {
             MintHandler();
         }
     }
@@ -244,9 +244,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         TextView animationTextView = new TextView(MainActivity.this);
 
-        if (binding.turbo.getVisibility() == View.GONE){
+        if (binding.turbo.getVisibility() == View.GONE) {
             animationTextView.setText("+" + progressBarManager.getMinter());
-        }else {
+        } else {
             animationTextView.setText("+" + progressBarManager.getMinter() * 3);
         }
         animationTextView.setTextSize(30);
@@ -452,7 +452,19 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         if (binding.tvBalanceCoin.getText().toString().isEmpty()) {
             binding.tvBalanceCoin.setText("0");
         }
-        HandleResponseData();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("WelcomeDialog", Context.MODE_PRIVATE);
+        final String SHARED_KEY = "Show";
+
+        boolean showWelcome = sharedPreferences.getBoolean(SHARED_KEY, false);
+
+        WelcomeDialog welcomeDialog = new WelcomeDialog(MainActivity.this);
+        if (!showWelcome) {
+            welcomeDialog.show();
+        } else {
+            welcomeDialog.dismiss();
+        }
+
     }
 
     @Override
@@ -548,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 progressBarManager.setImageWithCurrentLevel(binding.turboImage);
                 progressBarManager.getCurrentCoin(binding.levelXpProgressBar);
 
-                if (users.getLevel() == 15){
+                if (users.getLevel() == 15) {
                     binding.tvYourLevel.setText("Level Max");
                 }
 

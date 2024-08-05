@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.Model;
+package com.rarestardev.morimint.OfflineModel;
 
 
 public class DailyCheckModel {

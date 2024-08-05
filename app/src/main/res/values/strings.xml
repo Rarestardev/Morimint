@@ -90,5 +90,7 @@
     <string name="moriAi">Mori AI Company</string>
     <string name="warning">Warning :</string>
     <string name="TonKeeper">Ton Keeper</string>
+    <string name="previous">Previous</string>
+    <string name="showAgain">Don\'t show again</string>
 
 </resources>

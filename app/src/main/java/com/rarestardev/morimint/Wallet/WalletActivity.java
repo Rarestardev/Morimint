@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
@@ -45,7 +46,7 @@ public class WalletActivity extends AppCompatActivity {
             @Override
             public void onSingleClick(View v) {
                 super.onSingleClick(v);
-                ShowDialogConnectionWallet();
+                Toast.makeText(WalletActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -68,7 +69,5 @@ public class WalletActivity extends AppCompatActivity {
         CardView isConnectedWallet = dialog.findViewById(R.id.isConnectedWallet);
         CardView errorConnectedWallet = dialog.findViewById(R.id.errorConnectedWallet);
         CardView btnConnectWallet = dialog.findViewById(R.id.btnConnectWallet);
-
-
     }
 }

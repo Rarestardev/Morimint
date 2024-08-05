@@ -12,6 +12,7 @@
         <item name="colorOnSecondary">@color/TextColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">@color/black</item>
         <!-- Customize your theme here. -->
 
         <item name="android:screenOrientation">portrait</item>

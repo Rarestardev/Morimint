@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
@@ -21,9 +24,11 @@ import java.io.InputStreamReader;
 
 public class TaskActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    AppCompatTextView tvNoData,tvWarning;
+    AppCompatTextView tvNoData,tvWarning,warning_frame;
     ApplicationDataViewModel applicationDataViewModel;
     private static final String ADS_TAG = "StartApp";
+    Handler handler = new Handler();
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,19 @@ public class TaskActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         tvNoData = findViewById(R.id.tvNoData);
         tvWarning = findViewById(R.id.tvWarning);
+        warning_frame = findViewById(R.id.warning_frame);
 
         tvWarning.setText(readFromAssets());
+
+
+        runnable = () -> {
+            YoYo.with(Techniques.Flash).duration(500).playOn(warning_frame);
+
+            handler.postDelayed(runnable,1000);
+        };
+
+        handler.post(runnable);
+
 
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
         applicationDataViewModel.getTasks(TaskActivity.this,recyclerView,tvNoData);
@@ -64,5 +80,23 @@ public class TaskActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.post(runnable);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 }

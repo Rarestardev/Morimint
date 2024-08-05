@@ -113,7 +113,7 @@ public class ProgressBarManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences("Energy Manager", Context.MODE_PRIVATE);
         int level = sharedPreferences.getInt("LEVEL", 0);
         switch (level) {
-            case 1:  // 600
+            case 1:
                 progressStatus = (int) totalBalance;
                 minProgress = 0;
                 maxProgress = (int) UserConstants.LEVEL_COIN[1];
@@ -130,7 +130,7 @@ public class ProgressBarManager {
                 break;
             case 4:
                 progressStatus = (int) totalBalance;
-                minProgress = (int) UserConstants.LEVEL_COIN[2];
+                minProgress = (int) UserConstants.LEVEL_COIN[3];
                 maxProgress = (int) UserConstants.LEVEL_COIN[4];
                 break;
             case 5:
@@ -190,10 +190,10 @@ public class ProgressBarManager {
                 break;
         }
 
-        initProgressBarValues(progressBar,maxProgress,minProgress);
+        initProgressBarValues(progressBar, maxProgress, minProgress);
     }
 
-    private void initProgressBarValues(ProgressBar progressBar ,int max,int min) {
+    private void initProgressBarValues(ProgressBar progressBar, int max, int min) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             progressBar.setMin(min);
         }
