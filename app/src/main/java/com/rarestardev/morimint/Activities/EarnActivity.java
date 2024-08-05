@@ -1,86 +1,145 @@
 package com.rarestardev.morimint.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
-import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
+import com.rarestardev.morimint.Repository.CoinManagerRepository;
 import com.rarestardev.morimint.databinding.ActivityEarnBinding;
 import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class EarnActivity extends AppCompatActivity {
     ActivityEarnBinding binding;
-    ApplicationDataViewModel applicationDataViewModel;
-    private static final String ADS_TAG = "StartApp";
 
+    private static final String ADS_TAG = "StartApp";
+    private static final String PREFS_NAME = "DailyUpdater";
+
+    private int chance;
+
+    private StartAppAd startAppAd;
+
+    private SweetAlertDialog dialog;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_earn);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_earn);
+
+        dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
 
         StartAppSDK.init(this, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
         Banner startAppBanner = binding.startappBanner;
-        Log.d(ADS_TAG,startAppBanner + "");
+        Log.d(ADS_TAG, startAppBanner + "");
         startAppBanner.loadAd();
+        startAppAd = new StartAppAd(this);
 
+        updateChanceAd();
 
         binding.dailyReward.setOnClickListener(v ->
-                startActivity(new Intent(EarnActivity.this,DailyRewardActivity.class)));
+                startActivity(new Intent(EarnActivity.this, DailyRewardActivity.class)));
 
-        applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
+        binding.earnCode.setOnClickListener(v ->
+                startActivity(new Intent(EarnActivity.this, GiftCodeActivity.class)));
 
-
-        binding.editTextCodeSite.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.btnCheckCode.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty()){
-                    binding.btnCheckCode.setVisibility(View.VISIBLE);
-                    binding.btnCheckCode.setOnClickListener(v -> applicationDataViewModel.SiteGiftCode(EarnActivity.this,s.toString().trim()));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-
-        binding.editTextCodeApp.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.btnCheckCodeApp.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty()){
-                    binding.btnCheckCodeApp.setVisibility(View.VISIBLE);
-                    binding.btnCheckCodeApp.setOnClickListener(v ->
-                            applicationDataViewModel.GiftCode(EarnActivity.this,s.toString().trim()));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        MoreCoin();
 
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateChanceAd(){
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        chance = preferences.getInt("reward",0);
+
+        binding.chanceAdShow.setText("( " + chance + " / " + "3" + " )");
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private void MoreCoin() {
+        binding.makeMoney.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                if (chance == 0){
+                    Toast.makeText(EarnActivity.this, "The ad will be activated the next day", Toast.LENGTH_SHORT).show();
+                }else {
+                    dialog.setContentText("Loading...");
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    HandleAds();
+                }
+            }
+        });
+    }
+
+
+    private void HandleAds() {
+        startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO, new AdEventListener() {
+            @Override
+            public void onReceiveAd(@NonNull Ad ad) {
+                startAppAd.showAd();
+                dialog.dismiss();
+                GiftCoin();
+            }
+
+            @Override
+            public void onFailedToReceiveAd(@Nullable Ad ad) {
+                Toast.makeText(EarnActivity.this, "Try Again Later", Toast.LENGTH_SHORT).show();
+                Log.d(ADS_TAG,"Failed");
+                SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                if (preferences.getInt("reward",0) != 3){
+                    editor.putInt("reward", +1);
+                    editor.apply();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void GiftCoin(){
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        startAppAd.setVideoListener(() -> {
+            final SweetAlertDialog alertDialog = new SweetAlertDialog(EarnActivity.this,SweetAlertDialog.SUCCESS_TYPE);
+            alertDialog.setTitle("Good job");
+            alertDialog.setContentText("You received 10,000 Coins");
+            alertDialog.setCancelable(false);
+            alertDialog.setConfirmButton("Claim", sweetAlertDialog -> {
+                chance -= 1;
+                editor.putInt("reward", chance);
+                editor.apply();
+                updateChanceAd();
+                if (chance < 0) {
+                    chance = 0;
+                    editor.putInt("reward", chance);
+                    editor.apply();
+                    updateChanceAd();
+                }
+                CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
+                coinManagerRepository.UpdateCoin(10000,EarnActivity.this);
+                sweetAlertDialog.dismiss();
+            }).show();
+        });
+    }
 }

@@ -103,14 +103,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         StartActivities();
         NavigationDrawerHandle();
 
-        binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                startActivity(new Intent(MainActivity.this, LevelActivity.class));
-                super.onSingleClick(v);
-            }
-        });
-
         SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
         TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
@@ -428,6 +420,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         binding.referral.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ReferralActivity.class);
             startActivity(intent);
+        });
+
+        binding.applicationManagerLayout.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                startActivity(new Intent(MainActivity.this, LevelActivity.class));
+                super.onSingleClick(v);
+            }
         });
     }
 

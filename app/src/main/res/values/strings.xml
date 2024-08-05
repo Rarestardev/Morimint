@@ -92,5 +92,8 @@
     <string name="TonKeeper">Ton Keeper</string>
     <string name="previous">Previous</string>
     <string name="showAgain">Don\'t show again</string>
+    <string name="earnCode">Earn Code Rewards</string>
+    <string name="makeMoreMoney">More Coin :</string>
+    <string name="ShowAd">Show ad</string>
 
 </resources>

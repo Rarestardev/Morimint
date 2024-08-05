@@ -36,6 +36,7 @@
             android:layout_width="@dimen/MaxWidthViews"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
+            android:foreground="?selectableItemBackgroundBorderless"
             android:layout_marginTop="50dp"
             android:background="@drawable/card_layout_bg">
 
