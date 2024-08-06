@@ -34,13 +34,13 @@ public class DailyUpdater {
         int valueJackpotAds = sharedPreferences.getInt("jackpotAds", 0);
         int moreReward = sharedPreferences.getInt("reward", 0);
         if (value != UserConstants.TurboCountCharge && valueJackpot != UserConstants.JackpotPlayed &&
-                valueJackpotAds != UserConstants.JackpotPlayedAds && moreReward != 3) {
+                valueJackpotAds != UserConstants.JackpotPlayedAds && moreReward != 5) {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("turbo", UserConstants.TurboCountCharge);
             editor.putInt("jackpot", UserConstants.JackpotPlayed);
             editor.putInt("jackpotAds", UserConstants.JackpotPlayedAds);
-            editor.putInt("reward", 3);
+            editor.putInt("reward", 5);
             editor.apply();
         }
     }
