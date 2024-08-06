@@ -2,6 +2,7 @@ package com.rarestardev.morimint.Api;
 
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
 import com.rarestardev.morimint.Model.DailyRewardModel;
+import com.rarestardev.morimint.Response.MiniAppResponse;
 import com.rarestardev.morimint.Response.SiteGiftCodeResponse;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.TaskModel;
@@ -82,6 +83,10 @@ public interface ApiService {
     @Multipart
     @POST("/user/code")
     Call<AppGiftCodeResponse> GiftCode(@Header("Authorization") String token, @Part("code") RequestBody code);
+
+    @Multipart
+    @POST("/user/webappgiftcodcheck")
+    Call<MiniAppResponse> MiniAppBonusCode(@Header("Authorization") String token, @Part("code") RequestBody code);
 
     @Multipart
     @PUT("/user/resetpassword")

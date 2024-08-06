@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/base_app_bg"
+        tools:context=".Activities.ReferralActivity">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/referral_ic"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="60dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/total_invite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_gravity="center_horizontal"
+                android:textSize="25sp"
+                tools:text="0 Referral"
+                android:layout_marginTop="5dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/totalBonus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="+ 300 000"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textColor="#00C853" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invite 1 frens : 10.000"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ScrollView
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:scrollbars="none"
+            android:layout_below="@id/layout"
+            android:layout_above="@id/invite_layout"
+            android:layout_marginBottom="45dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNoData"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    tools:text="@string/noData"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/referral_item" />
+            </RelativeLayout>
+
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/invite_layout"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/inviteCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Invite Code : 5161516516515615"
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@id/btnCopyReferralCode" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCopyReferralCode"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/card_layout_bg"
+                android:textColor="@color/white"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/copy"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                tools:ignore="RelativeOverlap" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

@@ -1,4 +1,4 @@
-package com.rarestardev.morimint.Utilities;
+package com.rarestardev.morimint.ApplicationSetup;
 
 import android.content.Context;
 import android.content.SharedPreferences;

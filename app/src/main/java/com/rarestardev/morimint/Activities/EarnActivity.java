@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -41,7 +42,11 @@ public class EarnActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_earn);
+        if (isTabletMode()){
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_earn_tablet);
+        }else {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_earn);
+        }
 
         dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
 
@@ -54,7 +59,7 @@ public class EarnActivity extends AppCompatActivity {
 
         updateChanceAd();
 
-        binding.dailyReward.setOnClickListener(v ->
+        binding.rewardLayout.setOnClickListener(v ->
                 startActivity(new Intent(EarnActivity.this, DailyRewardActivity.class)));
 
         binding.earnCode.setOnClickListener(v ->
@@ -64,12 +69,24 @@ public class EarnActivity extends AppCompatActivity {
 
     }
 
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
+    }
+
     @SuppressLint("SetTextI18n")
     private void updateChanceAd(){
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         chance = preferences.getInt("reward",0);
 
-        binding.chanceAdShow.setText("( " + chance + " / " + "3" + " )");
+        binding.chanceAdShow.setText("( " + chance + " / " + "5" + " )");
     }
 
 
@@ -108,7 +125,7 @@ public class EarnActivity extends AppCompatActivity {
                 SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
 
-                if (preferences.getInt("reward",0) != 3){
+                if (preferences.getInt("reward",0) != 5){
                     editor.putInt("reward", +1);
                     editor.apply();
                 }

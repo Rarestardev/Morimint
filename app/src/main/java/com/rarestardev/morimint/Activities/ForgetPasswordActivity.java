@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -23,12 +24,31 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
+
+        if (isTabletMode()){
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password_tablet);
+        }else {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
+        }
+
+
 
         binding.btnSendLink.setOnClickListener(v -> {
             String email_address = String.valueOf(binding.editTextEmail.getText());
             ChangePassword(email_address);
         });
+    }
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 
     private void ChangePassword(String email_address) {

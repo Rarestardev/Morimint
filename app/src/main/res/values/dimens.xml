@@ -67,7 +67,6 @@
     <dimen name="moriNewsIcon">40dp</dimen>
 
 
-
     <dimen name="dailyRewardTitleLayoutHeight">50dp</dimen>
     <dimen name="dailyCheckItemHeight">100dp</dimen>
     <dimen name="dailyCheckIconSize">80dp</dimen>

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.rarestardev.morimint.Adapters.InformationJackpotAdapter;
@@ -34,7 +35,12 @@ public class JackpotInformationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_jackpot_information);
+
+        if (isTabletMode()){
+            setContentView(R.layout.activity_jackpot_information_tablet);
+        }else {
+            setContentView(R.layout.activity_jackpot_information);
+        }
         recyclerView = findViewById(R.id.recyclerView);
         tvDescJackpot = findViewById(R.id.tvDescJackpot);
 
@@ -93,6 +99,18 @@ public class JackpotInformationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 
 }

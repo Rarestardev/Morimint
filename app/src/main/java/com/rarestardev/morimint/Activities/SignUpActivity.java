@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -25,7 +26,12 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+
+        if (isTabletMode()) {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up_tablet);
+        } else {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+        }
 
 
         // start sign in
@@ -83,15 +89,13 @@ public class SignUpActivity extends AppCompatActivity {
             String inputRef = String.valueOf(binding.editTextReferral.getText());
 
             try {
-                if (!inputRef.isEmpty()){
+                if (!inputRef.isEmpty()) {
                     referral = Long.parseLong(inputRef);
-                }else
+                } else
                     referral = 0;
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-
-
 
 
             CheckInputFieldsValue(username, email, password, repeat, referral);
@@ -132,8 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
                 // all fields not error and complete register user account
 
 
-
-                SignUpAccount(username, email, password,referral);
+                SignUpAccount(username, email, password, referral);
 
             }
 
@@ -146,9 +149,21 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void SignUpAccount(String username, String email, String password,long referral) {
+    private void SignUpAccount(String username, String email, String password, long referral) {
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
-        userDataViewModel.SignUp(SignUpActivity.this,username,email,password,referral);
+        userDataViewModel.SignUp(SignUpActivity.this, username, email, password, referral);
+    }
+
+    private boolean isTabletMode() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 }

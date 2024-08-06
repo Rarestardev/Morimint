@@ -47,7 +47,7 @@
     <string name="chance">CHANCES</string>
     <string name="informationJackpot">More Information</string>
 
-    <!-- Notification -->
+    <!-- NotificationModel -->
 
     <!-- Daily Reward -->
     <string name="dailyCheck">DAILY CHECK</string>
@@ -95,5 +95,10 @@
     <string name="earnCode">Earn Code Rewards</string>
     <string name="makeMoreMoney">More Coin :</string>
     <string name="ShowAd">Show ad</string>
+    <string name="giftCode">Gift Code</string>
+    <string name="codeMiniApp">Enter the code you got in the MiniApp</string>
+    <string name="next">Next</string>
+
+    <string name="notificationModel">Notification</string>
 
 </resources>

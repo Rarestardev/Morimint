@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -24,7 +25,7 @@ import java.io.InputStreamReader;
 
 public class TaskActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    AppCompatTextView tvNoData,tvWarning,warning_frame;
+    AppCompatTextView tvNoData, tvWarning, warning_frame;
     ApplicationDataViewModel applicationDataViewModel;
     private static final String ADS_TAG = "StartApp";
     Handler handler = new Handler();
@@ -33,7 +34,12 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task);
+
+        if (isTabletMode()) {
+            setContentView(R.layout.activity_task_tablet);
+        } else {
+            setContentView(R.layout.activity_task);
+        }
 
         recyclerView = findViewById(R.id.recyclerView);
         tvNoData = findViewById(R.id.tvNoData);
@@ -46,20 +52,20 @@ public class TaskActivity extends AppCompatActivity {
         runnable = () -> {
             YoYo.with(Techniques.Flash).duration(500).playOn(warning_frame);
 
-            handler.postDelayed(runnable,1000);
+            handler.postDelayed(runnable, 1000);
         };
 
         handler.post(runnable);
 
 
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-        applicationDataViewModel.getTasks(TaskActivity.this,recyclerView,tvNoData);
+        applicationDataViewModel.getTasks(TaskActivity.this, recyclerView, tvNoData);
 
 
         StartAppSDK.init(this, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
         Banner startAppBanner = findViewById(R.id.startapp_banner);
-        Log.d(ADS_TAG,startAppBanner + "");
+        Log.d(ADS_TAG, startAppBanner + "");
         startAppBanner.loadAd();
 
     }
@@ -98,5 +104,17 @@ public class TaskActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+    }
+
+    private boolean isTabletMode() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 }

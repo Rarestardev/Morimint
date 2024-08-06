@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/base_app_bg"
+        android:orientation="vertical"
+        tools:context=".Activities.DailyCheckActivity">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/titleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/startapp_banner"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/TitleActivityImageSize"
+                android:layout_height="@dimen/TitleActivityImageSize"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/TitleActivityMarginTop"
+                android:src="@drawable/daily_reward_ic_t" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/dailyReward"
+                android:textColor="@color/white"
+                android:textSize="@dimen/TitleActivity" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dailyRewardTitleLayoutHeight"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/days_bg"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="@string/dailyRewardDesc"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rewardRecyclerView"
+                android:layout_width="550dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/daily_bonus_item_small" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <com.startapp.sdk.ads.banner.Banner
+            android:id="@+id/startapp_banner"
+            android:layout_width="550dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+</layout>

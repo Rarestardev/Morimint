@@ -3,8 +3,8 @@ package com.rarestardev.morimint.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -45,9 +45,9 @@ public class LevelActivity extends AppCompatActivity {
 
     long totalBalance;
     int currentLevel;
-    private int progressStatus;
-    private int maxProgress;
-    private int minProgress;
+    int progressStatus;
+    int maxProgress;
+    int minProgress;
 
     List<LevelManagerModel> levelManagerModels = new ArrayList<>();
 
@@ -57,7 +57,13 @@ public class LevelActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_level);
+
+        if (isTabletMode()){
+            binding = DataBindingUtil.setContentView(this,R.layout.activity_level_tablet);
+        }else {
+            binding = DataBindingUtil.setContentView(this,R.layout.activity_level);
+        }
+
 
         progressBarManager = new ProgressBarManager(this);
 
@@ -81,6 +87,18 @@ public class LevelActivity extends AppCompatActivity {
         setImageWithLevel();
         levelManager();
         ProgressBar();
+    }
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 
     private void ProgressBar() {

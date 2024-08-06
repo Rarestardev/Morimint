@@ -3,6 +3,7 @@ package com.rarestardev.morimint.Activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
@@ -25,7 +26,11 @@ public class GiftCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_gift_code);
+        if (isTabletMode()){
+            binding = DataBindingUtil.setContentView(this,R.layout.activity_gift_code_tablet);
+        }else {
+            binding = DataBindingUtil.setContentView(this,R.layout.activity_gift_code);
+        }
 
 
         StartAppSDK.init(this, UserConstants.startAppId, true);
@@ -85,5 +90,42 @@ public class GiftCodeActivity extends AppCompatActivity {
             }
         });
 
+
+        binding.editTextMiniApp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.btnCheckCodeMiniApp.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().isEmpty()){
+                    binding.btnCheckCodeMiniApp.setVisibility(View.VISIBLE);
+                    binding.btnCheckCodeMiniApp.setOnClickListener(v -> {
+                        applicationDataViewModel.MiniAppCode(GiftCodeActivity.this,s.toString().trim());
+                        binding.btnCheckCodeMiniApp.setVisibility(View.GONE);
+                        binding.editTextMiniApp.setText("");
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 }

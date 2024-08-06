@@ -109,7 +109,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="15dp"
                         android:background="@drawable/corner_cards"
                         android:padding="1dp"
                         app:layout_constraintStart_toEndOf="@id/open_drawer"
@@ -164,7 +164,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginStart="3dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="9dp"
                         android:src="@drawable/base_profile_ic"
                         app:layout_constraintStart_toEndOf="@id/open_drawer"
                         app:layout_constraintTop_toTopOf="parent"
@@ -172,11 +172,11 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/open_drawer"
-                        android:layout_width="25dp"
+                        android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="20dp"
-                        android:background="?selectableItemBackgroundBorderless"
+                        android:layout_marginTop="24dp"
+                        android:foreground="?selectableItemBackgroundBorderless"
                         android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -184,50 +184,61 @@
                         <View
                             android:layout_width="16dp"
                             android:layout_height="2dp"
+                            android:layout_gravity="center_horizontal"
                             android:background="@color/white" />
 
                         <View
                             android:layout_width="16dp"
                             android:layout_height="2dp"
                             android:layout_marginTop="7dp"
+                            android:layout_gravity="center_horizontal"
                             android:background="@color/white" />
 
                         <View
                             android:layout_width="16dp"
                             android:layout_height="2dp"
+                            android:layout_gravity="center_horizontal"
                             android:layout_marginTop="7dp"
                             android:background="@color/white" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvDay"
-                        android:layout_width="70dp"
+                    <RelativeLayout
+                        android:layout_width="95dp"
                         android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="15dp"
-                        android:background="@drawable/days_bg"
-                        android:gravity="center"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="9 0" />
+                        app:layout_constraintTop_toTopOf="@id/profileLayout"
+                        android:background="@drawable/days_bg"
+                        android:layout_marginEnd="10dp"
+                        >
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="@string/days"
-                        android:textAllCaps="true"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@id/tvDay"
-                        app:layout_constraintStart_toStartOf="@id/tvDay"
-                        app:layout_constraintTop_toBottomOf="@id/tvDay" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_toStartOf="@id/viewDay"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            tools:text="90" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/viewDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="15dp"
+                            android:textStyle="normal"
+                            android:text="@string/days" />
+
+                    </RelativeLayout>
+
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/mint_logo"
@@ -290,7 +301,8 @@
                                     android:layout_marginTop="@dimen/avatarMarginTop"
                                     android:padding="5dp"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/level_one" />
+                                    android:src="@drawable/level_one"
+                                    tools:ignore="ImageContrastCheck" />
                             </FrameLayout>
 
                             <FrameLayout
@@ -419,16 +431,17 @@
                             android:id="@+id/tvYourLevel"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
+                            android:gravity="center_vertical"
                             android:text="@string/yourLevel"
+                            android:textAlignment="gravity"
                             android:textColor="@color/white"
                             android:textSize="@dimen/tvYourLevel"
                             android:textStyle="bold"
-                            android:textAlignment="gravity"
-                            android:gravity="center_vertical"
                             app:layout_constraintBottom_toBottomOf="@id/level_xp_progressBar"
                             app:layout_constraintEnd_toEndOf="@id/tvEnergy"
                             app:layout_constraintStart_toStartOf="@id/tvEnergy"
-                            app:layout_constraintTop_toTopOf="@id/level_xp_progressBar" />
+                            app:layout_constraintTop_toTopOf="@id/level_xp_progressBar"
+                            />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/level_layout"

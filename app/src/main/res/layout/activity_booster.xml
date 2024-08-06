@@ -138,6 +138,7 @@
             app:layout_constraintTop_toBottomOf="@id/change"
             android:layout_marginTop="15dp"
             android:background="@drawable/card_layout_bg"
+            android:foreground="?selectableItemBackgroundBorderless"
             android:text="@string/payTransfer"
             android:fontFamily="@font/opensans_bold"
             android:textSize="18sp"

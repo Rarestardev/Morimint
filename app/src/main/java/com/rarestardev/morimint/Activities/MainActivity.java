@@ -20,6 +20,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +35,7 @@ import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
-import com.rarestardev.morimint.Utilities.DailyUpdater;
+import com.rarestardev.morimint.ApplicationSetup.DailyUpdater;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
 import com.rarestardev.morimint.Utilities.WelcomeDialog;
@@ -87,7 +88,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        if (isTabletMode()){
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_main_tablet);
+        }else {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        }
 
         networkChangeReceiver = new NetworkChangeReceiver(this);
 
@@ -109,6 +114,22 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         MintHandler();
     }
 
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
+    }
+
+
+
+    // handle turbo mode is on or off
     private void MintHandler() {
         SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
         int currentTurbo = sharedPreferences.getInt("turbo", 0);
@@ -411,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         binding.earn.setOnClickListener(v ->
                 startActivity(new Intent(this, EarnActivity.class)));
 
-        binding.jackpot.setOnClickListener(v ->
+        binding.jackpotViewLayout.setOnClickListener(v ->
                 startActivity(new Intent(this, JackpotActivity.class)));
 
         binding.wallet.setOnClickListener(v ->

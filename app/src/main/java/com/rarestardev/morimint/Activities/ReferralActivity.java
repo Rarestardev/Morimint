@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,24 +33,29 @@ public class ReferralActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_referral);
+        if (isTabletMode()) {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_referral_tablet);
+        } else {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_referral);
+        }
+
 
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         userDataViewModel.getUserData(this).observe(this, users -> {
             List<ReferralTeamModel> referralTeamModels = users.getInvited_users();
-            if (referralTeamModels != null){
-                ReferralTeamAdapter referralTeamAdapter = new ReferralTeamAdapter(ReferralActivity.this,referralTeamModels);
+            if (referralTeamModels != null) {
+                ReferralTeamAdapter referralTeamAdapter = new ReferralTeamAdapter(ReferralActivity.this, referralTeamModels);
                 binding.recyclerView.setLayoutManager(new LinearLayoutManager(ReferralActivity.this));
                 binding.recyclerView.setHasFixedSize(true);
                 binding.recyclerView.setAdapter(referralTeamAdapter);
                 binding.recyclerView.refreshDrawableState();
                 int total_friend = referralTeamModels.size();
 
-                if (total_friend == 0){
+                if (total_friend == 0) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.tvNoData.setVisibility(View.VISIBLE);
                     binding.tvNoData.setText("No friends!");
-                }else {
+                } else {
                     binding.recyclerView.setVisibility(View.VISIBLE);
                     binding.tvNoData.setVisibility(View.GONE);
                 }
@@ -77,5 +83,17 @@ public class ReferralActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isTabletMode() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 }

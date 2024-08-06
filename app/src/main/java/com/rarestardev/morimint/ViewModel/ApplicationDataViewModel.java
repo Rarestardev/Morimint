@@ -48,4 +48,8 @@ public class ApplicationDataViewModel extends ViewModel {
         applicationDataRepository.GetTasks(context, recyclerView, textView);
     }
 
+    public void MiniAppCode(Context context,String miniAppCode){
+        applicationDataRepository.MiniAppBonusCode(context, miniAppCode);
+    }
+
 }

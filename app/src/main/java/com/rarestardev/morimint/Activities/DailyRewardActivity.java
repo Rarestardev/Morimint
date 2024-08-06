@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
@@ -26,7 +27,12 @@ public class DailyRewardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_reward);
+
+        if (isTabletMode()){
+            setContentView(R.layout.activity_daily_reward_tablet);
+        }else {
+            setContentView(R.layout.activity_daily_reward);
+        }
 
         dailyRewardRecyclerView = findViewById(R.id.dailyRewardRecyclerView);
         dailyBonus = findViewById(R.id.dailyBonus);
@@ -43,5 +49,17 @@ public class DailyRewardActivity extends AppCompatActivity {
 
 
         dailyBonus.setOnClickListener(v -> startActivity(new Intent(DailyRewardActivity.this, DailyCheckActivity.class)));
+    }
+
+    private boolean isTabletMode(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+
+        return diagonalInches >= 7.0; // Tablet 7 inches
     }
 }

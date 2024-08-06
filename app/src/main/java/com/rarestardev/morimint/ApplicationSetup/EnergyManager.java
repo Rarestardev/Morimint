@@ -91,6 +91,7 @@ public class EnergyManager {
 
     private void SetEnergyWithLevelFromServer(int level) {
         switch (level) {
+            case 0:
             case 1:
                 level_text = 1;
                 maxEnergyWithLevelFromServer = LEVEL_ENERGY[0];

@@ -22,6 +22,7 @@ import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Response.ApiResponse;
 import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Response.AppGiftCodeResponse;
+import com.rarestardev.morimint.Response.MiniAppResponse;
 import com.rarestardev.morimint.Response.SingleResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.ApplicationSetupModel;
@@ -326,6 +327,42 @@ public class ApplicationDataRepository {
             @Override
             public void onFailure(@NonNull Call<AppGiftCodeResponse> call, @NonNull Throwable t) {
                 Log.e(UserConstants.APP_LOG_TAG, "GiftCoin : onFailure :", t);
+                Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void MiniAppBonusCode(Context context, String code) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
+
+        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitle("Checked...");
+        dialog.setContentText("Please Wait");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        RequestBody codec = RequestBody.create(MediaType.parse("text/plain"), code);
+
+        Call<MiniAppResponse> call = apiService.MiniAppBonusCode(token, codec);
+        call.enqueue(new Callback<MiniAppResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MiniAppResponse> call, @NonNull Response<MiniAppResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    MiniAppResponse miniAppResponse = response.body();
+                    Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success" + response.body());
+                    dialog.dismiss();
+                    Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success");
+                } else {
+                    dialog.dismiss();
+                    Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : Error " + response.errorBody());
+                    Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MiniAppResponse> call, @NonNull Throwable t) {
+                Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : onFailure :", t);
                 Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
         });

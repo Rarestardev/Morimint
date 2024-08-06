@@ -148,6 +148,7 @@
                     android:layout_width="@dimen/SigningIconSize"
                     android:layout_height="@dimen/SigningIconSize"
                     android:src="@drawable/icon_show_password"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -199,6 +200,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     android:layout_marginEnd="10dp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -255,6 +257,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:background="@drawable/signing_button"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     android:text="@string/SignUp"
                     android:textAllCaps="true"
                     android:textSize="16sp"
@@ -270,7 +273,8 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/SignUpToSignIn"
                 android:textColor="@color/TextColor"
-                android:textSize="15sp"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <View

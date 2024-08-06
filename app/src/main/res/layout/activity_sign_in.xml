@@ -106,6 +106,7 @@
                     android:layout_width="@dimen/SigningIconSize"
                     android:layout_height="@dimen/SigningIconSize"
                     android:src="@drawable/icon_show_password"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -131,6 +132,7 @@
                     android:text="@string/SignIn"
                     android:textAllCaps="true"
                     android:textSize="16sp"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     android:textStyle="bold" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,6 +159,7 @@
                     android:layout_toEndOf="@+id/view1"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="10dp"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     android:text="@string/register"
                     android:textColor="#662483"
                     android:textSize="16sp"
@@ -182,6 +185,7 @@
                     android:layout_toEndOf="@id/view2"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="10dp"
+                    android:foreground="?selectableItemBackgroundBorderless"
                     android:text="@string/Click"
                     android:textColor="#662483"
                     android:textSize="15sp"

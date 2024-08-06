@@ -4,9 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.AD_ID" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
         tools:node="remove" />
@@ -27,6 +29,11 @@
         android:theme="@style/Theme.Morimint"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.NotificationsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity"  />
         <activity
             android:name=".Activities.GiftCodeActivity"
             android:exported="false"
@@ -129,10 +136,18 @@
             android:value="207548984" />
         <meta-data
             android:name="com.startapp.sdk.RETURN_ADS_ENABLED"
-            android:value="false" />
+            android:value="true" />
         <meta-data
             android:name="com.startapp.sdk.MIXED_AUDIENCE"
             android:value="true" />
+
+        <service
+            android:name=".Notifications.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
