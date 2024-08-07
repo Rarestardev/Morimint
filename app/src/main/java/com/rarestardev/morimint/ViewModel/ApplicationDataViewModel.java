@@ -3,6 +3,7 @@ package com.rarestardev.morimint.ViewModel;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +29,8 @@ public class ApplicationDataViewModel extends ViewModel {
         applicationDataRepository.GetDataMoriNews(context, recyclerView);
     }
 
-    public void PinnedNews(TextView textView){
-        applicationDataRepository.GetPinnedNews(textView);
+    public void PinnedNews(TextView textView, AppCompatImageView imageView){
+        applicationDataRepository.GetPinnedNews(textView,imageView);
     }
 
     public LiveData<ApplicationSetupModel> SetApplicationSetup(){

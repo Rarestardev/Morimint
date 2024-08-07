@@ -9,10 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -20,12 +18,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -542,8 +536,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 } else {
                     HandleResponseData();
                     applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-                    applicationDataViewModel.PinnedNews(binding.tvNewsMessage);
-                    binding.moriNewsDot.setVisibility(View.VISIBLE);
+                    applicationDataViewModel.PinnedNews(binding.tvNewsMessage,binding.moriNewsDot);
                 }
 
                 if (is_mint_on) {

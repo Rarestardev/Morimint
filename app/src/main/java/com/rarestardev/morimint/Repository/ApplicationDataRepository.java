@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,9 @@ import retrofit2.Response;
 
 public class ApplicationDataRepository {
 
+    private List<MoriNewsModel> previousNewsList = null;
+    long lastRequestTime = 0;
+
     ApiService apiService;
 
     public ApplicationDataRepository() {
@@ -52,7 +56,7 @@ public class ApplicationDataRepository {
 
     public void GetDataMoriNews(Context context, RecyclerView recyclerView) {
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
+        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         dialog.setTitle("Updated");
         dialog.setContentText("Please wait");
         dialog.setCancelable(false);
@@ -97,27 +101,31 @@ public class ApplicationDataRepository {
         });
     }
 
-    public void GetPinnedNews(TextView textView) {
+    public void GetPinnedNews(TextView textView, AppCompatImageView imageView) {
         Call<List<MoriNewsModel>> call = apiService.GetMoriNewsPinned(ApiClient.SERVER_TOKEN);
         call.enqueue(new Callback<List<MoriNewsModel>>() {
             @Override
             public void onResponse(@NonNull Call<List<MoriNewsModel>> call, @NonNull Response<List<MoriNewsModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<MoriNewsModel> moriNewsModel = response.body();
+                    List<MoriNewsModel> newsList = response.body();
+                    checkForNewNews(newsList, imageView);
 
-                    String msg = moriNewsModel.get(0).getContent();
-                    boolean isPin = moriNewsModel.get(0).isIs_published();
-
-                    if (msg != null){
-                        if (isPin){
-                            textView.setText(msg);
-                        }else {
-                            textView.setText("");
+                    MoriNewsModel latestPublishedNews = null;
+                    for (MoriNewsModel news : newsList) {
+                        if (news.isIs_published()) {
+                            latestPublishedNews = news;
+                            break;
                         }
-                    }else {
-                        textView.setText("");
                     }
 
+                    if (latestPublishedNews != null) {
+                        displayNews(latestPublishedNews, textView);
+                    } else {
+                        displayNews(newsList.get(0), textView);
+                    }
+
+                    previousNewsList = newsList;
+                    lastRequestTime = System.currentTimeMillis();
                 }
             }
 
@@ -126,6 +134,21 @@ public class ApplicationDataRepository {
                 Log.e(UserConstants.APP_LOG_TAG, "Pinned news : onFailure", t);
             }
         });
+    }
+
+    private void checkForNewNews(List<MoriNewsModel> newsList, AppCompatImageView imageView) {
+        if (previousNewsList == null || newsList.size() > previousNewsList.size() ||
+                (!newsList.isEmpty() && !newsList.get(0).equals(previousNewsList.get(0)))) {
+
+            imageView.setVisibility(View.VISIBLE);
+
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    private void displayNews(MoriNewsModel news, TextView textView) {
+        textView.setText(news.getContent());
     }
 
     public void DailyRewardData(RecyclerView recyclerView, Context context, TextView textView) {
@@ -354,22 +377,21 @@ public class ApplicationDataRepository {
                     String status = miniAppResponse.getStatus();
                     String msg = miniAppResponse.getMessage();
 
-                    if (status.equals("error")){
+                    if (status.equals("error")) {
 
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
+                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
                         alertDialog.setTitle("Failed");
                         alertDialog.setContentText(msg);
                         alertDialog.setCancelable(false);
                         alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
 
-                    }else {
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.SUCCESS_TYPE);
+                    } else {
+                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                         alertDialog.setTitle(status);
                         alertDialog.setContentText(msg);
                         alertDialog.setCancelable(false);
                         alertDialog.setConfirmButton("Claim", Dialog::dismiss).show();
                     }
-
 
 
                     Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success");
@@ -378,7 +400,7 @@ public class ApplicationDataRepository {
                     Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : Error " + response.errorBody());
                     Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
 
-                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
+                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
                     alertDialog.setTitle("Failed");
                     alertDialog.setContentText("Wrong code");
                     alertDialog.setCancelable(false);
