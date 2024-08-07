@@ -120,9 +120,9 @@
                             android:id="@+id/blue_tick_icon"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:layout_toEndOf="@id/welcome"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
+                            android:layout_toEndOf="@id/welcome"
                             android:padding="4dp"
                             android:src="@drawable/blue_tick_ic"
                             android:visibility="gone" />
@@ -191,8 +191,8 @@
                         <View
                             android:layout_width="16dp"
                             android:layout_height="2dp"
-                            android:layout_marginTop="7dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="7dp"
                             android:background="@color/white" />
 
                         <View
@@ -204,34 +204,39 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvDay"
-                        android:layout_width="70dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="15dp"
-                        android:background="@drawable/days_bg"
-                        android:gravity="center"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="9 0" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="@string/days"
-                        android:textAllCaps="true"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@id/tvDay"
-                        app:layout_constraintStart_toStartOf="@id/tvDay"
-                        app:layout_constraintTop_toBottomOf="@id/tvDay" />
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/days_bg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/profileLayout">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            tools:text="90" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/viewDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            android:layout_toEndOf="@id/tvDay"
+                            android:text="@string/days"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </RelativeLayout>
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/mint_logo"
@@ -347,8 +352,8 @@
                                 android:id="@+id/turboCountLayout"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_marginBottom="5dp"
                                 android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="5dp"
                                 app:cardBackgroundColor="@android:color/holo_red_light"
                                 app:cardCornerRadius="20dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -434,8 +439,7 @@
                             app:layout_constraintBottom_toBottomOf="@id/level_xp_progressBar"
                             app:layout_constraintEnd_toEndOf="@id/tvEnergy"
                             app:layout_constraintStart_toStartOf="@id/tvEnergy"
-                            app:layout_constraintTop_toTopOf="@id/level_xp_progressBar"
-                            />
+                            app:layout_constraintTop_toTopOf="@id/level_xp_progressBar" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/level_layout"
@@ -588,8 +592,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/referral"
@@ -622,15 +625,15 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="0.3"/>
+                        android:layout_weight="0.3" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/moriNews"
                         android:layout_width="@dimen/NavigationLayoutSize"
                         android:layout_height="@dimen/NavigationLayoutSize"
                         android:layout_gravity="center_vertical"
-                        android:foreground="?selectableItemBackgroundBorderless"
-                        android:background="@drawable/card_layout_bg">
+                        android:background="@drawable/card_layout_bg"
+                        android:foreground="?selectableItemBackgroundBorderless">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/newsIcon"
@@ -670,7 +673,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="0.3"/>
+                        android:layout_weight="0.3" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/task"
@@ -704,7 +707,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="0.3"/>
+                        android:layout_weight="0.3" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/earn"
@@ -738,7 +741,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="0.3"/>
+                        android:layout_weight="0.3" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/wallet"

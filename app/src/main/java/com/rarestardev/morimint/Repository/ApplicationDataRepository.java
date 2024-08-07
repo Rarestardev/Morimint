@@ -350,13 +350,39 @@ public class ApplicationDataRepository {
             public void onResponse(@NonNull Call<MiniAppResponse> call, @NonNull Response<MiniAppResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     MiniAppResponse miniAppResponse = response.body();
-                    Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success" + response.body());
                     dialog.dismiss();
+                    String status = miniAppResponse.getStatus();
+                    String msg = miniAppResponse.getMessage();
+
+                    if (status.equals("error")){
+
+                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
+                        alertDialog.setTitle("Failed");
+                        alertDialog.setContentText(msg);
+                        alertDialog.setCancelable(false);
+                        alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
+
+                    }else {
+                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.SUCCESS_TYPE);
+                        alertDialog.setTitle(status);
+                        alertDialog.setContentText(msg);
+                        alertDialog.setCancelable(false);
+                        alertDialog.setConfirmButton("Claim", Dialog::dismiss).show();
+                    }
+
+
+
                     Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success");
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : Error " + response.errorBody());
                     Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
+
+                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
+                    alertDialog.setTitle("Failed");
+                    alertDialog.setContentText("Wrong code");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
                 }
             }
 

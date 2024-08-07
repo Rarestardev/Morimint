@@ -204,7 +204,7 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <RelativeLayout
-                        android:layout_width="95dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/profileLayout"
@@ -220,9 +220,8 @@
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            android:layout_toStartOf="@id/viewDay"
                             android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
+                            android:layout_marginStart="10dp"
                             tools:text="90" />
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -232,8 +231,8 @@
                             android:layout_centerVertical="true"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_toEndOf="@id/tvDay"
                             android:textStyle="normal"
                             android:text="@string/days" />
 

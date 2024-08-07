@@ -9,8 +9,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,8 +20,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -88,9 +95,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isTabletMode()){
+        if (isTabletMode()) {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main_tablet);
-        }else {
+        } else {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         }
 
@@ -112,10 +119,30 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
+
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra("from_notification",false)){
+            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "App Open", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
-    private boolean isTabletMode(){
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent != null && intent.getBooleanExtra("from_notification",false)){
+            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "App Open", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isTabletMode() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -126,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         return diagonalInches >= 7.0; // Tablet 7 inches
     }
-
 
 
     // handle turbo mode is on or off
