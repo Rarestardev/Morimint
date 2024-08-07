@@ -1,17 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 
 android {
-    namespace 'com.rarestardev.morimint'
+    namespace = "com.rarestardev.morimint"
     compileSdk 34
 
     defaultConfig {
         applicationId "com.rarestardev.morimint"
         minSdk 24
-        //noinspection OldTargetApi
         targetSdk 33
         versionCode 1
-        versionName "1.0.1"
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,7 +27,7 @@ android {
     }
 
     dataBinding {
-        enable true
+        enabled(true)
     }
     buildFeatures {
         viewBinding true
@@ -44,10 +43,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity:1.9.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    implementation 'com.google.android.gms:play-services-appset:16.1.0'
 
     // Rounded ImageView
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -68,10 +69,5 @@ dependencies {
 
     // Ad Platform : StartApp.io
     implementation 'com.startapp:inapp-sdk:5.0.2'
-
-    implementation 'com.google.firebase:firebase-messaging:24.0.0'
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
 }
-
-apply plugin: 'com.google.gms.google-services'
 

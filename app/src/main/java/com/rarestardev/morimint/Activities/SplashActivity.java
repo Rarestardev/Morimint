@@ -11,9 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.InternetConnection;
@@ -29,17 +26,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String token = task.getResult();
-                Log.d("FFM", "FCM Token: " + token);
-
-            } else {
-                Log.w("FFM", "Fetching FCM registration token failed", task.getException());
-            }
-        });
 
         InternetConnection connection = new InternetConnection();
         if (connection.isConnectedNetwork(this)) {
