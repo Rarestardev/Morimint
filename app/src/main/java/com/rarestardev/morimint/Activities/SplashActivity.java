@@ -1,15 +1,12 @@
 package com.rarestardev.morimint.Activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -37,12 +34,9 @@ public class SplashActivity extends AppCompatActivity {
 
         InternetConnection connection = new InternetConnection();
         if (connection.isConnectedNetwork(this)) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                showPermissionDialog();
-            }else {
-                CheckUserAndStartActivity();
-                Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
-            }
+
+            checkPermissions();
+
         } else {
             SweetAlertDialog dialog = new SweetAlertDialog(SplashActivity.this, SweetAlertDialog.ERROR_TYPE);
             dialog.setCancelable(false);
@@ -57,22 +51,15 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    private void showPermissionDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Notification Permission")
-                .setMessage("This app needs notification permission to notify you about important updates.")
-                .setPositiveButton("Allow", new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_CODE);
-                    }
-                })
-                .setNegativeButton("Deny", (dialog, which) -> {
-                    dialog.dismiss();
-                    finish();
-                })
-                .show();
+    private void checkPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_CODE);
+            }
+        }else {
+            CheckUserAndStartActivity();
+            Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
+        }
     }
 
     @Override
@@ -84,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
             }else {
                 Log.d(UserConstants.APP_LOG_TAG,"Notification denied");
+                checkPermissions();
             }
         }
     }
