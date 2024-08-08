@@ -22,4 +22,6 @@ public class UserConstants {
     public static final String startAppId = "207548984";
     public static final boolean startAppIsTested = true;
 
+    public static final String ApplicationID = "93f2b1e1-2946-4a0c-bffa-3449bb3aca6d";
+
 }

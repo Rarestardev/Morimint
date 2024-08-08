@@ -1,16 +1,23 @@
 package com.rarestardev.morimint.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.PendingIntent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Utilities.InternetConnection;
@@ -20,6 +27,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DURATION = 2500;
+    private static final int NOTIFICATION_PERMISSION_CODE = 100;
 
     @SuppressLint({"SetTextI18n", "MissingPermission"})
     @Override
@@ -29,36 +37,12 @@ public class SplashActivity extends AppCompatActivity {
 
         InternetConnection connection = new InternetConnection();
         if (connection.isConnectedNetwork(this)) {
-            new Handler().postDelayed(() -> {
-
-                SharedPreferences preferences = getSharedPreferences(UserConstants.SHARED_PREF_USER, MODE_PRIVATE);
-                String Token = preferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
-
-                Intent intent2;
-                if (Token.isEmpty()) {
-                    intent2 = new Intent(SplashActivity.this, SignUpActivity.class);
-                } else {
-                    intent2 = new Intent(SplashActivity.this, MainActivity.class);
-
-                    Intent notificationIntent = new Intent(this, MainActivity.class);
-                    notificationIntent.putExtra("from_notification", true);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-                    Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
-                            .setContentText("Content")
-                            .setContentTitle("Title")
-                            .setSmallIcon(R.drawable.morimint_app_icon)
-                            .setContentIntent(pendingIntent)
-                            .build();
-
-                    NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-                    notificationManagerCompat.notify(0, notification);
-
-
-                }
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent2);
-
-            }, SPLASH_DURATION);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                showPermissionDialog();
+            }else {
+                CheckUserAndStartActivity();
+                Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
+            }
         } else {
             SweetAlertDialog dialog = new SweetAlertDialog(SplashActivity.this, SweetAlertDialog.ERROR_TYPE);
             dialog.setCancelable(false);
@@ -71,5 +55,55 @@ public class SplashActivity extends AppCompatActivity {
             dialog.show();
         }
 
+    }
+
+    private void showPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Notification Permission")
+                .setMessage("This app needs notification permission to notify you about important updates.")
+                .setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_CODE);
+                    }
+                })
+                .setNegativeButton("Deny", (dialog, which) -> {
+                    dialog.dismiss();
+                    finish();
+                })
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == NOTIFICATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                CheckUserAndStartActivity();
+                Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
+            }else {
+                Log.d(UserConstants.APP_LOG_TAG,"Notification denied");
+            }
+        }
+    }
+
+
+    private void CheckUserAndStartActivity(){
+        new Handler().postDelayed(() -> {
+
+            SharedPreferences preferences = getSharedPreferences(UserConstants.SHARED_PREF_USER, MODE_PRIVATE);
+            String Token = preferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
+
+            Intent intent2;
+            if (Token.isEmpty()) {
+                intent2 = new Intent(SplashActivity.this, SignUpActivity.class);
+            } else {
+                intent2 = new Intent(SplashActivity.this, MainActivity.class);
+            }
+            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent2);
+
+        }, SPLASH_DURATION);
     }
 }

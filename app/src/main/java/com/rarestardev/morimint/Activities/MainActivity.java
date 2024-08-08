@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,12 +29,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
+import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.ApplicationSetup.DailyUpdater;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private static final long COIN_SHAKE_ANIMATION_TIMER = 250;
     private static final int[] animationAxis = {-250, 70, 500, 700, -200, 70, 500, -100, 70, 200};
     private static final int[] TEXT_ANIMATION_COLOR = {R.color.white, R.color.MidWhite, R.color.DarkGray, R.color.Gray};
-    private static final String TAG = "HomeLog";// Log tag
+    private static final String TAG = UserConstants.APP_LOG_TAG;// Log tag
 
     private ProgressBarManager progressBarManager;
 
@@ -113,28 +114,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
-
-
-        Intent intent = getIntent();
-        if (intent != null && intent.getBooleanExtra("from_notification",false)){
-            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "App Open", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        if (intent != null && intent.getBooleanExtra("from_notification",false)){
-            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "App Open", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private boolean isTabletMode() {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -293,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         Thread thread = new Thread(() -> {
 
-            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[1])), 500);
+            animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[1])), 400);
 
             animationTextView.postDelayed(() -> animationTextView.setTextColor(getColor(TEXT_ANIMATION_COLOR[2])), 700);
 
@@ -524,7 +505,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 is_active = applicationSetupModel.isIs_active();
                 is_mint_on = applicationSetupModel.isIs_mint_on();
                 DayValue = applicationSetupModel.getCount();
-                binding.tvDay.setText(String.valueOf(DayValue));
+
+                if (DayValue == 0) {
+                    binding.tvDay.setText(String.valueOf(90));
+                } else {
+                    binding.tvDay.setText(String.valueOf(DayValue));
+                }
 
                 if (!is_active) {
                     final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
@@ -536,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 } else {
                     HandleResponseData();
                     applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-                    applicationDataViewModel.PinnedNews(binding.tvNewsMessage,binding.moriNewsDot);
+                    applicationDataViewModel.PinnedNews(binding.tvNewsMessage, binding.moriNewsDot);
                 }
 
                 if (is_mint_on) {
@@ -553,12 +539,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 }
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(networkChangeReceiver);
     }
 
     @Override

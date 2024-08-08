@@ -1,4 +1,9 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+
+    // Add the Google services Gradle plugin
+    id 'com.google.gms.google-services'
+}
 
 
 android {
@@ -69,5 +74,9 @@ dependencies {
 
     // Ad Platform : StartApp.io
     implementation 'com.startapp:inapp-sdk:5.0.2'
+
+    // Firebase Cloud Message FCM
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation 'com.google.firebase:firebase-messaging'
 }
 

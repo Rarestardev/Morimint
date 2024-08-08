@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1089383397148",
+    "project_id": "morimint-b8a09",
+    "storage_bucket": "morimint-b8a09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089383397148:android:a6da821bf773f3b2c82cd9",
+        "android_client_info": {
+          "package_name": "com.rarestardev.morimint"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHOlGiqF-Ut1fNG08XqxddDgkO1T25igc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

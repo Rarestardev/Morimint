@@ -100,5 +100,6 @@
     <string name="next">Next</string>
 
     <string name="notificationModel">Notification</string>
+    <string name="default_notification_channel_id">BaseCHannelID</string>
 
 </resources>
