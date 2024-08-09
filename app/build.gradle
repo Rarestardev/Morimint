@@ -66,9 +66,6 @@ dependencies {
     // Animation
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
 
-    // Picasso
-    implementation 'com.squareup.picasso:picasso:2.8'
-
     // Dialog
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
 
@@ -78,5 +75,8 @@ dependencies {
     // Firebase Cloud Message FCM
     implementation platform('com.google.firebase:firebase-bom:33.1.2')
     implementation 'com.google.firebase:firebase-messaging'
+
+
+    implementation('com.getkeepsafe.taptargetview:taptargetview:1.13.3')
 }
 

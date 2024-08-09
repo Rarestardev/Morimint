@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +26,8 @@ public class ApplicationDataViewModel extends ViewModel {
     }
 
 
-    public void SetDataMoriNews(Context context,RecyclerView recyclerView){
-        applicationDataRepository.GetDataMoriNews(context, recyclerView);
+    public void SetDataMoriNews(Context context, RecyclerView recyclerView, AppCompatTextView textView){
+        applicationDataRepository.GetDataMoriNews(context, recyclerView,textView);
     }
 
     public void PinnedNews(TextView textView, AppCompatImageView imageView){

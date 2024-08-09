@@ -32,6 +32,20 @@
             android:textSize="@dimen/TitleActivity"
             />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoData"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:text="@string/noData"
+            android:textSize="18sp"
+            android:fontFamily="@font/opensans_bold"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMoriNews"
             android:layout_width="match_parent"
@@ -41,6 +55,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
+            android:visibility="gone"
             />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -3,6 +3,7 @@ package com.rarestardev.morimint.Repository;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,7 +56,7 @@ public class ApplicationDataRepository {
         apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public void GetDataMoriNews(Context context, RecyclerView recyclerView) {
+    public void GetDataMoriNews(Context context, RecyclerView recyclerView, AppCompatTextView noData) {
 
         final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         dialog.setTitle("Updated");
@@ -69,11 +71,19 @@ public class ApplicationDataRepository {
                 if (response.body() != null) {
                     dialog.dismiss();
                     List<MoriNewsModel> moriNewsModel = response.body();
-                    MoriNewsAdapter adapter = new MoriNewsAdapter(moriNewsModel, context);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.refreshDrawableState();
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setAdapter(adapter);
+
+                    if (moriNewsModel.isEmpty()){
+                        noData.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    }else {
+                        noData.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        MoriNewsAdapter adapter = new MoriNewsAdapter(moriNewsModel, context);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.refreshDrawableState();
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setAdapter(adapter);
+                    }
                 }
                 if (response.isSuccessful()) {
                     Log.d(UserConstants.APP_LOG_TAG, "MoriNews : Success");
@@ -120,9 +130,10 @@ public class ApplicationDataRepository {
 
                     if (latestPublishedNews != null) {
                         displayNews(latestPublishedNews, textView);
-                    } else {
+                    } else if (!newsList.isEmpty()){
                         displayNews(newsList.get(0), textView);
                     }
+
 
                     previousNewsList = newsList;
                     lastRequestTime = System.currentTimeMillis();
@@ -140,7 +151,11 @@ public class ApplicationDataRepository {
         if (previousNewsList == null || newsList.size() > previousNewsList.size() ||
                 (!newsList.isEmpty() && !newsList.get(0).equals(previousNewsList.get(0)))) {
 
-            imageView.setVisibility(View.VISIBLE);
+            if (newsList.isEmpty()){
+                imageView.setVisibility(View.GONE);
+            }else {
+                imageView.setVisibility(View.VISIBLE);
+            }
 
         } else {
             imageView.setVisibility(View.GONE);
@@ -148,7 +163,13 @@ public class ApplicationDataRepository {
     }
 
     private void displayNews(MoriNewsModel news, TextView textView) {
-        textView.setText(news.getContent());
+        String mNews = news.getContent();
+
+        if (!TextUtils.isEmpty(mNews)){
+            textView.setText(news.getContent());
+        }else {
+            textView.setText("");
+        }
     }
 
     public void DailyRewardData(RecyclerView recyclerView, Context context, TextView textView) {
@@ -422,17 +443,24 @@ public class ApplicationDataRepository {
             @Override
             public void onResponse(@NonNull Call<List<TaskModel>> call, @NonNull Response<List<TaskModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    textView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
+
                     List<TaskModel> tasks = response.body();
-                    TaskListAdapter adapter = new TaskListAdapter(context, tasks);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.refreshDrawableState();
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setAdapter(adapter);
+
+                    if (tasks.isEmpty()){
+                        textView.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    }else {
+                        textView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        TaskListAdapter adapter = new TaskListAdapter(context, tasks);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.refreshDrawableState();
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(adapter);
+                    }
+
                 } else {
-                    textView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
+
                     try {
                         assert response.errorBody() != null;
                         Log.e(UserConstants.APP_LOG_TAG, "GetTask :" + response.errorBody().string());

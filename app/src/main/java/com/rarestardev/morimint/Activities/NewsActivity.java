@@ -1,6 +1,7 @@
 package com.rarestardev.morimint.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import com.startapp.sdk.adsbase.StartAppSDK;
 
 public class NewsActivity extends AppCompatActivity {
     RecyclerView recyclerViewMoriNews;
+    AppCompatTextView tvNoData;
     ApplicationDataViewModel applicationDataViewModel;
     private static final String ADS_TAG = "StartApp";
 
@@ -23,6 +25,7 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         recyclerViewMoriNews = findViewById(R.id.recyclerViewMoriNews);
+        tvNoData = findViewById(R.id.tvNoData);
 
         StartAppSDK.init(this, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
@@ -32,6 +35,6 @@ public class NewsActivity extends AppCompatActivity {
 
         // View Model
         applicationDataViewModel = new ViewModelProvider(this).get(ApplicationDataViewModel.class);
-        applicationDataViewModel.SetDataMoriNews(this,recyclerViewMoriNews);
+        applicationDataViewModel.SetDataMoriNews(this,recyclerViewMoriNews,tvNoData);
     }
 }

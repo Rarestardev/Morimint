@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -152,8 +153,9 @@ public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.
     }
 
     private void OpenLink(String link) {
-        if (link.isEmpty()){
-            Toast.makeText(context, "No Address link", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(link)){
+            Toast.makeText(context, "Not Active", Toast.LENGTH_SHORT).show();
+            Log.e(UserConstants.APP_LOG_TAG,"Daily Reward Adapter link is empty");
         }else {
             Intent openBrowser = new Intent(Intent.ACTION_VIEW);
             openBrowser.setData(Uri.parse(link));

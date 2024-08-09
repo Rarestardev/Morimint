@@ -32,6 +32,8 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.rarestardev.morimint.ApplicationSetup.ProgressBarManager;
 import com.rarestardev.morimint.ApplicationSetup.EnergyManager;
 import com.rarestardev.morimint.Constants.UserConstants;
@@ -487,6 +489,65 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             welcomeDialog.dismiss();
         }
 
+        if (!welcomeDialog.isShowing()){
+            showTutorialDrawer();
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void showTutorialDrawer(){
+        SharedPreferences preferences = getSharedPreferences(UserConstants.showTutorialPref,MODE_PRIVATE);
+        boolean isShowingCase = preferences.getBoolean(UserConstants.showTutorialKeyDrawer,false);
+        if (!isShowingCase){
+            final String titleHelper = "More Features";
+            final String descHelper = "Click to open drawer for more features";
+            TapTargetView.showFor(MainActivity.this, TapTarget.forView(binding.openDrawer, titleHelper,descHelper)
+                            .tintTarget(true)
+                            .outerCircleColor(R.color.progressMaxValue)
+                            .targetCircleColor(R.color.white)
+                            .textColor(R.color.white)
+                            .drawShadow(true)
+                            .cancelable(false)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean(UserConstants.showTutorialKeyDrawer,true);
+                            editor.apply();
+                            showTutorialLevelShow();
+                            view.dismiss(true);
+                        }
+                    });
+        }
+    }
+
+    private void showTutorialLevelShow() {
+        SharedPreferences preferences = getSharedPreferences(UserConstants.showTutorialPref,MODE_PRIVATE);
+        boolean isShowingCase = preferences.getBoolean(UserConstants.showTutorialKeyLevel,false);
+        if (!isShowingCase){
+            final String titleHelper = "Level Status";
+            final String descHelper = "Click for Show More your level";
+            TapTargetView.showFor(MainActivity.this, TapTarget.forView(binding.levelLayout, titleHelper,descHelper)
+                            .tintTarget(true)
+                            .outerCircleColor(R.color.progressMaxValue)
+                            .targetCircleColor(R.color.white)
+                            .textColor(R.color.white)
+                            .drawShadow(true)
+                            .cancelable(false)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean(UserConstants.showTutorialKeyLevel,true);
+                            editor.apply();
+                            view.dismiss(true);
+                        }
+                    });
+        }
     }
 
     @Override

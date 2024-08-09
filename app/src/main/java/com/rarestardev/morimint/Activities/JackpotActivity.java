@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
@@ -65,6 +68,8 @@ public class JackpotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_jackpot);
 
+        showTutorial();
+
         coinManagerViewModel = new ViewModelProvider(this).get(CoinManagerViewModel.class);
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
@@ -83,6 +88,38 @@ public class JackpotActivity extends AppCompatActivity {
 
         UpdatePlayedJackpot();
     }
+
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void showTutorial(){
+        SharedPreferences preferences = getSharedPreferences(UserConstants.showTutorialPref,MODE_PRIVATE);
+        boolean isShowingCase = preferences.getBoolean(UserConstants.showTutorialKeyJackpot,false);
+        if (!isShowingCase){
+            final String titleHelper = "How to start the game ?";
+            final String descHelper = "Click on this lever to activate the jackpot";
+            TapTargetView.showFor(JackpotActivity.this, TapTarget.forView(binding.playJackpot, titleHelper,descHelper)
+                            .tintTarget(true)
+                            .outerCircleColor(R.color.progressMaxValue)
+                            .targetCircleColor(R.color.white)
+                            .textColor(R.color.white)
+                            .drawShadow(true)
+                            .cancelable(false)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean(UserConstants.showTutorialKeyJackpot,true);
+                            editor.apply();
+                            view.dismiss(true);
+                        }
+                    });
+        }
+    }
+
+
 
     private void UpdatePlayedJackpot() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);

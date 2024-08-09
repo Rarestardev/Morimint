@@ -47,11 +47,10 @@
     <string name="chance">CHANCES</string>
     <string name="informationJackpot">More Information</string>
 
-    <!-- NotificationModel -->
-
     <!-- Daily Reward -->
     <string name="dailyCheck">DAILY CHECK</string>
     <string name="check">CHECK</string>
+    <string name="dailyRewardDesc">Login every day to claim your rewards!</string>
 
     <!-- Booster -->
     <string name="xBooster">3X Booster</string>
@@ -68,10 +67,12 @@
     <string name="activeEmail">Active Email:</string>
     <string name="descRequest">Description Of The Request:</string>
     <string name="sendRequest">Send Request</string>
+
+    <!-- Referral -->
     <string name="copy">Copy</string>
 
 
-    <string name="dailyRewardDesc">Login every day to claim your rewards!</string>
+
     <string name="Climb">Claim</string>
     <string name="bonusCode">Enter the code you already received in site</string>
     <string name="bonusCodeApp">Enter the code you already received</string>
@@ -99,7 +100,7 @@
     <string name="codeMiniApp">Enter the code you got in the MiniApp</string>
     <string name="next">Next</string>
 
-    <string name="notificationModel">Notification</string>
-    <string name="default_notification_channel_id">BaseCHannelID</string>
+
+    <string name="default_notification_channel_id">BaseChannelID</string>
 
 </resources>

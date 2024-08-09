@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -27,13 +26,13 @@ import java.util.Objects;
 
 public class WelcomeDialog extends Dialog {
 
-    LinearLayoutCompat moriAiLayout,roadmapLayout,appLayout;
+    private LinearLayoutCompat moriAiLayout,roadmapLayout,appLayout;
 
-    AppCompatCheckBox ShowAgain;
+    private AppCompatCheckBox ShowAgain;
 
-    View page1,page2,page3;
+    private View page1,page2,page3;
 
-    AppCompatTextView tvPrevious,tvNext,moriAiText,roadmapText,appDescText;
+    private AppCompatTextView tvPrevious,tvNext,moriAiText,roadmapText,appDescText;
 
     Context context;
 

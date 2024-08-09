@@ -7,16 +7,16 @@
         <item name="colorPrimaryVariant">@color/BaseColor</item>
         <item name="colorOnPrimary">@color/Views</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/IconColor</item>
+        <item name="colorSecondary">@color/BaseColor</item>
         <item name="colorSecondaryVariant">@color/Views</item>
-        <item name="colorOnSecondary">@color/TextColor</item>
+        <item name="colorOnSecondary">@color/BaseColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:navigationBarColor">@color/black</item>
         <!-- Customize your theme here. -->
 
         <item name="android:screenOrientation">portrait</item>
-        <item name="android:textColor">?colorOnSecondary</item>
+        <item name="android:textColor">@color/TextColor</item>
         <item name="android:textSize">@dimen/TextSize</item>
         <item name="android:layoutDirection">ltr</item>
     </style>

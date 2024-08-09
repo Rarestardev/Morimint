@@ -11,8 +11,8 @@ public class UserConstants {
 
     public static final String APP_LOG_TAG = "MorimintApp";
 
-    public static final long[] LEVEL_COIN = {100000, 150000, 300000, 350000, 400000, 450000, 500000,
-            550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000};
+    public static final long[] LEVEL_COIN = {5000000, 10000000, 20000000, 35000000, 60000000, 90000000, 130000000,
+            170000000, 210000000, 270000000, 330000000, 380000000, 450000000, 550000000, 650000000};
 
 
     public static final int TurboCountCharge = 2;
@@ -22,6 +22,9 @@ public class UserConstants {
     public static final String startAppId = "207548984";
     public static final boolean startAppIsTested = true;
 
-    public static final String ApplicationID = "93f2b1e1-2946-4a0c-bffa-3449bb3aca6d";
+    public static final String showTutorialPref = "ShowTutorial";
+    public static final String showTutorialKeyJackpot = "Jackpot";
+    public static final String showTutorialKeyDrawer = "Drawer";
+    public static final String showTutorialKeyLevel = "LevelShow";
 
 }
