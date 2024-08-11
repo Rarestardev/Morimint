@@ -1,45 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/wallet_menu"
-        android:title="@string/wallet"
-        android:icon="@drawable/wallet_down_ic"/>
+    <group>
+        <item android:id="@+id/wallet_menu"
+            android:title="@string/wallet"
+            android:icon="@drawable/wallet_down_ic"/>
 
-    <item android:id="@+id/booster_menu"
-        android:title="@string/booster"
-        android:icon="@drawable/booster_ic"/>
+        <item android:id="@+id/booster_menu"
+            android:title="@string/booster"
+            android:icon="@drawable/booster_ic"/>
 
-    <item android:id="@+id/jackpot_menu"
-        android:title="@string/jackpot"
-        android:icon="@drawable/jackpot_ic"/>
+        <item android:id="@+id/jackpot_menu"
+            android:title="@string/jackpot"
+            android:icon="@drawable/jackpot_ic"/>
 
-    <item android:id="@+id/task_menu"
-        android:title="@string/task"
-        android:icon="@drawable/task_ic"/>
+        <item android:id="@+id/task_menu"
+            android:title="@string/task"
+            android:icon="@drawable/task_ic"/>
+    </group>
 
-    <item android:id="@+id/ads_menu"
-        android:title="@string/ads"
-        android:icon="@drawable/advert_ic"/>
+    <group android:id="@+id/userFeature">
+        <item android:id="@+id/ads_menu"
+            android:title="@string/ads"
+            android:icon="@drawable/advert_ic"/>
 
-    <item android:id="@+id/mori_ai_menu"
-        android:title="@string/moriAi"
-        android:icon="@drawable/mori_info_icon"/>
+        <item android:id="@+id/content_production_menu"
+            android:title="@string/contentProduction"
+            android:icon="@drawable/social_ic"/>
+    </group>
 
-    <item android:id="@+id/blue_icon_menu"
-        android:title="@string/blue_tick"
-        android:icon="@drawable/blue_tick_menu_ic"/>
+    <group android:id="@+id/info">
+        <item android:id="@+id/mori_ai_menu"
+            android:title="@string/moriAi"
+            android:icon="@drawable/mori_info_icon"/>
 
-    <item android:id="@+id/road_map_menu"
-        android:title="@string/roadmap"
-        android:icon="@drawable/roadmap_ic"/>
+        <item android:id="@+id/blue_icon_menu"
+            android:title="@string/blue_tick"
+            android:icon="@drawable/blue_tick_menu_ic"/>
 
-    <item android:id="@+id/info_app_menu"
-        android:title="@string/features"
-        android:icon="@drawable/info_ic"/>
+        <item android:id="@+id/road_map_menu"
+            android:title="@string/roadmap"
+            android:icon="@drawable/roadmap_ic"/>
 
-    <item android:id="@+id/exitApp"
-        android:title="@string/exit"
-        android:icon="@drawable/exit_ic"/>
+        <item android:id="@+id/info_app_menu"
+            android:title="@string/features"
+            android:icon="@drawable/info_ic"/>
+    </group>
 
+    <group>
+        <item android:id="@+id/exitApp"
+            android:title="@string/exit"
+            android:icon="@drawable/exit_ic"/>
+    </group>
 
 </menu>

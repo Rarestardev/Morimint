@@ -1,19 +1,18 @@
 package com.rarestardev.morimint.Wallet;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rarestardev.morimint.Constants.UserConstants;
@@ -28,7 +27,9 @@ import java.util.Objects;
 public class WalletActivity extends AppCompatActivity {
 
     ActivityWalletBinding binding;
+
     private static final String ADS_TAG = "StartApp";
+    private static final String TOKEN_DESC_URL = "https://tonviewer.com/EQBhX8aPPjQiZSCutal6n10VIeGW5N7uqGuXI_NdCarPNxFj";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,14 @@ public class WalletActivity extends AppCompatActivity {
             }
         });
 
+        binding.tokenIdLayout.setOnClickListener(v -> OpenLink());
+
+    }
+
+    private void OpenLink() {
+        Intent openBrowser = new Intent(Intent.ACTION_VIEW);
+        openBrowser.setData(Uri.parse(TOKEN_DESC_URL));
+        startActivity(openBrowser);
     }
 
     private void ShowDialogConnectionWallet() {
@@ -64,10 +73,10 @@ public class WalletActivity extends AppCompatActivity {
         dialog.show();
 
 
-        AppCompatTextView textAnim = dialog.findViewById(R.id.textAnim);
-        ProgressBar progressBarStatus = dialog.findViewById(R.id.progressBarStatus);
-        CardView isConnectedWallet = dialog.findViewById(R.id.isConnectedWallet);
-        CardView errorConnectedWallet = dialog.findViewById(R.id.errorConnectedWallet);
-        CardView btnConnectWallet = dialog.findViewById(R.id.btnConnectWallet);
+       /* AppCompatTextView textAnim = dialog.findViewById(R.id.textAnim);
+       // ProgressBar progressBarStatus = dialog.findViewById(R.id.progressBarStatus);
+       // CardView isConnectedWallet = dialog.findViewById(R.id.isConnectedWallet);
+       // CardView errorConnectedWallet = dialog.findViewById(R.id.errorConnectedWallet);
+        //CardView btnConnectWallet = dialog.findViewById(R.id.btnConnectWallet);*/
     }
 }

@@ -25,7 +25,7 @@
         </shape>
     </item>
 
-    <item android:id="@+id/second"
+    <item
         android:height="@dimen/levelShowSecond"
         android:width="@dimen/levelShowSecond"
         android:gravity="center"

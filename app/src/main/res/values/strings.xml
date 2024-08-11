@@ -15,7 +15,6 @@
     <string name="ForgetPassHint">Please enter your email address, so we will send are set link.</string>
     <string name="emailTitle">EMAIL :</string>
     <string name="Next">Next</string>
-    <string name="or">OR</string>
     <string name="Click">Click</string>
     <string name="refHint">Invitation Code (Optional)</string>
 
@@ -36,7 +35,6 @@
     <string name="newPass">Create new password</string>
     <string name="jackpot">Jackpot</string>
     <string name="importantNews">Important News :</string>
-    <string name="comingSoon">Coming soon</string>
     <string name="morimintUser">Morimint User</string>
     <string name="ads">Your Advertising</string>
     <string name="contentCreationRules">Content creation rules</string>
@@ -72,8 +70,6 @@
     <string name="copy">Copy</string>
 
 
-
-    <string name="Climb">Claim</string>
     <string name="bonusCode">Enter the code you already received in site</string>
     <string name="bonusCodeApp">Enter the code you already received</string>
     <string name="yourCode">Your Code</string>
@@ -87,7 +83,6 @@
     <string name="dailyRewardInfo">Click to top button for claim your daily reward</string>
     <string name="walletConnection">Connect Wallet</string>
     <string name="walletDesc">Connect your TON wallet for claim rewards</string>
-    <string name="walletTonKeeper">Based on Ton Keeper</string>
     <string name="moriAi">Mori AI Company</string>
     <string name="warning">Warning :</string>
     <string name="TonKeeper">Ton Keeper</string>
@@ -98,9 +93,12 @@
     <string name="ShowAd">Show ad</string>
     <string name="giftCode">Gift Code</string>
     <string name="codeMiniApp">Enter the code you got in the MiniApp</string>
-    <string name="next">Next</string>
 
 
     <string name="default_notification_channel_id">BaseChannelID</string>
+    <string name="tonViewerId">Token ID</string>
+    <string name="contentProduction">Submit Content</string>
+    <string name="linkAddress">Content Address</string>
+    <string name="submit">Submit</string>
 
 </resources>

@@ -3,7 +3,6 @@
     <color name="Views">#ad24d8</color>
     <color name="BaseColor">#30015f</color>
     <color name="Fields">#40228d</color>
-    <color name="IconColor">#FFFFFFFF</color>
     <color name="TextColor">#F6F6F6</color>
     <color name="black">#000000</color>
 
@@ -21,11 +20,8 @@
 
 
     <color name="progressMinValue">#038697</color>
-    <color name="progressTwoValue">#0C8BC5</color>
-    <color name="progressThreeValue">#25379A</color>
     <color name="progressMaxValue">#40228d</color>
 
 
-    <color name="levelImageGradientBg">#BC26014A</color>
     <color name="ViewPage">#CDCBCB</color>
 </resources>

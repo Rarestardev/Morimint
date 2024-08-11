@@ -48,44 +48,35 @@ public class EnergyManager {
     @SuppressLint("SetTextI18n")
     public void getLevelFromServer(int level) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_ENERGY_MANGER, Context.MODE_PRIVATE);
-        int local_level = preferences.getInt(PREF_LEVEL, 0);
         SetEnergyWithLevelFromServer(level);
-        if (local_level == level) {
-            maxEnergy = preferences.getInt(PREF_ENERGY_MAX, 1000);
+
+        maxEnergy = preferences.getInt(PREF_ENERGY_MAX, 1000);
+        valueEnergy = maxEnergy;
+
+        int new_energy = preferences.getInt("current" + PREF_ENERGY, 0);
+        long current_time = preferences.getLong(PREF_KEY_CURRENT_TIME, 0);
+        long time = System.currentTimeMillis();
+
+        if (new_energy == 0 || new_energy == maxEnergy) {
             valueEnergy = maxEnergy;
+        } else {
+            valueEnergy = new_energy;
+        }
 
-            int new_energy = preferences.getInt("current" + PREF_ENERGY, 0);
-            long current_time = preferences.getLong(PREF_KEY_CURRENT_TIME, 0);
-            long time = System.currentTimeMillis();
+        final int step = 3;
 
-            if (new_energy == 0 && new_energy == maxEnergy) {
+        if (current_time != -1) {
+            long total_sec = (time - current_time) / 1000;
+            int added_energy = (int) (total_sec * step);
+
+            valueEnergy = new_energy + added_energy;
+
+            if (valueEnergy > maxEnergy) {
                 valueEnergy = maxEnergy;
-            } else {
-                valueEnergy = new_energy;
             }
 
-            final int step = 3;
 
-            if (current_time != -1) {
-                long total_sec = (time - current_time) / 1000;
-                int added_energy = (int) (total_sec * step);
-
-                valueEnergy = new_energy + added_energy;
-
-                if (valueEnergy > maxEnergy) {
-                    valueEnergy = maxEnergy;
-                }
-                if (total_sec >= 3600) {
-                    valueEnergy = maxEnergy;
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("current" + PREF_ENERGY, valueEnergy);
-                    editor.putLong(PREF_KEY_CURRENT_TIME, 0);
-                    editor.apply();
-                }
-
-
-                tvEnergy.setText(valueEnergy + " / " + maxEnergy);
-            }
+            tvEnergy.setText(valueEnergy + " / " + maxEnergy);
         }
     }
 
@@ -189,6 +180,14 @@ public class EnergyManager {
     public void IncreasedEnergy() {
         final int step_charge = 3;
         final long IncreaseEnergyTime = 1000;
+
+        SharedPreferences preferences = context.getSharedPreferences(PREF_ENERGY_MANGER, Context.MODE_PRIVATE);
+        int energy = preferences.getInt("current" + PREF_ENERGY, 0);
+
+        if (energy != 0){
+            valueEnergy = energy;
+        }
+
         runnable = new Runnable() {
             @SuppressLint("SetTextI18n")
             @Override

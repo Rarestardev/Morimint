@@ -108,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         DailyUpdater dailyUpdater = new DailyUpdater(this);
         dailyUpdater.updateValueIfNeeded();
 
-
-        StartActivities();
-        NavigationDrawerHandle();
-
         SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
         TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
         MintHandler();
+
+
+        binding.blueTickIcon.setOnClickListener(v ->
+                ShowDialogAboutApp(R.drawable.blue_tick_menu_ic, getString(R.string.blue_tick), "blue_tick.txt"));
     }
 
 
@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         return diagonalInches >= 7.0; // Tablet 7 inches
     }
-
 
     // handle turbo mode is on or off
     private void MintHandler() {
@@ -360,6 +359,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             if (item.getItemId() == R.id.ads_menu) {
                 binding.drawer.closeDrawers();
                 startActivity(new Intent(MainActivity.this, AdvertisingActivity.class));
+            }
+            if (item.getItemId() == R.id.content_production_menu) {
+                binding.drawer.closeDrawers();
+                startActivity(new Intent(MainActivity.this, SubmitContentActivity.class));
             }
             if (item.getItemId() == R.id.info_app_menu) {
                 ShowDialogAboutApp(R.drawable.info_ic, getString(R.string.features), "info_app.txt");
@@ -617,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     public void HandleResponseData() {
         userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
         userDataViewModel.getUserData(MainActivity.this).observe(this, users -> {
@@ -632,6 +635,21 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 coinMintManager.SendNewValue(users.getCoin());
                 NumberFormat(coinMintManager.getBalance(), binding.tvBalanceCoin);
                 progressBarManager.ProgressBar(binding.levelXpProgressBar);
+
+                if (users.getCoin() == 0){
+                    binding.turboCountLayout.setVisibility(View.INVISIBLE);
+                }else {
+                    binding.turboCountLayout.setVisibility(View.VISIBLE);
+                    MintHandler();
+                    StartActivities();
+                    NavigationDrawerHandle();
+                }
+
+                if (users.isBlue_tick()){
+                    binding.blueTickIcon.setImageDrawable(getDrawable(R.drawable.blue_tick_ic));
+                }else {
+                    binding.blueTickIcon.setImageDrawable(getDrawable(R.drawable.offline_blue_tick_ic));
+                }
 
                 energyManager.getLevelFromServer(users.getLevel());
 

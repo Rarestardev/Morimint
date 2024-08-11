@@ -32,8 +32,4 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Morimint" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
 </resources>
