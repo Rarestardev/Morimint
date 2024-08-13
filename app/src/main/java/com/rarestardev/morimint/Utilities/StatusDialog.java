@@ -60,6 +60,7 @@ public class StatusDialog extends Dialog {
         Log.d(UserConstants.APP_LOG_TAG, message);
         binding.statusMessage.setText(message);
         binding.statusBtn.setOnClickListener(listener);
+        binding.statusBtn.setText(btnText);
 
 
         switch (type) {
@@ -67,7 +68,8 @@ public class StatusDialog extends Dialog {
                 binding.statusBtn.setVisibility(View.VISIBLE);
                 binding.statusIconBackground.setCardBackgroundColor(context.getColor(DIALOG_ICON_BACKGROUND[2]));
                 binding.statusIcon.setImageDrawable(context.getDrawable(R.drawable.failed_ic));
-                YoYo.with(Techniques.RotateIn).duration(1000).playOn(binding.statusIconBackground);
+                YoYo.with(Techniques.RotateIn).duration(1000).repeat(0).playOn(binding.statusIconBackground);
+                YoYo.with(Techniques.Pulse).duration(1000).repeat(YoYo.INFINITE).playOn(binding.statusIconBackground);
                 break;
             case LOADING:
                 binding.statusBtn.setVisibility(View.GONE);
@@ -88,12 +90,14 @@ public class StatusDialog extends Dialog {
                 binding.statusIconBackground.setCardBackgroundColor(context.getColor(DIALOG_ICON_BACKGROUND[3]));
                 binding.statusIcon.setImageDrawable(context.getDrawable(R.drawable.task_tick_ic));
                 YoYo.with(Techniques.RotateIn).duration(1000).playOn(binding.statusIconBackground);
+                YoYo.with(Techniques.Pulse).duration(1000).repeat(YoYo.INFINITE).playOn(binding.statusIconBackground);
                 break;
             case WARNING:
                 binding.statusBtn.setVisibility(View.VISIBLE);
                 binding.statusIconBackground.setCardBackgroundColor(context.getColor(DIALOG_ICON_BACKGROUND[0]));
                 binding.statusIcon.setImageDrawable(context.getDrawable(R.drawable.warning_ic));
                 YoYo.with(Techniques.RotateIn).duration(1000).playOn(binding.statusIconBackground);
+                YoYo.with(Techniques.Pulse).duration(1000).repeat(YoYo.INFINITE).playOn(binding.statusIconBackground);
                 break;
         }
     }

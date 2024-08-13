@@ -20,6 +20,8 @@ import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.OfflineModel.DailyCheckModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.CoinManagerRepository;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
@@ -27,8 +29,6 @@ import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.ViewHolder> {
     Context context;
@@ -82,9 +82,9 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
             if (!isClaim){
                 holder.items.setOnClickListener(v -> {
                     long coin = dailyCheckModels.get(position).getCoin();
-                    final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
-                    dialog.setTitle("Loading");
-                    dialog.setContentText("Please wait");
+                    final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+                    dialog.setTitleDialog("Loading");
+                    dialog.setMessageDialog("Please wait");
                     dialog.setCancelable(false);
                     dialog.show();
                     startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
@@ -94,11 +94,12 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
                                 @Override
                                 public void adHidden(Ad ad) {
                                     dialog.dismiss();
-                                    SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                                    dialog.setTitle("Success");
-                                    dialog.setContentText("You are won :" + coin + "MoriBit");
+                                    StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+                                    dialog.setTitleDialog("Success");
+                                    dialog.setMessageDialog("You are won :" + coin + "MoriBit");
                                     dialog.setCancelable(false);
-                                    dialog.setConfirmButton("Claim", sweetAlertDialog -> {
+                                    dialog.setButtonText("Claim");
+                                    dialog.setButtonListener(v1 -> {
                                         dailyCheckModels.get(position).setClaimed(true);
                                         notifyItemChanged(position);
                                         saveRewardStatus(dailyCheckModels.get(position).getDay());
@@ -107,8 +108,9 @@ public class DailyCheckAdapter extends RecyclerView.Adapter<DailyCheckAdapter.Vi
                                         holder.isCompleteSmall.setVisibility(View.VISIBLE);
                                         holder.isCompleteSmall.setImageDrawable(context.getDrawable(R.drawable.green_tick));
 
-                                        sweetAlertDialog.dismiss();
-                                    }).show();
+                                        dialog.dismiss();
+                                    });
+                                    dialog.show();
                                 }
 
                                 @Override

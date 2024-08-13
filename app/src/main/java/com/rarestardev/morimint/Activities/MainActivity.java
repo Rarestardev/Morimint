@@ -40,8 +40,10 @@ import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.ApplicationSetup.CoinMintManager;
 import com.rarestardev.morimint.ApplicationSetup.DailyUpdater;
+import com.rarestardev.morimint.Utilities.DialogType;
 import com.rarestardev.morimint.Utilities.NetworkChangeReceiver;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.rarestardev.morimint.Utilities.WelcomeDialog;
 import com.rarestardev.morimint.ViewModel.ApplicationDataViewModel;
 import com.rarestardev.morimint.ViewModel.UserDataViewModel;
@@ -56,8 +58,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Objects;
 import java.util.Random;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
 
@@ -587,11 +587,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 }
 
                 if (!is_active) {
-                    final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+                    final StatusDialog dialog = new StatusDialog(this, DialogType.WARNING);
                     dialog.setCancelable(false);
-                    dialog.setTitle("Under repair");
-                    dialog.setContentText("Please try again later or check for new update");
-                    dialog.setConfirmButton("Exit", sweetAlertDialog -> finish());
+                    dialog.setTitleDialog("Under repair");
+                    dialog.setMessageDialog("Please try again later or check for new update");
+                    dialog.setButtonText("Exit");
+                    dialog.setButtonListener(v -> finish());
                     dialog.show();
                 } else {
                     HandleResponseData();
@@ -603,11 +604,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     MintHandler();
                 } else {
                     binding.CoinLayout.setOnClickListener(v -> {
-                        final SweetAlertDialog dialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+                        final StatusDialog dialog = new StatusDialog(MainActivity.this, DialogType.WARNING);
                         dialog.setCancelable(false);
-                        dialog.setTitle("Mint is closed");
-                        dialog.setContentText("Please try again later");
-                        dialog.setConfirmButton("Exit", sweetAlertDialog -> finish());
+                        dialog.setTitleDialog("Mint is closed");
+                        dialog.setMessageDialog("Please try again later");
+                        dialog.setButtonText("Exit");
+                        dialog.setButtonListener(v1 -> finish());
                         dialog.show();
                     });
                 }
@@ -618,11 +620,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     public void onNetworkChange(boolean isConnected) {
         if (!isConnected) {
-            SweetAlertDialog dialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE);
+            StatusDialog dialog = new StatusDialog(MainActivity.this, DialogType.FAILED);
             dialog.setCancelable(false);
-            dialog.setTitle("No Internet!");
-            dialog.setContentText("Please check the internet connection");
-            dialog.setConfirmButton("Exit", sweetAlertDialog -> {
+            dialog.setTitleDialog("No Internet!");
+            dialog.setMessageDialog("Please check the internet connection");
+            dialog.setButtonText("Exit");
+            dialog.setButtonListener(v -> {
                 finish();
                 dialog.dismiss();
             });

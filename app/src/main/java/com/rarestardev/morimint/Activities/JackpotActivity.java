@@ -29,7 +29,9 @@ import com.github.jinatonic.confetti.ConfettiSource;
 import com.rarestardev.morimint.Constants.JackpotValues;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
+import com.rarestardev.morimint.Utilities.DialogType;
 import com.rarestardev.morimint.Utilities.NoDoubleClickListener;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.rarestardev.morimint.ViewModel.CoinManagerViewModel;
 import com.rarestardev.morimint.databinding.ActivityJackpotBinding;
 import com.startapp.sdk.ads.banner.Banner;
@@ -42,8 +44,6 @@ import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Random;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class JackpotActivity extends AppCompatActivity {
     private ActivityJackpotBinding binding;
@@ -90,15 +90,14 @@ public class JackpotActivity extends AppCompatActivity {
     }
 
 
-
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void showTutorial(){
-        SharedPreferences preferences = getSharedPreferences(UserConstants.showTutorialPref,MODE_PRIVATE);
-        boolean isShowingCase = preferences.getBoolean(UserConstants.showTutorialKeyJackpot,false);
-        if (!isShowingCase){
+    private void showTutorial() {
+        SharedPreferences preferences = getSharedPreferences(UserConstants.showTutorialPref, MODE_PRIVATE);
+        boolean isShowingCase = preferences.getBoolean(UserConstants.showTutorialKeyJackpot, false);
+        if (!isShowingCase) {
             final String titleHelper = "How to start the game ?";
             final String descHelper = "Click on this lever to activate the jackpot";
-            TapTargetView.showFor(JackpotActivity.this, TapTarget.forView(binding.playJackpot, titleHelper,descHelper)
+            TapTargetView.showFor(JackpotActivity.this, TapTarget.forView(binding.playJackpot, titleHelper, descHelper)
                             .tintTarget(true)
                             .outerCircleColor(R.color.progressMaxValue)
                             .targetCircleColor(R.color.white)
@@ -111,14 +110,13 @@ public class JackpotActivity extends AppCompatActivity {
                         public void onTargetClick(TapTargetView view) {
                             super.onTargetClick(view);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(UserConstants.showTutorialKeyJackpot,true);
+                            editor.putBoolean(UserConstants.showTutorialKeyJackpot, true);
                             editor.apply();
                             view.dismiss(true);
                         }
                     });
         }
     }
-
 
 
     private void UpdatePlayedJackpot() {
@@ -318,18 +316,19 @@ public class JackpotActivity extends AppCompatActivity {
             editor.apply();
         }
 
-        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
-        dialog.setCancelable(false);
-        dialog.setTitle("Try again");
-        dialog.setContentText("More chance by seeing the ad");
-        dialog.setConfirmButton("Show Ad", sweetAlertDialog -> {
+        StatusDialog dialog = new StatusDialog(JackpotActivity.this, DialogType.WARNING);
+        dialog.setCancelable(true);
+        dialog.setTitleDialog("Try again");
+        dialog.setMessageDialog("More chance by seeing the ad");
+        dialog.setButtonListener(v -> {
             loadAndShowVideoAd();
-            sweetAlertDialog.dismiss();
+            dialog.dismiss();
         });
-        dialog.setCancelButton("Cancel", sweetAlertDialog -> {
+
+        dialog.setOnDismissListener(dialog1 -> {
             editor.putInt("jackpotAds", 0);
             editor.apply();
-            sweetAlertDialog.dismiss();
+            dialog1.dismiss();
         });
         dialog.show();
     }
@@ -338,9 +337,9 @@ public class JackpotActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DailyUpdater", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        final SweetAlertDialog alertDialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-        alertDialog.setTitle("Loading");
-        alertDialog.setContentText("Please wait");
+        final StatusDialog alertDialog = new StatusDialog(JackpotActivity.this, DialogType.LOADING);
+        alertDialog.setTitleDialog("Loading");
+        alertDialog.setMessageDialog("Please wait");
         alertDialog.setCancelable(false);
         alertDialog.show();
 
@@ -364,18 +363,19 @@ public class JackpotActivity extends AppCompatActivity {
             public void onFailedToReceiveAd(Ad ad) {
                 alertDialog.dismiss();
                 Log.e(ADS_TAG, "Failed to receive video ad.");
-                SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.WARNING_TYPE);
-                dialog.setCancelable(false);
-                dialog.setTitle("Try again");
-                dialog.setContentText("Failed to receive ad");
-                dialog.setConfirmButton("Retry", sweetAlertDialog -> {
+                StatusDialog dialog = new StatusDialog(JackpotActivity.this, DialogType.WARNING);
+                dialog.setCancelable(true);
+                dialog.setTitleDialog("Try again");
+                dialog.setMessageDialog("Failed to receive ad");
+                dialog.setButtonText("Retry");
+                dialog.setButtonListener(v -> {
                     loadAndShowVideoAd();
-                    sweetAlertDialog.dismiss();
+                    dialog.dismiss();
                 });
-                dialog.setCancelButton("Cancel", sweetAlertDialog -> {
+                dialog.setOnDismissListener(dialog1 -> {
                     editor.putInt("jackpotAds", 0);
                     editor.apply();
-                    sweetAlertDialog.dismiss();
+                    dialog1.dismiss();
                 });
                 dialog.show();
             }
@@ -415,9 +415,9 @@ public class JackpotActivity extends AppCompatActivity {
     }
 
     private void loadAndShowInterstitialAd(int reward) {
-        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Loading");
-        dialog.setContentText("Please wait");
+        final StatusDialog dialog = new StatusDialog(this, DialogType.LOADING);
+        dialog.setTitleDialog("Loading");
+        dialog.setMessageDialog("Please wait");
         dialog.setCancelable(false);
         dialog.show();
         startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
@@ -482,11 +482,13 @@ public class JackpotActivity extends AppCompatActivity {
         numberFormat.setGroupingSize(3);
         numberFormat.setMaximumFractionDigits(2);
         showConfetti();
-        SweetAlertDialog dialog = new SweetAlertDialog(JackpotActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+
+        StatusDialog dialog = new StatusDialog(JackpotActivity.this, DialogType.SUCCESS);
         dialog.setCancelable(false);
-        dialog.setTitle("Good Job!");
-        dialog.setContentText("Great , you won " + numberFormat.format(reward) + " MoriBit Coin");
-        dialog.setConfirmButton("Claim", sweetAlertDialog -> {
+        dialog.setTitleDialog("Good Job!");
+        dialog.setMessageDialog("Great , you won " + numberFormat.format(reward) + " MoriBit Coin");
+        dialog.setButtonText("Claim");
+        dialog.setButtonListener(v -> {
             if (reward != 0) {
                 coinManagerViewModel.UpdateCoin(reward, JackpotActivity.this);
                 updateScoreDisplay();

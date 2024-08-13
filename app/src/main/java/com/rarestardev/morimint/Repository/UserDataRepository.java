@@ -1,6 +1,5 @@
 package com.rarestardev.morimint.Repository;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +17,11 @@ import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Response.ApiResponse;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 
 import java.io.IOException;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -40,9 +40,9 @@ public class UserDataRepository {
     public LiveData<Users> UserData(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Update");
-        dialog.setContentText("Please wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Update");
+        dialog.setMessageDialog("Please wait");
         dialog.setCancelable(false);
         dialog.show();
         MutableLiveData<Users> data = new MutableLiveData<>();
@@ -57,18 +57,20 @@ public class UserDataRepository {
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "UserData : Failed : " + response.errorBody());
-                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                    alertDialog.setTitle("Something wrong!");
-                    alertDialog.setContentText("Please check your internet connection");
+                    final StatusDialog alertDialog = new StatusDialog(context, DialogType.WARNING);
+                    alertDialog.setTitleDialog("Something wrong!");
+                    alertDialog.setMessageDialog("Please check your internet connection");
                     alertDialog.setCancelable(false);
-                    alertDialog.setConfirmButton("Exit", sweetAlertDialog -> {
+                    alertDialog.setButtonText("Exit");
+                    alertDialog.setButtonListener(v -> {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.clear();
                         editor.apply();
                         ClearAllUserData(context);
                         ((MainActivity) context).finish();
-                        sweetAlertDialog.dismiss();
-                    }).show();
+                        alertDialog.dismiss();
+                    });
+                    alertDialog.show();
                 }
             }
 
@@ -121,9 +123,9 @@ public class UserDataRepository {
 
         RequestBody refRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(referral));
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Checked");
-        dialog.setContentText("Please wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Checked");
+        dialog.setMessageDialog("Please wait");
         dialog.setCancelable(false);
         dialog.show();
 
@@ -167,9 +169,9 @@ public class UserDataRepository {
         RequestBody Username = RequestBody.create(MediaType.parse("text/plain"), username);
         RequestBody Password = RequestBody.create(MediaType.parse("text/plain"), password);
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Check");
-        dialog.setContentText("Please wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Check");
+        dialog.setMessageDialog("Please wait");
         dialog.setCancelable(false);
         dialog.show();
 
@@ -217,23 +219,25 @@ public class UserDataRepository {
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse apiResponse = response.body();
-                    final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                    dialog.setTitle(apiResponse.getStatus());
-                    dialog.setContentText(apiResponse.getMessage());
+                    final StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+                    dialog.setTitleDialog(apiResponse.getStatus());
+                    dialog.setMessageDialog(apiResponse.getMessage());
                     dialog.setCancelable(false);
-                    dialog.setConfirmButton("Ok", Dialog::dismiss);
+                    dialog.setButtonText("Ok");
+                    dialog.setButtonListener(v -> dialog.dismiss());
                     dialog.show();
                 } else {
                     try {
                         assert response.errorBody() != null;
                         Log.e(UserConstants.APP_LOG_TAG, "ChangePass :" + response.errorBody().string());
                         ApiResponse apiResponse = response.body();
-                        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                        final StatusDialog dialog = new StatusDialog(context, DialogType.WARNING);
                         assert apiResponse != null;
-                        dialog.setTitle(apiResponse.getStatus());
-                        dialog.setContentText(apiResponse.getMessage());
+                        dialog.setTitleDialog(apiResponse.getStatus());
+                        dialog.setMessageDialog(apiResponse.getMessage());
                         dialog.setCancelable(false);
-                        dialog.setConfirmButton("Ok", Dialog::dismiss);
+                        dialog.setButtonText("Ok");
+                        dialog.setButtonListener(v -> dialog.dismiss());
                         dialog.show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

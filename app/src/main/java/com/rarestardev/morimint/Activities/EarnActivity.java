@@ -17,14 +17,14 @@ import android.widget.Toast;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.CoinManagerRepository;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.rarestardev.morimint.databinding.ActivityEarnBinding;
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
 import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class EarnActivity extends AppCompatActivity {
     ActivityEarnBinding binding;
@@ -36,7 +36,7 @@ public class EarnActivity extends AppCompatActivity {
 
     private StartAppAd startAppAd;
 
-    private SweetAlertDialog dialog;
+    private StatusDialog statusDialog;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -48,7 +48,7 @@ public class EarnActivity extends AppCompatActivity {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_earn);
         }
 
-        dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
+        statusDialog = new StatusDialog(this, DialogType.LOADING);
 
         StartAppSDK.init(this, UserConstants.startAppId, true);
         StartAppSDK.setTestAdsEnabled(UserConstants.startAppIsTested);
@@ -99,9 +99,10 @@ public class EarnActivity extends AppCompatActivity {
                 if (chance == 0){
                     Toast.makeText(EarnActivity.this, "The ad will be activated the next day", Toast.LENGTH_SHORT).show();
                 }else {
-                    dialog.setContentText("Loading...");
-                    dialog.setCancelable(false);
-                    dialog.show();
+                    statusDialog.setTitleDialog("Loading");
+                    statusDialog.setMessageDialog("Please wait");
+                    statusDialog.setCancelable(false);
+                    statusDialog.show();
                     HandleAds();
                 }
             }
@@ -114,7 +115,7 @@ public class EarnActivity extends AppCompatActivity {
             @Override
             public void onReceiveAd(@NonNull Ad ad) {
                 startAppAd.showAd();
-                dialog.dismiss();
+                statusDialog.dismiss();
                 GiftCoin();
             }
 
@@ -129,7 +130,7 @@ public class EarnActivity extends AppCompatActivity {
                     editor.putInt("reward", +1);
                     editor.apply();
                 }
-                dialog.dismiss();
+                statusDialog.dismiss();
             }
         });
     }
@@ -138,11 +139,12 @@ public class EarnActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         startAppAd.setVideoListener(() -> {
-            final SweetAlertDialog alertDialog = new SweetAlertDialog(EarnActivity.this,SweetAlertDialog.SUCCESS_TYPE);
-            alertDialog.setTitle("Good job");
-            alertDialog.setContentText("You received 10,000 Coins");
-            alertDialog.setCancelable(false);
-            alertDialog.setConfirmButton("Claim", sweetAlertDialog -> {
+            final StatusDialog dialog = new StatusDialog(EarnActivity.this,DialogType.SUCCESS);
+            dialog.setTitleDialog("Good job");
+            dialog.setMessageDialog("You received 10,000 Coins");
+            dialog.setCancelable(false);
+            dialog.setButtonText("Claim");
+            dialog.setButtonListener(v -> {
                 chance -= 1;
                 editor.putInt("reward", chance);
                 editor.apply();
@@ -155,8 +157,8 @@ public class EarnActivity extends AppCompatActivity {
                 }
                 CoinManagerRepository coinManagerRepository = new CoinManagerRepository();
                 coinManagerRepository.UpdateCoin(10000,EarnActivity.this);
-                sweetAlertDialog.dismiss();
-            }).show();
+                dialog.dismiss();
+            });
         });
     }
 }

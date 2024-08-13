@@ -17,9 +17,9 @@ import android.util.Log;
 
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.R;
+import com.rarestardev.morimint.Utilities.DialogType;
 import com.rarestardev.morimint.Utilities.InternetConnection;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -38,11 +38,12 @@ public class SplashActivity extends AppCompatActivity {
             checkPermissions();
 
         } else {
-            SweetAlertDialog dialog = new SweetAlertDialog(SplashActivity.this, SweetAlertDialog.ERROR_TYPE);
+            StatusDialog dialog = new StatusDialog(SplashActivity.this, DialogType.WARNING);
+            dialog.setTitleDialog("No Internet!");
+            dialog.setMessageDialog("Please check the internet connection");
             dialog.setCancelable(false);
-            dialog.setTitle("No Internet!");
-            dialog.setContentText("Please check the internet connection");
-            dialog.setConfirmButton("Exit", sweetAlertDialog -> {
+            dialog.setButtonText("Exit");
+            dialog.setButtonListener(v -> {
                 finish();
                 dialog.dismiss();
             });
@@ -51,14 +52,14 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    private void checkPermissions(){
+    private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_CODE);
             }
-        }else {
+        } else {
             CheckUserAndStartActivity();
-            Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
+            Log.d(UserConstants.APP_LOG_TAG, "Notification granted");
         }
     }
 
@@ -68,16 +69,16 @@ public class SplashActivity extends AppCompatActivity {
         if (requestCode == NOTIFICATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 CheckUserAndStartActivity();
-                Log.d(UserConstants.APP_LOG_TAG,"Notification granted");
-            }else {
-                Log.d(UserConstants.APP_LOG_TAG,"Notification denied");
+                Log.d(UserConstants.APP_LOG_TAG, "Notification granted");
+            } else {
+                Log.d(UserConstants.APP_LOG_TAG, "Notification denied");
                 checkPermissions();
             }
         }
     }
 
 
-    private void CheckUserAndStartActivity(){
+    private void CheckUserAndStartActivity() {
         new Handler().postDelayed(() -> {
 
             SharedPreferences preferences = getSharedPreferences(UserConstants.SHARED_PREF_USER, MODE_PRIVATE);

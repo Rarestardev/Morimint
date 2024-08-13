@@ -1,6 +1,5 @@
 package com.rarestardev.morimint.Repository;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
@@ -33,12 +32,13 @@ import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.Response.SiteGiftCodeResponse;
 import com.rarestardev.morimint.Model.MoriNewsModel;
 import com.rarestardev.morimint.Model.TaskModel;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -57,10 +57,9 @@ public class ApplicationDataRepository {
     }
 
     public void GetDataMoriNews(Context context, RecyclerView recyclerView, AppCompatTextView noData) {
-
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Updated");
-        dialog.setContentText("Please wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Updated");
+        dialog.setMessageDialog("Please wait");
         dialog.setCancelable(false);
         dialog.show();
 
@@ -97,11 +96,12 @@ public class ApplicationDataRepository {
                     Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Timeout", t);
                 } else {
                     Log.e(UserConstants.APP_LOG_TAG, "MoriNews : Failed", t);
-                    SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                    StatusDialog dialog = new StatusDialog(context, DialogType.WARNING);
                     dialog.setCancelable(false);
-                    dialog.setTitle("No Internet!");
-                    dialog.setContentText("Please check the internet connection");
-                    dialog.setConfirmButton("Exit", sweetAlertDialog -> {
+                    dialog.setTitleDialog("No Internet!");
+                    dialog.setMessageDialog("Please check the internet connection");
+                    dialog.setButtonText("Exit");
+                    dialog.setButtonListener(v -> {
                         ((NewsActivity) context).finish();
                         dialog.dismiss();
                     });
@@ -242,20 +242,22 @@ public class ApplicationDataRepository {
                     Log.d(UserConstants.APP_LOG_TAG, "ClaimDailyReward : Success");
                     SingleResponse singleResponse = response.body();
                     String detail = singleResponse.getDetail();
-                    final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                    dialog.setTitle("Success");
-                    dialog.setContentText(detail);
-                    dialog.setConfirmButton("Claim", Dialog::dismiss);
+                    final StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+                    dialog.setTitleDialog("Success");
+                    dialog.setMessageDialog(detail);
+                    dialog.setButtonText("Claim");
+                    dialog.setButtonListener(v -> dialog.dismiss());
                     dialog.show();
 
                 } else {
                     try {
                         assert response.errorBody() != null;
                         String error = response.errorBody().string();
-                        final SweetAlertDialog dialogWarning = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                        dialogWarning.setTitle("Failed!");
-                        dialogWarning.setContentText("You have already claimed the daily bonus");
-                        dialogWarning.setConfirmButton("Done", Dialog::dismiss);
+                        final StatusDialog dialogWarning = new StatusDialog(context, DialogType.FAILED);
+                        dialogWarning.setTitleDialog("Failed!");
+                        dialogWarning.setMessageDialog("You have already claimed the daily bonus");
+                        dialogWarning.setButtonText("Done");
+                        dialogWarning.setButtonListener(v -> dialogWarning.dismiss());
                         dialogWarning.show();
                         Log.e(UserConstants.APP_LOG_TAG, "ClaimDailyReward : " + error);
 
@@ -277,9 +279,9 @@ public class ApplicationDataRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
 
-        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        alertDialog.setTitle("Checked...");
-        alertDialog.setContentText("Please Wait");
+        final StatusDialog alertDialog = new StatusDialog(context, DialogType.LOADING);
+        alertDialog.setTitleDialog("Checked...");
+        alertDialog.setMessageDialog("Please Wait");
         alertDialog.setCancelable(false);
         alertDialog.show();
 
@@ -296,17 +298,21 @@ public class ApplicationDataRepository {
                     String message = apiResponse.getMessage();
 
                     if (status.equals("error")) {
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                        final StatusDialog alertDialog = new StatusDialog(context, DialogType.FAILED);
                         alertDialog.setTitle(status);
-                        alertDialog.setContentText(message);
+                        alertDialog.setMessageDialog(message);
                         alertDialog.setCancelable(false);
-                        alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                        alertDialog.setButtonText("Ok");
+                        alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                        alertDialog.show();
                     } else {
-                        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                        dialog.setTitle(status);
-                        dialog.setContentText(message);
+                        final StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+                        dialog.setTitleDialog(status);
+                        dialog.setMessageDialog(message);
                         dialog.setCancelable(false);
-                        dialog.setConfirmButton("Claim", Dialog::dismiss).show();
+                        dialog.setButtonText("Claim");
+                        dialog.setButtonListener(v -> dialog.dismiss());
+                        dialog.show();
                     }
                     Log.d(UserConstants.APP_LOG_TAG, "GiftCoinSite : Success");
                 } else {
@@ -328,9 +334,9 @@ public class ApplicationDataRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Checked...");
-        dialog.setContentText("Please Wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Checked...");
+        dialog.setMessageDialog("Please Wait");
         dialog.setCancelable(false);
         dialog.show();
 
@@ -347,19 +353,22 @@ public class ApplicationDataRepository {
                     String message = apiResponse.getMessage();
                     dialog.dismiss();
 
+                    final StatusDialog alertDialog;
                     if (status.equals("error")) {
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
-                        alertDialog.setTitle(status);
-                        alertDialog.setContentText(message);
+                        alertDialog = new StatusDialog(context, DialogType.FAILED);
+                        alertDialog.setTitleDialog(status);
+                        alertDialog.setMessageDialog(message);
                         alertDialog.setCancelable(false);
-                        alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                        alertDialog.setButtonText("Ok");
                     } else {
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                        alertDialog.setTitle(status);
-                        alertDialog.setContentText(message);
+                        alertDialog = new StatusDialog(context, DialogType.SUCCESS);
+                        alertDialog.setTitleDialog(status);
+                        alertDialog.setMessageDialog(message);
                         alertDialog.setCancelable(false);
-                        alertDialog.setConfirmButton("Claim", Dialog::dismiss).show();
+                        alertDialog.setButtonText("Claim");
                     }
+                    alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                    alertDialog.show();
                     Log.d(UserConstants.APP_LOG_TAG, "GiftCoin : Success");
                 } else {
                     dialog.dismiss();
@@ -380,9 +389,9 @@ public class ApplicationDataRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences(UserConstants.SHARED_PREF_USER, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(UserConstants.SHARED_KEY_TOKEN, "");
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setTitle("Checked...");
-        dialog.setContentText("Please Wait");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setTitleDialog("Checked...");
+        dialog.setMessageDialog("Please Wait");
         dialog.setCancelable(false);
         dialog.show();
 
@@ -398,21 +407,23 @@ public class ApplicationDataRepository {
                     String status = miniAppResponse.getStatus();
                     String msg = miniAppResponse.getMessage();
 
+                    final StatusDialog alertDialog;
                     if (status.equals("error")) {
-
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                        alertDialog.setTitle("Failed");
-                        alertDialog.setContentText(msg);
+                        alertDialog = new StatusDialog(context, DialogType.FAILED);
+                        alertDialog.setTitleDialog("Failed");
+                        alertDialog.setMessageDialog(msg);
                         alertDialog.setCancelable(false);
-                        alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                        alertDialog.setButtonText("Ok");
 
                     } else {
-                        final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                        alertDialog.setTitle(status);
-                        alertDialog.setContentText(msg);
+                        alertDialog = new StatusDialog(context, DialogType.SUCCESS);
+                        alertDialog.setTitleDialog(status);
+                        alertDialog.setMessageDialog(msg);
                         alertDialog.setCancelable(false);
-                        alertDialog.setConfirmButton("Claim", Dialog::dismiss).show();
+                        alertDialog.setButtonText("Claim");
                     }
+                    alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                    alertDialog.show();
 
 
                     Log.d(UserConstants.APP_LOG_TAG, "MiniAppCode : Success");
@@ -421,11 +432,13 @@ public class ApplicationDataRepository {
                     Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : Error " + response.errorBody());
                     Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
 
-                    final SweetAlertDialog alertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                    alertDialog.setTitle("Failed");
-                    alertDialog.setContentText("Wrong code");
+                    final StatusDialog alertDialog = new StatusDialog(context, DialogType.FAILED);
+                    alertDialog.setTitleDialog("Failed");
+                    alertDialog.setMessageDialog("Wrong code");
                     alertDialog.setCancelable(false);
-                    alertDialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                    alertDialog.setButtonText("Ok");
+                    alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                    alertDialog.show();
                 }
             }
 
@@ -488,18 +501,22 @@ public class ApplicationDataRepository {
             public void onResponse(@NonNull Call<SingleResponse> call, @NonNull Response<SingleResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     SingleResponse task = response.body();
-                    final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                    dialog.setTitle("Success");
-                    dialog.setContentText(task.getDetail());
+                    final StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+                    dialog.setTitleDialog("Success");
+                    dialog.setMessageDialog(task.getDetail());
                     dialog.setCancelable(false);
-                    dialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                    dialog.setButtonText("Claim");
+                    dialog.setButtonListener(v -> dialog.dismiss());
+                    dialog.show();
                 } else {
                     SingleResponse task = response.body();
-                    final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
-                    dialog.setTitle("Failed");
-                    dialog.setContentText(task != null ? task.getDetail() : null);
+                    final StatusDialog dialog = new StatusDialog(context, DialogType.FAILED);
+                    dialog.setTitleDialog("Failed");
+                    dialog.setMessageDialog(task != null ? task.getDetail() : null);
                     dialog.setCancelable(false);
-                    dialog.setConfirmButton("Ok", Dialog::dismiss).show();
+                    dialog.setButtonText("Ok");
+                    dialog.setButtonListener(v -> dialog.dismiss());
+                    dialog.show();
 
                     try {
                         assert response.errorBody() != null;

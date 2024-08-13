@@ -21,6 +21,8 @@ import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.TaskModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.ApplicationDataRepository;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
@@ -29,8 +31,6 @@ import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
@@ -88,13 +88,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 OpenLink(openLink);
                 final long second = 1000;
                 final long time = 15 * 1000;
-                SweetAlertDialog checkDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                StatusDialog checkDialog = new StatusDialog(context, DialogType.LOADING);
                 CountDownTimer countDownTimer = new CountDownTimer(time, second) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         checkDialog.setCancelable(false);
-                        checkDialog.setTitle("Loading...");
-                        checkDialog.setContentText("Check task complete...");
+                        checkDialog.setTitleDialog("Loading...");
+                        checkDialog.setMessageDialog("Check task complete...");
                         checkDialog.show();
                     }
 
@@ -121,13 +121,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                             @Override
                             public void onFailedToReceiveAd(Ad ad) {
                                 Log.e(ADS_TAG, "Failed to receive video ad.");
-                                SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                                StatusDialog dialog = new StatusDialog(context, DialogType.FAILED);
                                 dialog.setCancelable(false);
-                                dialog.setTitle("Try again");
-                                dialog.setContentText("Failed to receive ad");
-                                dialog.setConfirmButton("Retry", sweetAlertDialog -> {
+                                dialog.setTitleDialog("Try again");
+                                dialog.setMessageDialog("Failed to receive ad");
+                                dialog.setButtonText("Retry");
+                                dialog.setButtonListener(v -> {
                                     startAppAd.showAd();
-                                    sweetAlertDialog.dismiss();
+                                    dialog.dismiss();
                                 });
                                 dialog.show();
                             }

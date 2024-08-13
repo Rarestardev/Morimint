@@ -7,8 +7,8 @@ import android.os.Handler;
 import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Repository.CoinManagerRepository;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 
 public class CoinMintManager {
 
@@ -67,7 +67,7 @@ public class CoinMintManager {
                 coinManagerRepository.UpdateCoin(total, context);
                 ((MainActivity) context).HandleResponseData();
             }
-            if (coin > current_coin){
+            if (coin > current_coin) {
                 SavedTotalCoin(coin);
             }
         }
@@ -167,9 +167,9 @@ public class CoinMintManager {
     private void updateLevel() {
         if (isUpdatingLevel) return;
         isUpdatingLevel = true;
-        final SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.setContentText("Please wait...");
-        dialog.setTitle("Update");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+        dialog.setMessageDialog("Please wait...");
+        dialog.setTitleDialog("Update");
         dialog.setCancelable(false);
         dialog.show();
         new Handler().postDelayed(() -> {

@@ -12,10 +12,11 @@ import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.Users;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 
 import java.io.IOException;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -70,11 +71,12 @@ public class CoinManagerRepository {
         RequestBody levelRequest = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(level));
         MultipartBody.Part levelPart = MultipartBody.Part.createFormData("level", null, levelRequest);
 
-        final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.SUCCESS_TYPE);
-        dialog.setTitle("Good Job!");
-        dialog.setContentText("Your Level is upgraded");
+        final StatusDialog dialog = new StatusDialog(context, DialogType.SUCCESS);
+        dialog.setTitleDialog("Good Job!");
+        dialog.setMessageDialog("Your Level is upgraded");
         dialog.setCancelable(false);
-        dialog.setConfirmButton("Thanks", sweetAlertDialog -> {
+        dialog.setButtonText("Thanks");
+        dialog.setButtonListener(v -> {
             Call<Users> call = apiService.putLevelData(levelPart, token);
             call.enqueue(new Callback<Users>() {
                 @Override
@@ -82,20 +84,22 @@ public class CoinManagerRepository {
                     if (response.isSuccessful()) {
                         Log.d(UserConstants.APP_LOG_TAG, "UpdateLevel : Success");
                         ((MainActivity) context).HandleResponseData();
-                        sweetAlertDialog.dismiss();
+                        dialog.dismiss();
                     } else {
                         try {
                             assert response.errorBody() != null;
                             String errorBodyString = response.errorBody().string();
                             Log.e(UserConstants.APP_LOG_TAG, "UpdateLevel: " + errorBodyString);
-                            final SweetAlertDialog alertDialog = new SweetAlertDialog(context,SweetAlertDialog.WARNING_TYPE);
-                            alertDialog.setTitle("Something wrong!");
-                            alertDialog.setContentText("Please check your internet connection.");
+                            final StatusDialog alertDialog = new StatusDialog(context,DialogType.WARNING);
+                            alertDialog.setTitleDialog("Something wrong!");
+                            alertDialog.setMessageDialog("Please check your internet connection.");
                             alertDialog.setCancelable(false);
-                            alertDialog.setConfirmButton("Retry", sweetAlertDialog1 -> {
+                            alertDialog.setButtonText("Retry");
+                            alertDialog.setButtonListener(v -> {
                                 UpdateLevel(level,context);
                                 alertDialog.dismiss();
-                            }).show();
+                            });
+                            alertDialog.show();
                         } catch (IOException e) {
                             e.printStackTrace();
                             Log.e(UserConstants.APP_LOG_TAG, "UpdateLevel: Error parsing error body");
@@ -107,6 +111,7 @@ public class CoinManagerRepository {
                     Log.e(UserConstants.APP_LOG_TAG, "UpdateLevel: onFailure :", t);
                 }
             });
-        }).show();
+        });
+        dialog.show();
     }
 }

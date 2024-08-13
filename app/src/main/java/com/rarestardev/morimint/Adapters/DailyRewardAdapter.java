@@ -23,6 +23,8 @@ import com.rarestardev.morimint.Constants.UserConstants;
 import com.rarestardev.morimint.Model.DailyRewardModel;
 import com.rarestardev.morimint.R;
 import com.rarestardev.morimint.Repository.ApplicationDataRepository;
+import com.rarestardev.morimint.Utilities.DialogType;
+import com.rarestardev.morimint.Utilities.StatusDialog;
 import com.startapp.sdk.adsbase.Ad;
 import com.startapp.sdk.adsbase.StartAppAd;
 import com.startapp.sdk.adsbase.StartAppSDK;
@@ -32,8 +34,6 @@ import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.DailyRewardViewHolder> {
 
@@ -98,9 +98,9 @@ public class DailyRewardAdapter extends RecyclerView.Adapter<DailyRewardAdapter.
                         holder.rewardTimer.setVisibility(View.GONE);
                         holder.rewardCheck.setVisibility(View.VISIBLE);
                         holder.rewardCheck.setOnClickListener(v1 -> {
-                            final SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE);
-                            dialog.setTitle("Loading");
-                            dialog.setContentText("Please wait");
+                            final StatusDialog dialog = new StatusDialog(context, DialogType.LOADING);
+                            dialog.setTitleDialog("Loading");
+                            dialog.setMessageDialog("Please wait");
                             dialog.setCancelable(false);
                             dialog.show();
                             startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC, new AdEventListener() {
