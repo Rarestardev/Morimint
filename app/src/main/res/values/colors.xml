@@ -24,4 +24,9 @@
 
 
     <color name="ViewPage">#CDCBCB</color>
+
+    <color name="DialogWarning">#f59c00</color>
+    <color name="DialogFailed">#c00d0d</color>
+    <color name="DialogLoading">#164194</color>
+    <color name="DialogSuccess">#00aa63</color>
 </resources>

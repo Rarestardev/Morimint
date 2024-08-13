@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        app:cardBackgroundColor="#6e4599"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+
+            <RelativeLayout
+                android:id="@+id/layoutStatus"
+                android:layout_width="110dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/base_app_bg">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/statusIconBackground"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:cardCornerRadius="50dp"
+                    android:layout_centerInParent="true">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/statusIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:src="@drawable/task_tick_ic"
+                        android:padding="10dp" />
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/layoutStatus"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/status_second_bg"
+                android:layout_marginBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/statusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Something Wrong"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:textSize="25sp"
+                    android:maxLines="1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20sp"
+                    android:textColor="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/statusMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Please check your internet connection"
+                    android:layout_below="@id/statusTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    android:minLines="2"
+                    android:textAlignment="gravity"
+                    android:gravity="center_horizontal"
+                    android:textColor="#D9D7D7" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/statusBtn"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/statusMessage"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    tools:text="Retry"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    android:foreground="?selectableItemBackgroundBorderless"
+                    android:background="@drawable/status_dialog_button" />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -1,214 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="450dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/custom_dialog_background"
-    android:layout_margin="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_above="@id/ShowAgain"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentTop="true"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/moriAiLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible"
-                >
+    <data>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/moriAi"
-                    android:fontFamily="@font/opensans_bold"
-                    android:layout_marginTop="30dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/moriAiText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
-                    tools:text="@string/dailyRewardDesc"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:textStyle="normal"
-                    />
-
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/roadmapLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                >
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/roadmap"
-                    android:fontFamily="@font/opensans_bold"
-                    android:layout_marginTop="30dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/roadmapText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
-                    tools:text="@string/dailyRewardDesc"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:textStyle="normal"
-                    />
-
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/appLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                >
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/features"
-                    android:fontFamily="@font/opensans_bold"
-                    android:layout_marginTop="30dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/appDescText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
-                    tools:text="@string/dailyRewardDesc"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:textStyle="normal"
-                    />
-
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </RelativeLayout>
-    </ScrollView>
-
-
-
-
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/ShowAgain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomLayout"
-        android:layout_marginStart="10dp"
-        android:buttonTint="@color/white"
-        android:checked="false"
-        android:text="@string/showAgain"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
-
+    </data>
 
     <RelativeLayout
-        android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/card_layout_bg"
-        >
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_dialog_background"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvPrevious"
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scrollbars="vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentTop="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/LayoutPage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutTitle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_gravity="center_horizontal"
+                        tools:text="@string/moriAi"
+                        android:fontFamily="@font/opensans_bold"
+                        android:layout_marginTop="30dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutDesc1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        tools:text="@string/dailyRewardDesc"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/opensans_bold" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/LayoutPage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        tools:text="@string/roadmap"
+                        android:fontFamily="@font/opensans_bold"
+                        android:layout_marginTop="30dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutDesc2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        tools:text="@string/dailyRewardDesc"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:textStyle="normal" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/LayoutPage3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutTitle3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        tools:text="@string/features"
+                        android:fontFamily="@font/opensans_bold"
+                        android:layout_marginTop="30dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutDesc3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        tools:text="@string/dailyRewardDesc"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:textStyle="normal" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/LayoutPage4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutTitle4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        tools:text="@string/features"
+                        android:fontFamily="@font/opensans_bold"
+                        android:layout_marginTop="30dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/LayoutDesc4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        tools:text="@string/dailyRewardDesc"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:textStyle="normal" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </RelativeLayout>
+        </ScrollView>
+
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/ShowAgain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="@string/previous"
-            android:visibility="gone"
+            android:layout_below="@id/scrollView"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/opensans_bold"
-            android:background="?selectableItemBackgroundBorderless"
-            />
+            android:buttonTint="@color/white"
+            android:checked="false"
+            android:text="@string/showAgain"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
-        <View
-            android:id="@+id/page1"
-            android:layout_width="10dp"
-            android:layout_height="2dp"
-            android:background="@color/white"
-            android:layout_toStartOf="@id/page2"
-            android:layout_marginEnd="10dp"
-            android:layout_centerVertical="true"/>
 
-        <View
-            android:id="@+id/page2"
-            android:layout_width="10dp"
-            android:layout_height="2dp"
-            android:background="@color/ViewPage"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+        <RelativeLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/ShowAgain"
+            android:layout_margin="10dp"
+            android:background="@drawable/card_layout_bg">
 
-        <View
-            android:id="@+id/page3"
-            android:layout_width="10dp"
-            android:layout_height="2dp"
-            android:background="@color/ViewPage"
-            android:layout_toEndOf="@id/page2"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/previous"
+                android:visibility="gone"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/opensans_bold"
+                android:background="?selectableItemBackgroundBorderless" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="@string/Next"
-            android:layout_marginEnd="10dp"
-            android:fontFamily="@font/opensans_bold"
-            android:background="?selectableItemBackgroundBorderless"
-            tools:ignore="RelativeOverlap" />
+            <View
+                android:id="@+id/page1"
+                android:layout_width="10dp"
+                android:layout_height="2dp"
+                android:background="@color/white"
+                android:layout_toStartOf="@id/page2"
+                android:layout_marginEnd="10dp"
+                android:layout_centerVertical="true" />
+
+            <View
+                android:id="@+id/page2"
+                android:layout_width="10dp"
+                android:layout_height="2dp"
+                android:background="@color/ViewPage"
+                android:layout_toStartOf="@id/view"
+                android:layout_centerVertical="true" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
+
+            <View
+                android:id="@+id/page3"
+                android:layout_width="10dp"
+                android:layout_height="2dp"
+                android:background="@color/ViewPage"
+                android:layout_toEndOf="@id/view"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true" />
+
+            <View
+                android:id="@+id/page4"
+                android:layout_width="10dp"
+                android:layout_height="2dp"
+                android:background="@color/ViewPage"
+                android:layout_toEndOf="@id/page3"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/Next"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/opensans_bold"
+                android:background="?selectableItemBackgroundBorderless"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
-
-</RelativeLayout>
+</layout>

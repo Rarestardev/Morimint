@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="3dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNumber"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/card_layout_bg"
+        tools:text="10"
+        android:textSize="20sp"
+        android:fontFamily="@font/opensans_bold"
+        android:textColor="@color/white"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRoadmap"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/card_layout_bg"
+        app:layout_constraintStart_toEndOf="@id/tvNumber"
+        app:layout_constraintEnd_toStartOf="@id/statusLayout"
+        tools:text="@string/dailyRewardDesc"
+        android:textAlignment="gravity"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="12sp"
+        android:fontFamily="@font/opensans_bold"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"/>
+
+    <RelativeLayout
+        android:id="@+id/statusLayout"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/success"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:cardBackgroundColor="#00dd80"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="50dp"
+            android:visibility="gone"
+            >
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/task_tick_ic"
+                android:padding="8dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="7dp"
+            android:src="@drawable/loading_icon"
+            android:visibility="gone"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,8 +61,12 @@ public class UserDataRepository {
                     alertDialog.setTitle("Something wrong!");
                     alertDialog.setContentText("Please check your internet connection");
                     alertDialog.setCancelable(false);
-                    alertDialog.setConfirmButton("Retry", sweetAlertDialog -> {
-                        UserData(context);
+                    alertDialog.setConfirmButton("Exit", sweetAlertDialog -> {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                        ClearAllUserData(context);
+                        ((MainActivity) context).finish();
                         sweetAlertDialog.dismiss();
                     }).show();
                 }
@@ -76,6 +80,38 @@ public class UserDataRepository {
             }
         });
         return data;
+    }
+
+    private void ClearAllUserData(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("WelcomeDialog",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        SharedPreferences sharedPreferences2 = context.getSharedPreferences("ShowTutorial",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = sharedPreferences2.edit();
+        editor2.clear();
+        editor2.apply();
+
+        SharedPreferences sharedPreferences3 = context.getSharedPreferences("DailyUpdater",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor3 = sharedPreferences3.edit();
+        editor3.clear();
+        editor3.apply();
+
+        SharedPreferences sharedPreferences4 = context.getSharedPreferences("DailyCheck",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor4 = sharedPreferences4.edit();
+        editor4.clear();
+        editor4.apply();
+
+        SharedPreferences sharedPreferences5 = context.getSharedPreferences("Energy Manager",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor5 = sharedPreferences5.edit();
+        editor5.clear();
+        editor5.apply();
+
+        SharedPreferences sharedPreferences6 = context.getSharedPreferences("Balance",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor6 = sharedPreferences6.edit();
+        editor6.clear();
+        editor6.apply();
     }
 
     public void SendUserDataSignUp(Context context, String username, String email, String password, long referral) {

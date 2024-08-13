@@ -1,14 +1,1 @@
 This roadmap is the guiding path for the business operations of Mori AI. We will initially deposit tokens, NFTs, and cash prizes into your account, and then create conditions to increase the value of the tokens and NFTs. Additionally, we will launch ways to generate income again from the tokens and NFTs through the application and gadgets. We aim to move forward together with steady steps and complete transparency.
-
-1. Minting Start: The program (application and Telegram mini app bot) begins on August 10, 2024
-2. Wallet Integration with the Application
-3. Start of Cash Prize Draws During Minting
-4. Start of NFT and Token Distribution in Mini App and Application
-5. Start of NFT Sales in the Market
-6. Creation of MORIBIT Token Trading Pool
-7. Token Listing on Exchange
-8. End of Token and NFT Minting
-9. Start of MORI AI Watch Production
-10. Launch of Moriflix Social Network Application
-11. Start of New Phase of Morimint Application
-12. To Be Continued...

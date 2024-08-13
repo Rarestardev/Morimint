@@ -111,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         SharedPreferences sharedPreferences = getSharedPreferences("DailyUpdater", MODE_PRIVATE);
         TurboCount = sharedPreferences.getInt("turbo", 0);
         binding.tvTurboCount.setText(String.valueOf(TurboCount));
-        MintHandler();
-
 
         binding.blueTickIcon.setOnClickListener(v ->
                 ShowDialogAboutApp(R.drawable.blue_tick_menu_ic, getString(R.string.blue_tick), "blue_tick.txt"));
@@ -231,7 +229,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     case 5:
                         if (!energyManager.mintStop(progressBarManager.getMinter())) {
                             clickerCounter++;
+
                             coinMintManager.IncreaseBalance(clickerCounter, progressBarManager.getMinter());
+
                             energyManager.clicked(true);
 
                             energyManager.ReduceEnergy(progressBarManager.getMinter());
@@ -365,18 +365,22 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 startActivity(new Intent(MainActivity.this, SubmitContentActivity.class));
             }
             if (item.getItemId() == R.id.info_app_menu) {
+                binding.drawer.closeDrawers();
                 ShowDialogAboutApp(R.drawable.info_ic, getString(R.string.features), "info_app.txt");
             }
 
             if (item.getItemId() == R.id.road_map_menu) {
-                ShowDialogAboutApp(R.drawable.roadmap_ic, getString(R.string.roadmap), "roadmap.txt");
+                binding.drawer.closeDrawers();
+                startActivity(new Intent(MainActivity.this, RoadmapActivity.class));
             }
 
             if (item.getItemId() == R.id.blue_icon_menu) {
+                binding.drawer.closeDrawers();
                 ShowDialogAboutApp(R.drawable.blue_tick_menu_ic, getString(R.string.blue_tick), "blue_tick.txt");
             }
 
             if (item.getItemId() == R.id.mori_ai_menu) {
+                binding.drawer.closeDrawers();
                 ShowDialogAboutApp(R.drawable.mori_info_icon, getString(R.string.moriAi), "mori_ai_desc.txt");
             }
 
@@ -519,6 +523,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putBoolean(UserConstants.showTutorialKeyDrawer,true);
                             editor.apply();
+                            binding.drawerNavigationView.bringToFront();
+                            binding.openDrawer.setOnClickListener(v ->
+                                    binding.drawer.openDrawer(GravityCompat.START)
+                            );
                             showTutorialLevelShow();
                             view.dismiss(true);
                         }
@@ -547,6 +555,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putBoolean(UserConstants.showTutorialKeyLevel,true);
                             editor.apply();
+                            binding.applicationManagerLayout.setOnClickListener(v ->
+                                    startActivity(new Intent(MainActivity.this, LevelActivity.class)));
                             view.dismiss(true);
                         }
                     });
