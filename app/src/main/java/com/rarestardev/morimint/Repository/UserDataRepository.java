@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.rarestardev.morimint.Activities.MainActivity;
 import com.rarestardev.morimint.Activities.SignInActivity;
+import com.rarestardev.morimint.Activities.SignUpActivity;
 import com.rarestardev.morimint.Api.ApiClient;
 import com.rarestardev.morimint.Api.ApiService;
 import com.rarestardev.morimint.Response.ApiResponse;
@@ -66,7 +67,6 @@ public class UserDataRepository {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.clear();
                         editor.apply();
-                        ClearAllUserData(context);
                         ((MainActivity) context).finish();
                         alertDialog.dismiss();
                     });
@@ -84,7 +84,7 @@ public class UserDataRepository {
         return data;
     }
 
-    private void ClearAllUserData(Context context){
+    /*private void ClearAllUserData(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("WelcomeDialog",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
@@ -114,7 +114,7 @@ public class UserDataRepository {
         SharedPreferences.Editor editor6 = sharedPreferences6.edit();
         editor6.clear();
         editor6.apply();
-    }
+    }*/
 
     public void SendUserDataSignUp(Context context, String username, String email, String password, long referral) {
         RequestBody Username = RequestBody.create(MediaType.parse("text/plain"), username);
@@ -153,6 +153,15 @@ public class UserDataRepository {
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "SignUp : Failed :" + response.errorBody());
+                    StatusDialog statusDialog = new StatusDialog(context,DialogType.FAILED);
+                    statusDialog.setTitleDialog("Failed");
+                    statusDialog.setMessageDialog("Try Again Later");
+                    statusDialog.setButtonText("Exit");
+                    statusDialog.setButtonListener(v -> {
+                        ((SignUpActivity) context).finish();
+                        statusDialog.dismiss();
+                    });
+                    statusDialog.show();
                 }
             }
 

@@ -317,7 +317,13 @@ public class ApplicationDataRepository {
                     Log.d(UserConstants.APP_LOG_TAG, "GiftCoinSite : Success");
                 } else {
                     alertDialog.dismiss();
-                    Log.e(UserConstants.APP_LOG_TAG, "GiftCoinSite : Error" + response.errorBody());
+                    final StatusDialog alertDialog = new StatusDialog(context, DialogType.FAILED);
+                    alertDialog.setTitleDialog("Failed");
+                    alertDialog.setMessageDialog("Wrong code");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButtonText("Ok");
+                    alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                    alertDialog.show();
                 }
             }
 
@@ -373,7 +379,13 @@ public class ApplicationDataRepository {
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "GiftCoin : Error " + response.errorBody());
-                    Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
+                    final StatusDialog alertDialog = new StatusDialog(context, DialogType.FAILED);
+                    alertDialog.setTitleDialog("Failed");
+                    alertDialog.setMessageDialog("Wrong code");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButtonText("Ok");
+                    alertDialog.setButtonListener(v -> alertDialog.dismiss());
+                    alertDialog.show();
                 }
             }
 
@@ -430,7 +442,6 @@ public class ApplicationDataRepository {
                 } else {
                     dialog.dismiss();
                     Log.e(UserConstants.APP_LOG_TAG, "MiniAppCode : Error " + response.errorBody());
-                    Toast.makeText(context, "Wrong Code", Toast.LENGTH_LONG).show();
 
                     final StatusDialog alertDialog = new StatusDialog(context, DialogType.FAILED);
                     alertDialog.setTitleDialog("Failed");

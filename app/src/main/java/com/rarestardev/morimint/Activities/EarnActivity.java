@@ -159,6 +159,7 @@ public class EarnActivity extends AppCompatActivity {
                 coinManagerRepository.UpdateCoin(10000,EarnActivity.this);
                 dialog.dismiss();
             });
+            dialog.show();
         });
     }
 }

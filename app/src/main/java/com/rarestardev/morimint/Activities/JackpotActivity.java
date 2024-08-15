@@ -320,6 +320,7 @@ public class JackpotActivity extends AppCompatActivity {
         dialog.setCancelable(true);
         dialog.setTitleDialog("Try again");
         dialog.setMessageDialog("More chance by seeing the ad");
+        dialog.setButtonText("Show Ad");
         dialog.setButtonListener(v -> {
             loadAndShowVideoAd();
             dialog.dismiss();

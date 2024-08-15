@@ -68,7 +68,7 @@ public class ReferralActivity extends AppCompatActivity {
                 numberFormat.setGroupingSize(3);
                 numberFormat.setMaximumFractionDigits(2);
 
-                int total_bonus = total_friend * 10000;
+                int total_bonus = total_friend * 20000;
                 binding.totalBonus.setText("+ " + numberFormat.format(total_bonus));
 
                 binding.inviteCode.setText("Invite code : " + users.getReferral_code());

@@ -87,7 +87,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             if (taskID != taskModels.get(position).getId()) {
                 OpenLink(openLink);
                 final long second = 1000;
-                final long time = 15 * 1000;
+                final long time = 10 * 1000;
                 StatusDialog checkDialog = new StatusDialog(context, DialogType.LOADING);
                 CountDownTimer countDownTimer = new CountDownTimer(time, second) {
                     @Override
@@ -115,6 +115,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                             @Override
                             public void onReceiveAd(@NonNull Ad ad) {
                                 Log.d(ADS_TAG, "Video ad received.");
+                                checkDialog.dismiss();
                                 startAppAd.showAd();
                             }
 

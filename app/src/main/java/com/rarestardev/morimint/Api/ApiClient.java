@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     private static Retrofit retrofit = null;
-    private static final String BASE_URL = "http://5.75.200.24:800";
-    public static final String SERVER_TOKEN = "Token 7e210f923765076614fdc3c57074f92a5c3cbe0f";
+    private static final String BASE_URL = "https://botshop.shop";
+    public static final String SERVER_TOKEN = "Token e4ed3c6812f94e9f44a0d20bf9bcc62552cfc4c4";
 
     public static Retrofit getClient() {
         if (retrofit == null) {

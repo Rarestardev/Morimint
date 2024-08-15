@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.rarestardev.morimint"
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.rarestardev.morimint"
