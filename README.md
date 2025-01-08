@@ -88,6 +88,13 @@ Mori Mint Clicker Game is an interactive mobile game where users collect virtual
 ## **Development Company:**
 **MoriAi** - Based in Oman.
 
+---
+
+## Connect with Me
+
+- [Instagram](https://www.instagram.com/rarestar.dev)
+- [Telegram](https://t.me/Rarestar_dev)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
