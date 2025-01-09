@@ -2,7 +2,9 @@
 
 ## **Screenshots**
 
-<img src="Screenshot_2025-01-08-17-38-52-759_com.rarestardev.morimint.jpg" width="100" />
+<img src="Screenshot_2025-01-08-17-38-52-759_com.rarestardev.morimint.jpg" width="150" />  <img src="IMG_20250109_132331_550.jpg" width="150" />  <img src="IMG_20250109_132923_485.jpg" width="150" />  <img src="IMG_20250109_132943_667.jpg" width="150" />
+
+<img src="IMG_20250109_133950_724.jpg" width="150" />  <img src="IMG_20250109_134205_989.jpg" width="150" />  <img src="Screenshot 2025-01-09 143117.png" width="150" />  <img src="Screenshot_20240826-225213_Morimint.jpg" width="150" /> 
 
 ## **Project Overview**
 Mori Mint Clicker Game is an interactive mobile game where users collect virtual coins by completing tasks, inviting friends, and playing engaging jackpot and board games. These virtual coins, once listed on a cryptocurrency exchange, are distributed to users as an airdrop, which is then withdrawable. The game includes features like daily rewards, energy management, and character progression, enhancing user engagement.
